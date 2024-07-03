@@ -15,26 +15,25 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import { setAdjustPan, setAdjustResize } from "rn-android-keyboard-adjust";
-import { AuthNavigationProps } from "../../types/navigation";
+import { AppImage } from "../../components/AppImage/AppImage";
+import CustomButton from "../../components/ui/CustomButton";
+import { CustomTxtInput } from "../../components/ui/CustomTextInput";
+import Loading from "../../components/ui/Loading";
+import PasswordChangePopup from "../../components/ui/popups/PasswordChangePopup";
+import LeftIcon from "../../components/ui/svg/LeftIcon";
+import { HAS_NOTCH, HIT_SLOP, USER_ROLE } from "../../constant";
+import { ResetPasswordScreenSchema } from "../../constant/formValidations";
 import { Route } from "../../constant/navigationConstants";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { selectAuthenticationLoading } from "../../store/authentication/authentication.selectors";
-import { ResetPasswordFormProps } from "../../types/authentication.types";
-import { ResetPasswordScreenSchema } from "../../constant/formValidations";
-import { getData } from "../../utils/asyncStorage";
-import { HAS_NOTCH, HIT_SLOP, USER_ROLE } from "../../constant";
 import { userResetPassword } from "../../store/authentication/authentication.thunks";
+import { ResetPasswordFormProps } from "../../types/authentication.types";
 import { LoadingState, ThemeProps } from "../../types/global.types";
-import Loading from "../../components/ui/Loading";
-import BackIcon from "../../components/ui/svg/BackIcon";
-import { CustomTxtInput } from "../../components/ui/CustomTextInput";
-import CustomButton from "../../components/ui/CustomButton";
-import PasswordChangePopup from "../../components/ui/popups/PasswordChangePopup";
-import LeftIcon from "../../components/ui/svg/LeftIcon";
-import { AppImage } from "../../components/AppImage/AppImage";
+import { MainNavigationProps } from "../../types/navigation";
 import Scale from "../../utils/Scale";
+import { getData } from "../../utils/asyncStorage";
 
-const ResetPassword: React.FC<AuthNavigationProps<Route.navResetPassword>> = ({
+const ResetPassword: React.FC<MainNavigationProps<Route.navResetPassword>> = ({
   navigation,
   route,
 }) => {
@@ -42,7 +41,7 @@ const ResetPassword: React.FC<AuthNavigationProps<Route.navResetPassword>> = ({
   const style = useStyles({ insets });
   const { theme } = useTheme();
 
-  const phone = route?.params?.phone;
+  const phone = route?.params?.phone || "";
   const dispatch = useAppDispatch();
   const loading = useSelector(selectAuthenticationLoading);
 
