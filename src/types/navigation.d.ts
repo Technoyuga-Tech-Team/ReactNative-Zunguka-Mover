@@ -1,8 +1,8 @@
-import {RouteProp} from '@react-navigation/native';
+import { RouteProp } from "@react-navigation/native";
 import {
   NativeStackNavigationProp,
   NativeStackScreenProps,
-} from '@react-navigation/native-stack';
+} from "@react-navigation/native-stack";
 
 export type AppRoutes = {
   Onboard: undefined;
@@ -14,7 +14,7 @@ export type AppRoutes = {
   Profile: undefined;
   EditProfile: undefined;
   ChangePassword: undefined;
-  ResetPassword: undefined;
+  ResetPassword: { phone?: string; email?: string };
   SavedItems: undefined;
   PurchasedHistory: undefined;
   Messaging: undefined;
@@ -42,7 +42,7 @@ export type AppRoutes = {
   CategoryProduct: undefined;
   RequestToMover: undefined;
   PaymentToMover: undefined;
-  VisitProfile: {is_rating: number};
+  VisitProfile: { is_rating: number };
   JobHistory: undefined;
 };
 
@@ -54,24 +54,24 @@ export type MoverRoute = {
   ReviewAndRating: undefined;
   PackageDetails: {
     package_details_id: string;
-    pickupLatLng: {lat: number; lng: number};
-    destinationLatLng: {lat: number; lng: number};
+    pickupLatLng: { lat: number; lng: number };
+    destinationLatLng: { lat: number; lng: number };
     canStartJob: boolean;
     canEndJob: boolean;
     buyerSellerId: string;
   };
   DeliveryDetails: undefined;
-  DeliveryDetails1: {package_details_id: string; from?: string};
-  Withdraw: {earning: string};
+  DeliveryDetails1: { package_details_id: string; from?: string };
+  Withdraw: { earning: string };
   PayoutHistory: undefined;
-  Chatroom: {receiver_id: string};
+  Chatroom: { receiver_id: string };
 };
 
 export type MoverAuthenticationRoutes = {
   Login: undefined;
   Signup: undefined;
   ForgotPassword: undefined;
-  EnterOTP: {phone?: string; email?: string; fromForgotPassword?: boolean};
+  EnterOTP: { phone?: string; email?: string; fromForgotPassword?: boolean };
   ChangePassword: undefined;
   Mainstack: undefined;
   Dashboard: undefined;
@@ -83,7 +83,7 @@ export type MoverAuthenticationRoutes = {
   SetupProfile5: undefined;
   SetupProfile6: undefined;
   SetupProfile7: undefined;
-  ResetPassword: {phone?: string; email?: string};
+  ResetPassword: { phone?: string; email?: string };
   ChangePassword: undefined;
   PackageInfo: undefined;
   ConfirmPackageInfo: undefined;
@@ -91,14 +91,13 @@ export type MoverAuthenticationRoutes = {
 
 export type AuthenticationRoutes = {
   Onboard: undefined;
-  SelectRoll: undefined;
   Login: undefined;
   Signup: undefined;
   ForgotPassword: undefined;
   EnterOTP: {
     phone?: string;
     email?: string;
-    type: 'forget_password' | 'otp_verification';
+    type: "forget_password" | "otp_verification";
   };
   ChangePassword: undefined;
   SetupProfile1: undefined;
@@ -111,7 +110,8 @@ export type AuthenticationRoutes = {
   Mainstack: undefined;
   Dashboard: undefined;
   Authentication: undefined;
-  ResetPassword: {phone?: string; email?: string};
+  AddKyc: undefined;
+  ResetPassword: { phone?: string; email?: string };
   ChangePassword: undefined;
 };
 
@@ -134,14 +134,14 @@ export type MoverBottomRoutes = {
 export type TopRoutes = {
   OpenItems: undefined;
   ClosedItems: undefined;
-  ProductDetails: {itemId: number};
+  ProductDetails: { itemId: number };
 };
 
 export type TopPackageRoutes = {
   UpcomingPackages: undefined;
   OngoingPackages: undefined;
   CompletedPackages: undefined;
-  ProductDetails: {itemId: number};
+  ProductDetails: { itemId: number };
 };
 
 export type HomeRoutes = {
@@ -149,22 +149,22 @@ export type HomeRoutes = {
   HomeMover: undefined;
   Search: {
     screen: Search1;
-    params: {userType: string; category_ids?: number};
+    params: { userType: string; category_ids?: number };
   };
-  Search1: {userType: string; category_ids?: number};
+  Search1: { userType: string; category_ids?: number };
   Add: undefined;
   Storefront: undefined;
   Profile: undefined;
   EditProfile: undefined;
-  VisitProfile: {item: any};
+  VisitProfile: { item: any };
   SavedItems: undefined;
   PurchasedHistory: undefined;
   Messaging: undefined;
-  Chatroom: {receiver_id: number};
+  Chatroom: { receiver_id: number };
   ChangePassword: undefined;
-  ProductDetails: {itemId: number};
+  ProductDetails: { itemId: number };
   TransactionHistory: undefined;
-  TransactionDetails: {item: GetProductDetailsDataProps};
+  TransactionDetails: { item: GetProductDetailsDataProps };
   NotificationSetting: undefined;
   ProductFilter: {
     onGoBack: ({
@@ -180,7 +180,7 @@ export type HomeRoutes = {
   Notification: undefined;
   AllDeals: undefined;
   ModeOfPayment: undefined;
-  CardDetails: {from: string; package_details_id?: string};
+  CardDetails: { from: string; package_details_id?: string };
   AddCard: undefined;
   ModeOfDelivery: undefined;
   DeliveryDetails: undefined;
@@ -194,10 +194,10 @@ export type HomeRoutes = {
   CompletedPackages: undefined;
   ReviewAndRating: undefined;
   PackageDetails: undefined;
-  DeliveryDetails1: {package_details_id: string; from?: string};
+  DeliveryDetails1: { package_details_id: string; from?: string };
   SelectMover: undefined;
   MoverHistory: undefined;
-  Withdraw: {earning: string};
+  Withdraw: { earning: string };
   Earnings: undefined;
   ConfirmSelfPickup: undefined;
   RequestToMover: undefined;
@@ -214,7 +214,7 @@ export type HomeRoutes = {
     category_ids?: number;
     categoryName?: string;
   };
-  PackageInfo: {mover_id?: number} | undefined;
+  PackageInfo: { mover_id?: number } | undefined;
   ConfirmPackageInfo: {
     itmeName: string;
     size: string;
@@ -223,8 +223,8 @@ export type HomeRoutes = {
     receiverName: string;
     date: string;
     time: string;
-    pickupLatlng: {lat: number; lng: number};
-    deliveryLatlng: {lat: number; lng: number};
+    pickupLatlng: { lat: number; lng: number };
+    deliveryLatlng: { lat: number; lng: number };
   };
 };
 
@@ -240,9 +240,9 @@ export type SellAnItemRoutes = {
 };
 
 export type SearchRoutes = {
-  Search1: {userType: string; category_ids?: number};
-  Search2: {searchVal: string; userType: string};
-  ProductDetails: {itemId: number};
+  Search1: { userType: string; category_ids?: number };
+  Search2: { searchVal: string; userType: string };
+  ProductDetails: { itemId: number };
   ProductFilter: {
     onGoBack: ({
       category_ids: string,
@@ -258,12 +258,12 @@ export type SearchRoutes = {
 };
 
 export interface MainNavigationProps<RouteName extends keyof AppRoutes> {
-  navigation: NativeStackNavigationProp<AppRoutes, 'Splash'>;
+  navigation: NativeStackNavigationProp<AppRoutes, "Splash">;
   route: RouteProp<AppRoutes, RouteName>;
 }
 
 export interface AuthNavigationProps<
-  RouteName extends keyof AuthenticationRoutes,
+  RouteName extends keyof AuthenticationRoutes
 > {
   navigation: NativeStackNavigationProp<AuthenticationRoutes, RouteName>;
   route: RouteProp<AuthenticationRoutes, RouteName>;
@@ -278,7 +278,7 @@ export interface MoverHomeNavigationProps<RouteName extends keyof MoverRoute> {
   route: RouteProp<MoverRoute, RouteName>;
 }
 export interface SellAnItemNavigationProps<
-  RouteName extends keyof SellAnItemRoutes,
+  RouteName extends keyof SellAnItemRoutes
 > {
   navigation: NativeStackNavigationProp<SellAnItemRoutes, RouteName>;
   route: RouteProp<SellAnItemRoutes, RouteName>;
@@ -289,7 +289,7 @@ export interface SearchNavigationProps<RouteName extends keyof SearchRoutes> {
   route: RouteProp<SearchRoutes, RouteName>;
 }
 export interface MyFrontStoreNavigationProps<
-  RouteName extends keyof TopRoutes,
+  RouteName extends keyof TopRoutes
 > {
   navigation: NativeStackNavigationProp<TopRoutes, RouteName>;
   route: RouteProp<TopRoutes, RouteName>;

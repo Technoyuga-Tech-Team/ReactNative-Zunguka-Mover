@@ -1,62 +1,62 @@
-import {useFormik} from 'formik';
-import React, {useEffect, useState} from 'react';
+import { useFormik } from "formik";
+import React, { useEffect, useState } from "react";
 import {
   Keyboard,
   Platform,
   TextInput,
   TouchableOpacity,
   View,
-} from 'react-native';
+} from "react-native";
 import {
   CountryCode,
   TranslationLanguageCodeMap,
-} from 'react-native-country-picker-modal';
-import {makeStyles, useTheme} from 'react-native-elements';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import ReactNativePhoneInput from 'react-native-phone-input';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useSelector} from 'react-redux';
-import {setAdjustPan, setAdjustResize} from 'rn-android-keyboard-adjust';
-import {HomeNavigationProps} from '../../types/navigation';
-import {Route} from '../../constant/navigationConstants';
-import {selectUserData} from '../../store/settings/settings.selectors';
-import {selectUserProfileLoading} from '../../store/userprofile/userprofile.selectors';
-import {useAppDispatch} from '../../hooks/useAppDispatch';
-import {imagePickerProps} from '../../types/common.types';
-import {EditProfileFormProps} from '../../types/authentication.types';
-import {EditProfileScreenSchema} from '../../constant/formValidations';
+} from "react-native-country-picker-modal";
+import { makeStyles, useTheme } from "react-native-elements";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import ReactNativePhoneInput from "react-native-phone-input";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
+import { setAdjustPan, setAdjustResize } from "rn-android-keyboard-adjust";
+import BorderedItem from "../../components/ui/BorderedItem";
+import CountryPickerModal from "../../components/ui/CountryPickerModal";
+import CustomButton from "../../components/ui/CustomButton";
+import { CustomTxtInput } from "../../components/ui/CustomTextInput";
+import ImagePickerPopup from "../../components/ui/ImagePickerPopup";
+import Loading from "../../components/ui/Loading";
+import { PhoneNumberInput } from "../../components/ui/PhoneNumberInput";
+import ProfileImage from "../../components/ui/Profile/ProfileImage";
+import BackIcon from "../../components/ui/svg/BackIcon";
+import { HAS_NOTCH, MAX_CHAR_LENGTH, USER_DATA } from "../../constant";
+import { EditProfileScreenSchema } from "../../constant/formValidations";
+import { Route } from "../../constant/navigationConstants";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { setSuccess } from "../../store/global/global.slice";
+import { selectUserData } from "../../store/settings/settings.selectors";
+import { setUserData } from "../../store/settings/settings.slice";
+import { selectUserProfileLoading } from "../../store/userprofile/userprofile.selectors";
 import {
   userUpdateProfile,
   userUpdateProfilePicture,
-} from '../../store/userprofile/userprofile.thunk';
-import {setUserData} from '../../store/settings/settings.slice';
-import {HAS_NOTCH, MAX_CHAR_LENGTH, USER_DATA} from '../../constant';
-import {setData} from '../../utils/asyncStorage';
-import {setSuccess} from '../../store/global/global.slice';
+} from "../../store/userprofile/userprofile.thunk";
+import { EditProfileFormProps } from "../../types/authentication.types";
+import { imagePickerProps } from "../../types/common.types";
+import { LoadingState, ThemeProps } from "../../types/global.types";
+import { MainNavigationProps } from "../../types/navigation";
+import { getUrlExtension } from "../../utils";
 import {
   getImageFromCamera,
   getImageFromGallary,
   requestCameraPermission,
-} from '../../utils/ImagePickerCameraGallary';
-import {getUrlExtension} from '../../utils';
-import {LoadingState, ThemeProps} from '../../types/global.types';
-import Loading from '../../components/ui/Loading';
-import BackIcon from '../../components/ui/svg/BackIcon';
-import ProfileImage from '../../components/ui/Profile/ProfileImage';
-import {CustomTxtInput} from '../../components/ui/CustomTextInput';
-import {PhoneNumberInput} from '../../components/ui/PhoneNumberInput';
-import CountryPickerModal from '../../components/ui/CountryPickerModal';
-import CustomButton from '../../components/ui/CustomButton';
-import ImagePickerPopup from '../../components/ui/ImagePickerPopup';
-import Scale from '../../utils/Scale';
-import BorderedItem from '../../components/ui/BorderedItem';
+} from "../../utils/ImagePickerCameraGallary";
+import Scale from "../../utils/Scale";
+import { setData } from "../../utils/asyncStorage";
 
-const EditProfile: React.FC<HomeNavigationProps<Route.navEditProfile>> = ({
+const EditProfile: React.FC<MainNavigationProps<Route.navEditProfile>> = ({
   navigation,
 }) => {
   const insets = useSafeAreaInsets();
-  const style = useStyles({insets});
-  const {theme} = useTheme();
+  const style = useStyles({ insets });
+  const { theme } = useTheme();
 
   const userData = useSelector(selectUserData);
   const userLoading = useSelector(selectUserProfileLoading);
@@ -72,19 +72,19 @@ const EditProfile: React.FC<HomeNavigationProps<Route.navEditProfile>> = ({
 
   const [tamp_phone, setTamp_phone] = useState<string>(userData?.phone_number);
   const [profilePicture, setProfilePicture] = useState<string>(
-    userData?.profile_image,
+    userData?.profile_image
   );
 
   const [profileImage, setProfileImage] = useState<imagePickerProps>({
-    name: '',
-    type: '',
-    uri: '',
+    name: "",
+    type: "",
+    uri: "",
   });
   const [visibleCountryPicker, setVisibleCountryPicker] =
     useState<boolean>(false);
-  const [countryCode, setCountryCode] = useState<string | CountryCode>('RW');
+  const [countryCode, setCountryCode] = useState<CountryCode>("RW");
   const [country, setCountry] = useState<string | TranslationLanguageCodeMap>(
-    '',
+    ""
   );
 
   useEffect(() => {
@@ -95,16 +95,16 @@ const EditProfile: React.FC<HomeNavigationProps<Route.navEditProfile>> = ({
   }, []);
 
   useEffect(() => {
-    let unsubscribe = navigation.addListener('focus', async () => {
+    let unsubscribe = navigation.addListener("focus", async () => {
       if (userData) {
         userData?.first_name &&
-          setFieldValue('firstName', userData?.first_name);
-        userData?.last_name && setFieldValue('lastName', userData?.last_name);
-        userData?.username && setFieldValue('username', userData?.username);
-        userData?.email && setFieldValue('email', userData?.email);
+          setFieldValue("firstName", userData?.first_name);
+        userData?.last_name && setFieldValue("lastName", userData?.last_name);
+        userData?.username && setFieldValue("username", userData?.username);
+        userData?.email && setFieldValue("email", userData?.email);
         phoneRef.current?.selectCountry(userData?.iso);
         userData?.phone_number &&
-          setFieldValue('phoneNumber', userData?.phone_number);
+          setFieldValue("phoneNumber", userData?.phone_number);
         setTamp_phone(userData?.phone_number);
         setProfilePicture(userData?.profile_image);
       }
@@ -122,18 +122,18 @@ const EditProfile: React.FC<HomeNavigationProps<Route.navEditProfile>> = ({
   const onPressUpdateProfile = () => {};
 
   const onPressFlag = () => {
-    setFieldValue('phoneNumber', '');
+    setFieldValue("phoneNumber", "");
     setVisibleCountryPicker(true);
   };
 
   const onPhoneInputChange = (value: string, iso2: string) => {
-    setCountryCode(iso2?.toUpperCase());
-    setFieldValue('phoneNumber', value);
+    setCountryCode(iso2?.toUpperCase() as CountryCode);
+    setFieldValue("phoneNumber", value);
   };
 
   const onSelect = (
     country: string | TranslationLanguageCodeMap,
-    cca2: CountryCode,
+    cca2: CountryCode
   ) => {
     phoneRef?.current?.selectCountry(cca2.toLowerCase());
     setCountryCode(cca2);
@@ -173,14 +173,14 @@ const EditProfile: React.FC<HomeNavigationProps<Route.navEditProfile>> = ({
   } = useFormik<EditProfileFormProps>({
     validationSchema: EditProfileScreenSchema(countryCode),
     initialValues: {
-      firstName: '',
-      lastName: '',
-      username: '',
-      email: '',
-      phoneNumber: '',
+      firstName: "",
+      lastName: "",
+      username: "",
+      email: "",
+      phoneNumber: "",
     },
     validateOnBlur: false,
-    onSubmit: async ({firstName, lastName, username, email, phoneNumber}) => {
+    onSubmit: async ({ firstName, lastName, username, email, phoneNumber }) => {
       const result = await dispatch(
         userUpdateProfile({
           first_name: firstName,
@@ -188,7 +188,7 @@ const EditProfile: React.FC<HomeNavigationProps<Route.navEditProfile>> = ({
           username: username,
           email,
           phone_number: phoneNumber,
-        }),
+        })
       );
       if (userUpdateProfile.fulfilled.match(result)) {
         if (result.payload.status === 1) {
@@ -199,7 +199,7 @@ const EditProfile: React.FC<HomeNavigationProps<Route.navEditProfile>> = ({
         if (result.payload) {
         }
       } else {
-        console.log('errror userUpdateProfile --->', result.payload);
+        console.log("errror userUpdateProfile --->", result.payload);
       }
     },
   });
@@ -207,7 +207,7 @@ const EditProfile: React.FC<HomeNavigationProps<Route.navEditProfile>> = ({
   const onPressFromCamera = async () => {
     togglePopup();
     setTimeout(async () => {
-      if (Platform.OS === 'android') {
+      if (Platform.OS === "android") {
         const hasPermission = await requestCameraPermission();
         if (hasPermission) {
           openPickerCameraImage();
@@ -220,13 +220,13 @@ const EditProfile: React.FC<HomeNavigationProps<Route.navEditProfile>> = ({
 
   const openPickerCameraImage = async () => {
     try {
-      const imageObject = await getImageFromCamera({cropping: true});
+      const imageObject = await getImageFromCamera({ cropping: true });
       setProfilePicture(imageObject.uri);
       setProfileImage(imageObject);
       uploadProfilePicture(imageObject);
     } catch (error) {
       // Handle errors here if needed (e.g., display a user-friendly message)
-      console.error('Error using getImageFromCamera:', error);
+      console.error("Error using getImageFromCamera:", error);
     }
   };
 
@@ -234,42 +234,42 @@ const EditProfile: React.FC<HomeNavigationProps<Route.navEditProfile>> = ({
     togglePopup();
     setTimeout(async () => {
       try {
-        const imageObject = await getImageFromGallary({cropping: true});
+        const imageObject = await getImageFromGallary({ cropping: true });
         setProfilePicture(imageObject.uri);
         setProfileImage(imageObject);
         uploadProfilePicture(imageObject);
       } catch (error) {
         // Handle errors here if needed (e.g., display a user-friendly message)
-        console.error('Error using getImageFromGallary:', error);
+        console.error("Error using getImageFromGallary:", error);
       }
     }, 100);
   };
 
   const uploadProfilePicture = async (obj: imagePickerProps) => {
     const formData = new FormData();
-    formData.append('profile_image', {
+    formData.append("profile_image", {
       name: obj.name || `${new Date().getTime()}.${getUrlExtension(obj.uri)}`,
       type: obj.type,
-      uri: Platform.OS === 'ios' ? obj.uri.replace('file://', '') : obj.uri,
+      uri: Platform.OS === "ios" ? obj.uri.replace("file://", "") : obj.uri,
     });
 
     const result = await dispatch(
-      userUpdateProfilePicture({formData: formData}),
+      userUpdateProfilePicture({ formData: formData })
     );
 
     if (userUpdateProfilePicture.fulfilled.match(result)) {
-      console.log('userUpdateProfilePicture  - - - ', result.payload);
+      console.log("userUpdateProfilePicture  - - - ", result.payload);
       if (result?.payload?.status === 1) {
         dispatch(setUserData(result?.payload?.data));
         await setData(USER_DATA, result?.payload?.data);
       }
     } else {
-      console.log('userUpdateProfilePicture error - - - ', result.payload);
+      console.log("userUpdateProfilePicture error - - - ", result.payload);
     }
   };
 
   let phone_initial =
-    tamp_phone === '' ? values.phoneNumber : userData?.phone_number;
+    tamp_phone === "" ? values.phoneNumber : userData?.phone_number;
 
   return (
     <View style={style.container}>
@@ -277,15 +277,17 @@ const EditProfile: React.FC<HomeNavigationProps<Route.navEditProfile>> = ({
       <TouchableOpacity
         onPress={onPressBack}
         activeOpacity={0.8}
-        style={style.backCont}>
+        style={style.backCont}
+      >
         <BackIcon color={theme.colors?.black} />
       </TouchableOpacity>
       <View style={style.innerCont}>
         <KeyboardAwareScrollView
-          keyboardShouldPersistTaps={'handled'}
+          keyboardShouldPersistTaps={"handled"}
           contentContainerStyle={style.scrollCont}
           showsVerticalScrollIndicator={false}
-          bounces={false}>
+          bounces={false}
+        >
           <View style={style.profileCont}>
             <ProfileImage
               profileImage={profilePicture}
@@ -299,10 +301,10 @@ const EditProfile: React.FC<HomeNavigationProps<Route.navEditProfile>> = ({
               placeholder="Enter your first name"
               returnKeyType="next"
               returnKeyLabel="next"
-              keyboardType={'default'}
+              keyboardType={"default"}
               maxLength={MAX_CHAR_LENGTH}
-              onChangeText={handleChange('firstName')}
-              onBlur={handleBlur('firstName')}
+              onChangeText={handleChange("firstName")}
+              onBlur={handleBlur("firstName")}
               value={values.firstName}
               error={errors.firstName}
               touched={touched.firstName}
@@ -314,10 +316,10 @@ const EditProfile: React.FC<HomeNavigationProps<Route.navEditProfile>> = ({
               placeholder="Enter your last name"
               returnKeyType="next"
               returnKeyLabel="next"
-              keyboardType={'default'}
+              keyboardType={"default"}
               maxLength={MAX_CHAR_LENGTH}
-              onChangeText={handleChange('lastName')}
-              onBlur={handleBlur('lastName')}
+              onChangeText={handleChange("lastName")}
+              onBlur={handleBlur("lastName")}
               value={values.lastName}
               error={errors.lastName}
               touched={touched.lastName}
@@ -329,10 +331,10 @@ const EditProfile: React.FC<HomeNavigationProps<Route.navEditProfile>> = ({
               placeholder="Username"
               returnKeyType="next"
               returnKeyLabel="next"
-              keyboardType={'default'}
+              keyboardType={"default"}
               maxLength={MAX_CHAR_LENGTH}
-              onChangeText={handleChange('username')}
-              onBlur={handleBlur('username')}
+              onChangeText={handleChange("username")}
+              onBlur={handleBlur("username")}
               editable={false}
               value={values.username}
               error={errors.username}
@@ -345,9 +347,9 @@ const EditProfile: React.FC<HomeNavigationProps<Route.navEditProfile>> = ({
               placeholder="Enter email"
               returnKeyType="next"
               returnKeyLabel="next"
-              keyboardType={'email-address'}
-              onChangeText={handleChange('email')}
-              onBlur={handleBlur('email')}
+              keyboardType={"email-address"}
+              onChangeText={handleChange("email")}
+              onBlur={handleBlur("email")}
               editable={false}
               value={values.email}
               error={errors.email}
@@ -356,9 +358,10 @@ const EditProfile: React.FC<HomeNavigationProps<Route.navEditProfile>> = ({
             />
             <TouchableOpacity
               onPress={() => {
-                setTamp_phone('');
+                setTamp_phone("");
               }}
-              activeOpacity={1}>
+              activeOpacity={1}
+            >
               <PhoneNumberInput
                 ref={phoneRef}
                 textInputTitle="Phone Number"
@@ -368,13 +371,13 @@ const EditProfile: React.FC<HomeNavigationProps<Route.navEditProfile>> = ({
                 }
                 initialValue={phone_initial}
                 textProps={{
-                  placeholder: 'Enter your phone number',
+                  placeholder: "Enter your phone number",
                   placeholderTextColor: theme.colors?.iconColor,
                   style: style.txtInStyle,
-                  returnKeyLabel: 'done',
-                  returnKeyType: 'done',
+                  returnKeyLabel: "done",
+                  returnKeyType: "done",
                   onPressIn: () => {
-                    setTamp_phone('');
+                    setTamp_phone("");
                   },
                 }}
                 error={errors.phoneNumber}
@@ -403,7 +406,7 @@ const EditProfile: React.FC<HomeNavigationProps<Route.navEditProfile>> = ({
               Keyboard.dismiss();
               handleSubmit();
             }}
-            title={'Update Profile'}
+            title={"Update Profile"}
             buttonWidth="full"
             variant="primary"
             type="solid"
@@ -433,7 +436,7 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
   },
   btnCont: {
     paddingBottom:
-      Platform.OS === 'ios'
+      Platform.OS === "ios"
         ? HAS_NOTCH
           ? props.insets.bottom
           : props.insets.bottom + 10
@@ -461,8 +464,8 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
   backCont: {
     height: Scale(48),
     width: Scale(48),
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginLeft: 20,
   },
 }));

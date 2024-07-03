@@ -1,6 +1,6 @@
-import {CommonActions, useFocusEffect} from '@react-navigation/native';
-import * as React from 'react';
-import {useEffect, useRef, useState} from 'react';
+import { CommonActions, useFocusEffect } from "@react-navigation/native";
+import * as React from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Animated,
   BackHandler,
@@ -9,27 +9,27 @@ import {
   StatusBar,
   View,
   ViewToken,
-} from 'react-native';
-// import RNBootSplash from "react-native-bootsplash";
-import {makeStyles, useTheme} from 'react-native-elements';
+} from "react-native";
+import RNBootSplash from "react-native-bootsplash";
+import { makeStyles, useTheme } from "react-native-elements";
 // relative path
 
-import SliderItem from '../../components/Onboard/SliderItem';
-import {SLIDER} from '../../constant';
-import {Route} from '../../constant/navigationConstants';
-import {MainNavigationProps} from '../../types/navigation';
-import {setOpenFirstTime} from '../../utils/asyncStorage';
-import {createArrayUseNumber} from '../../utils';
-import CustomButton from '../../components/ui/CustomButton';
-import Paginator from '../../components/ui/Paginator';
+import SliderItem from "../../components/Onboard/SliderItem";
+import { SLIDER } from "../../constant";
+import { Route } from "../../constant/navigationConstants";
+import { MainNavigationProps } from "../../types/navigation";
+import { setOpenFirstTime } from "../../utils/asyncStorage";
+import { createArrayUseNumber } from "../../utils";
+import CustomButton from "../../components/ui/CustomButton";
+import Paginator from "../../components/ui/Paginator";
 
-const {width: wWidth} = Dimensions.get('window');
+const { width: wWidth } = Dimensions.get("window");
 
 const Onboard: React.FC<MainNavigationProps<Route.navOnboard>> = ({
   navigation,
 }) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const { theme } = useTheme();
 
   const sliderRef = useRef<FlatList>(null);
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -37,10 +37,10 @@ const Onboard: React.FC<MainNavigationProps<Route.navOnboard>> = ({
   const [currentSlide, setCurrentSlide] = useState<number>(0);
 
   useEffect(() => {
-    // const init = async () => {
-    //   await RNBootSplash.hide();
-    // };
-    // init();
+    const init = async () => {
+      await RNBootSplash.hide();
+    };
+    init();
     setOpenFirstTime().then();
   }, []);
 
@@ -55,23 +55,23 @@ const Onboard: React.FC<MainNavigationProps<Route.navOnboard>> = ({
             offset: (currentSlide - 1) * wWidth,
             animated: true,
           });
-          setCurrentSlide(pv => pv - 1);
+          setCurrentSlide((pv) => pv - 1);
           return true;
         }
       };
-      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
       return () =>
-        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    }, [currentSlide]),
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+    }, [currentSlide])
   );
 
   // scroll to next slide
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const nextSlide = async () => {
     if (currentSlide < SLIDER.length - 1) {
-      sliderRef.current?.scrollToIndex({index: currentSlide + 1});
+      sliderRef.current?.scrollToIndex({ index: currentSlide + 1 });
     } else {
-      sliderRef.current?.scrollToIndex({index: 0});
+      sliderRef.current?.scrollToIndex({ index: 0 });
     }
   };
 
@@ -84,24 +84,24 @@ const Onboard: React.FC<MainNavigationProps<Route.navOnboard>> = ({
     };
   }, [nextSlide]);
 
-  const viewConfig = useRef({viewAreaCoveragePercentThreshold: 50}).current;
+  const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
   const viewableItemChanged = useRef(
-    ({viewableItems}: {viewableItems: ViewToken[]}) => {
+    ({ viewableItems }: { viewableItems: ViewToken[] }) => {
       setCurrentSlide(viewableItems[0].index as number);
-    },
+    }
   ).current;
 
   const scrollToIndex = (index: number) => {
-    sliderRef.current?.scrollToIndex({index});
+    sliderRef.current?.scrollToIndex({ index });
   };
 
   const onPressLogin = () => {
     navigation.dispatch(
       CommonActions.reset({
         index: 0,
-        routes: [{name: Route.navAuthentication}],
-      }),
+        routes: [{ name: Route.navAuthentication }],
+      })
     );
   };
   const onPressSignup = () => {
@@ -120,14 +120,14 @@ const Onboard: React.FC<MainNavigationProps<Route.navOnboard>> = ({
             },
           },
         ],
-      }),
+      })
     );
   };
 
   return (
     <View style={styles.mainCont}>
       <StatusBar
-        barStyle={'dark-content'}
+        barStyle={"dark-content"}
         backgroundColor={theme.colors?.transparent}
         translucent
       />
@@ -147,31 +147,31 @@ const Onboard: React.FC<MainNavigationProps<Route.navOnboard>> = ({
           onScroll={Animated.event(
             [
               {
-                nativeEvent: {contentOffset: {x: scrollX}},
+                nativeEvent: { contentOffset: { x: scrollX } },
               },
             ],
-            {useNativeDriver: false},
+            { useNativeDriver: false }
           )}
-          renderItem={({item, index}) => <SliderItem item={item} />}
+          renderItem={({ item, index }) => <SliderItem item={item} />}
         />
-        <View style={{alignItems: 'center', marginBottom: 50}}>
+        <View style={{ alignItems: "center", marginBottom: 50 }}>
           <Paginator
             data={createArrayUseNumber(SLIDER.length)}
             scrollX={scrollX}
-            variant={'secondary'}
+            variant={"secondary"}
           />
         </View>
       </View>
 
       <CustomButton
         onPress={onPressSignup}
-        title={'Create an account'}
+        title={"Create an account"}
         variant="primary"
         buttonWidth="full"
       />
       <CustomButton
         onPress={onPressLogin}
-        title={'Log in'}
+        title={"Log in"}
         type="outline"
         buttonWidth="full"
         marginTop={20}
@@ -182,17 +182,17 @@ const Onboard: React.FC<MainNavigationProps<Route.navOnboard>> = ({
 
 export default Onboard;
 
-export const useStyles = makeStyles(theme => ({
+export const useStyles = makeStyles((theme) => ({
   mainCont: {
     flex: 1,
     paddingBottom: 40,
     backgroundColor: theme?.colors?.background,
   },
-  innerCont: {flex: 1},
+  innerCont: { flex: 1 },
   bottomSafeAreaView: {
     flex: 0,
   },
-  lgCont: {flex: 1},
+  lgCont: { flex: 1 },
   topSafeAreaView: {
     flex: 0,
     zIndex: 999,
@@ -205,5 +205,5 @@ export const useStyles = makeStyles(theme => ({
   bottomCont: {
     paddingBottom: 16,
   },
-  fltCont: {flexGrow: 1},
+  fltCont: { flexGrow: 1 },
 }));

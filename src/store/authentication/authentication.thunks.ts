@@ -1,12 +1,12 @@
-import {createAsyncThunk} from '@reduxjs/toolkit';
-import {TokenPayload, TokenPayload1} from '../../types/authentication.types';
-import {FetchResponseError} from '../../types/fetch.types';
-import {RootReduxState} from '../../types/store.types';
-import {setData} from '../../utils/asyncStorage';
-import {fetchAction} from '../fetch';
-import {setUserData} from '../settings/settings.slice';
-import {API} from '../../constant/apiEndpoints';
-import {USER_DATA, secureStoreKeys} from '../../constant';
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { TokenPayload, TokenPayload1 } from "../../types/authentication.types";
+import { FetchResponseError } from "../../types/fetch.types";
+import { RootReduxState } from "../../types/store.types";
+import { setData } from "../../utils/asyncStorage";
+import { fetchAction } from "../fetch";
+import { setUserData } from "../settings/settings.slice";
+import { API } from "../../constant/apiEndpoints";
+import { USER_DATA, secureStoreKeys } from "../../constant";
 // import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
 export const userRegistration = createAsyncThunk<
@@ -22,9 +22,9 @@ export const userRegistration = createAsyncThunk<
     device_type: string;
     device_token: string;
   },
-  {state: RootReduxState; rejectValue: FetchResponseError}
+  { state: RootReduxState; rejectValue: FetchResponseError }
 >(
-  'authentication/userRegistration',
+  "authentication/userRegistration",
   async (
     {
       first_name,
@@ -37,13 +37,13 @@ export const userRegistration = createAsyncThunk<
       device_type,
       device_token,
     },
-    {dispatch, rejectWithValue},
+    { dispatch, rejectWithValue }
   ) => {
-    const {errors, data, authorization} = await dispatch(
+    const { errors, data, authorization } = await dispatch(
       fetchAction<TokenPayload>(
         {
           url: API.REGISTER,
-          method: 'POST',
+          method: "POST",
           data: {
             first_name,
             last_name,
@@ -56,16 +56,16 @@ export const userRegistration = createAsyncThunk<
             device_token,
           },
         },
-        false,
-      ),
+        false
+      )
     );
 
     if (errors) {
       return rejectWithValue(errors);
     }
 
-    console.log('data', data);
-    console.log('authorization', authorization);
+    console.log("data", data);
+    console.log("authorization", authorization);
 
     if (authorization) {
       dispatch(setUserData(data?.user));
@@ -73,7 +73,7 @@ export const userRegistration = createAsyncThunk<
     }
 
     return true;
-  },
+  }
 );
 export const userLogin = createAsyncThunk<
   any,
@@ -84,18 +84,18 @@ export const userLogin = createAsyncThunk<
     device_type: string;
     device_token: string;
   },
-  {state: RootReduxState; rejectValue: FetchResponseError}
+  { state: RootReduxState; rejectValue: FetchResponseError }
 >(
-  'authentication/userLogin',
+  "authentication/userLogin",
   async (
-    {phone_number, password, is_social, device_token, device_type},
-    {dispatch, rejectWithValue},
+    { phone_number, password, is_social, device_token, device_type },
+    { dispatch, rejectWithValue }
   ) => {
-    const {errors, data} = await dispatch(
+    const { errors, data } = await dispatch(
       fetchAction<TokenPayload>(
         {
           url: API.LOGIN,
-          method: 'POST',
+          method: "POST",
           data: {
             phone_number,
             password,
@@ -104,8 +104,8 @@ export const userLogin = createAsyncThunk<
             device_type,
           },
         },
-        false,
-      ),
+        false
+      )
     );
 
     if (errors) {
@@ -119,29 +119,29 @@ export const userLogin = createAsyncThunk<
     }
 
     return data;
-  },
+  }
 );
 export const userForgotPassword = createAsyncThunk<
   any,
-  {phone_number: string},
-  {state: RootReduxState; rejectValue: FetchResponseError}
+  { phone_number: string },
+  { state: RootReduxState; rejectValue: FetchResponseError }
 >(
-  'authentication/userForgotPassword',
-  async ({phone_number}, {dispatch, rejectWithValue}) => {
-    const {errors, data} = await dispatch(
+  "authentication/userForgotPassword",
+  async ({ phone_number }, { dispatch, rejectWithValue }) => {
+    const { errors, data } = await dispatch(
       fetchAction<TokenPayload1>(
         {
           url: API.FORGOT_PASSWORD,
-          method: 'POST',
+          method: "POST",
           data: {
             phone_number,
           },
         },
-        false,
-      ),
+        false
+      )
     );
 
-    console.log('data', data);
+    console.log("data", data);
 
     if (errors) {
       return rejectWithValue(errors);
@@ -150,21 +150,24 @@ export const userForgotPassword = createAsyncThunk<
     // await setData(secureStoreKeys.JWT_TOKEN, data.token);
 
     return data;
-  },
+  }
 );
 
 export const userOTPCode = createAsyncThunk<
   any,
-  {email?: string; code: string; type: string; phone_number?: string},
-  {state: RootReduxState; rejectValue: FetchResponseError}
+  { email?: string; code: string; type: string; phone_number?: string },
+  { state: RootReduxState; rejectValue: FetchResponseError }
 >(
-  'authentication/userOTPCode',
-  async ({code, email, type, phone_number}, {dispatch, rejectWithValue}) => {
-    const {errors, data} = await dispatch(
+  "authentication/userOTPCode",
+  async (
+    { code, email, type, phone_number },
+    { dispatch, rejectWithValue }
+  ) => {
+    const { errors, data } = await dispatch(
       fetchAction<TokenPayload>(
         {
           url: API.VERIFY_OTP_CODE,
-          method: 'POST',
+          method: "POST",
           data: {
             code,
             ...(email && {
@@ -178,12 +181,12 @@ export const userOTPCode = createAsyncThunk<
             }),
           },
         },
-        false,
-      ),
+        false
+      )
     );
 
-    console.log('data', data);
-    console.log('errors', errors);
+    console.log("data", data);
+    console.log("errors", errors);
 
     if (errors) {
       return rejectWithValue(errors);
@@ -192,28 +195,28 @@ export const userOTPCode = createAsyncThunk<
     // await setData(secureStoreKeys.JWT_TOKEN, data.token);
 
     return data;
-  },
+  }
 );
 
 export const userChangePassword = createAsyncThunk<
   any,
-  {old_password: string; password: string},
-  {state: RootReduxState; rejectValue: FetchResponseError}
+  { old_password: string; password: string },
+  { state: RootReduxState; rejectValue: FetchResponseError }
 >(
-  'authentication/userChangePassword',
-  async ({old_password, password}, {dispatch, rejectWithValue}) => {
-    const {errors, data} = await dispatch(
+  "authentication/userChangePassword",
+  async ({ old_password, password }, { dispatch, rejectWithValue }) => {
+    const { errors, data } = await dispatch(
       fetchAction<TokenPayload1>(
         {
           url: API.CHANGE_PASSWORD,
-          method: 'POST',
+          method: "POST",
           data: {
             old_password,
             password,
           },
         },
-        true,
-      ),
+        true
+      )
     );
 
     if (errors) {
@@ -223,68 +226,67 @@ export const userChangePassword = createAsyncThunk<
     // await setData(secureStoreKeys.JWT_TOKEN, data.token);
 
     return data;
-  },
+  }
 );
 
 export const userResetPassword = createAsyncThunk<
   any,
-  {password: string; phone_number: string; type: string},
-  {state: RootReduxState; rejectValue: FetchResponseError}
+  { password: string; phone_number: string },
+  { state: RootReduxState; rejectValue: FetchResponseError }
 >(
-  'authentication/userResetPassword',
-  async ({password, phone_number, type}, {dispatch, rejectWithValue}) => {
-    const {errors, data} = await dispatch(
+  "authentication/userResetPassword",
+  async ({ password, phone_number }, { dispatch, rejectWithValue }) => {
+    const { errors, data } = await dispatch(
       fetchAction<TokenPayload1>(
         {
           url: API.RESET_PASSWORD,
-          method: 'POST',
+          method: "POST",
           data: {
             password,
             phone_number,
-            type,
           },
         },
-        false,
-      ),
+        false
+      )
     );
 
     if (errors) {
       return rejectWithValue(errors);
     }
     return data;
-  },
+  }
 );
 
 export const userResendOTP = createAsyncThunk<
   any,
-  {phone_number: string},
-  {state: RootReduxState; rejectValue: FetchResponseError}
+  { phone_number: string },
+  { state: RootReduxState; rejectValue: FetchResponseError }
 >(
-  'authentication/userResendOTP',
-  async ({phone_number}, {dispatch, rejectWithValue}) => {
-    const {errors, data} = await dispatch(
+  "authentication/userResendOTP",
+  async ({ phone_number }, { dispatch, rejectWithValue }) => {
+    const { errors, data } = await dispatch(
       fetchAction<TokenPayload1>(
         {
           url: API.RESEND_OTP,
-          method: 'POST',
+          method: "POST",
           data: {
             ...(phone_number && {
               phone_number,
             }),
           },
         },
-        false,
-      ),
+        false
+      )
     );
 
-    console.log('errors', errors);
-    console.log('data', data);
+    console.log("errors", errors);
+    console.log("data", data);
 
     if (errors) {
       return rejectWithValue(errors);
     }
     return data;
-  },
+  }
 );
 
 export const oAuthLogin = createAsyncThunk<
@@ -303,9 +305,9 @@ export const oAuthLogin = createAsyncThunk<
     device_token: string;
     // credential: FirebaseAuthTypes.AuthCredential;
   },
-  {state: RootReduxState; rejectValue: FetchResponseError}
+  { state: RootReduxState; rejectValue: FetchResponseError }
 >(
-  'authentication/oAuthLogin',
+  "authentication/oAuthLogin",
   async (
     {
       first_name,
@@ -319,18 +321,18 @@ export const oAuthLogin = createAsyncThunk<
       device_token,
       // credential,
     },
-    {dispatch, rejectWithValue},
+    { dispatch, rejectWithValue }
   ) => {
     // try {
     //   await auth().signInWithCredential(credential);
     // } catch (e) {
     //   return rejectWithValue(e);
     // }
-    const {errors, data, authorization} = await dispatch(
+    const { errors, data, authorization } = await dispatch(
       fetchAction<TokenPayload>(
         {
           url: API.OAUTH_LOGIN,
-          method: 'POST',
+          method: "POST",
           data: {
             // first_name: auth()?.currentUser?.displayName || first_name,
             // last_name: auth()?.currentUser?.displayName || last_name,
@@ -346,15 +348,15 @@ export const oAuthLogin = createAsyncThunk<
           },
         },
         false,
-        true,
-      ),
+        true
+      )
     );
 
     if (errors) {
       return rejectWithValue(errors);
     }
 
-    console.log('USER data - - - - ', data?.user);
+    console.log("USER data - - - - ", data?.user);
     if (data?.user) {
       dispatch(setUserData(data?.user));
       setData(USER_DATA, data?.user);
@@ -365,7 +367,7 @@ export const oAuthLogin = createAsyncThunk<
     }
 
     return data;
-  },
+  }
 );
 
 export const oAuthRegister = createAsyncThunk<
@@ -379,18 +381,18 @@ export const oAuthRegister = createAsyncThunk<
     social_type: string;
     type: string;
   },
-  {state: RootReduxState; rejectValue: FetchResponseError}
+  { state: RootReduxState; rejectValue: FetchResponseError }
 >(
-  'authentication/oAuthRegister',
+  "authentication/oAuthRegister",
   async (
-    {first_name, last_name, email, social_id, is_social, social_type, type},
-    {dispatch, rejectWithValue},
+    { first_name, last_name, email, social_id, is_social, social_type, type },
+    { dispatch, rejectWithValue }
   ) => {
-    const {errors, data} = await dispatch(
+    const { errors, data } = await dispatch(
       fetchAction<TokenPayload>(
         {
           url: API.OAUTH_REGISTER,
-          method: 'POST',
+          method: "POST",
           data: {
             first_name,
             last_name,
@@ -402,8 +404,8 @@ export const oAuthRegister = createAsyncThunk<
           },
         },
         false,
-        true,
-      ),
+        true
+      )
     );
 
     if (errors) {
@@ -417,22 +419,22 @@ export const oAuthRegister = createAsyncThunk<
     }
 
     return data;
-  },
+  }
 );
 
 export const logout = createAsyncThunk<
   any,
   void,
-  {state: RootReduxState; rejectValue: FetchResponseError}
->('authentication/logout', async (_, {dispatch, rejectWithValue}) => {
-  const {errors} = await dispatch(
+  { state: RootReduxState; rejectValue: FetchResponseError }
+>("authentication/logout", async (_, { dispatch, rejectWithValue }) => {
+  const { errors } = await dispatch(
     fetchAction(
       {
         url: API.LOGOUT,
-        method: 'GET',
+        method: "GET",
       },
-      true,
-    ),
+      true
+    )
   );
 
   if (errors) {
@@ -449,22 +451,22 @@ export const userAddress = createAsyncThunk<
   {
     formData: FormData;
   },
-  {state: RootReduxState; rejectValue: FetchResponseError}
+  { state: RootReduxState; rejectValue: FetchResponseError }
 >(
-  'authentication/userAddress',
-  async ({formData}, {dispatch, rejectWithValue}) => {
-    const {errors, data} = await dispatch(
+  "authentication/userAddress",
+  async ({ formData }, { dispatch, rejectWithValue }) => {
+    const { errors, data } = await dispatch(
       fetchAction<TokenPayload>(
         {
           url: API.ADD_ADDRESS,
-          method: 'POST',
+          method: "POST",
           data: formData,
           headers: {
-            'content-type': 'multipart/form-data',
+            "content-type": "multipart/form-data",
           },
         },
-        true,
-      ),
+        true
+      )
     );
 
     if (errors) {
@@ -478,7 +480,7 @@ export const userAddress = createAsyncThunk<
     }
 
     return data;
-  },
+  }
 );
 // Add KYC
 export const userVerifyId = createAsyncThunk<
@@ -486,22 +488,22 @@ export const userVerifyId = createAsyncThunk<
   {
     formData: FormData;
   },
-  {state: RootReduxState; rejectValue: FetchResponseError}
+  { state: RootReduxState; rejectValue: FetchResponseError }
 >(
-  'authentication/userVerifyId',
-  async ({formData}, {dispatch, rejectWithValue}) => {
-    const {errors, data} = await dispatch(
+  "authentication/userVerifyId",
+  async ({ formData }, { dispatch, rejectWithValue }) => {
+    const { errors, data } = await dispatch(
       fetchAction<TokenPayload>(
         {
           url: API.VERIFY_KYC,
-          method: 'POST',
+          method: "POST",
           data: formData,
           headers: {
-            'content-type': 'multipart/form-data',
+            "content-type": "multipart/form-data",
           },
         },
-        true,
-      ),
+        true
+      )
     );
 
     if (errors) {
@@ -515,5 +517,5 @@ export const userVerifyId = createAsyncThunk<
     }
 
     return data;
-  },
+  }
 );
