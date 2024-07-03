@@ -1,33 +1,32 @@
-import * as React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-// import RNBootSplash from "react-native-bootsplash";
-import {AuthenticationRoutes} from '../types/navigation';
-import {Route} from '../constant/navigationConstants';
-import Login from '../screens/authentication/Login';
-import Signup from '../screens/authentication/Signup';
-import ForgotPassword from '../screens/authentication/ForgotPassword/ForgotPassword';
-import EnterOTP from '../screens/authentication/ForgotPassword/EnterOTP';
-import SetupProfile1 from '../screens/authentication/SetupProfiles/SetupProfile1';
-import SetupProfile2 from '../screens/authentication/SetupProfiles/SetupProfile2';
-import SetupProfile3 from '../screens/authentication/SetupProfiles/SetupProfile3';
-import SetupProfile4 from '../screens/authentication/SetupProfiles/SetupProfile4';
-import SetupProfile5 from '../screens/authentication/SetupProfiles/SetupProfile5';
-import SetupProfile6 from '../screens/authentication/SetupProfiles/SetupProfile6';
-import SetupProfile7 from '../screens/authentication/SetupProfiles/SetupProfile7';
-
+import * as React from "react";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import RNBootSplash from "react-native-bootsplash";
 // relative path
+import { AuthenticationRoutes } from "../types/navigation";
+import { Route } from "../constant/navigationConstants";
+import Login from "../screens/authentication/Login";
+import Signup from "../screens/authentication/Signup";
+import ForgotPassword from "../screens/authentication/ForgotPassword/ForgotPassword";
+import EnterOTP from "../screens/authentication/ForgotPassword/EnterOTP";
+import SetupProfile1 from "../screens/authentication/SetupProfiles/SetupProfile1";
+import SetupProfile2 from "../screens/authentication/SetupProfiles/SetupProfile2";
+import SetupProfile3 from "../screens/authentication/SetupProfiles/SetupProfile3";
+import SetupProfile4 from "../screens/authentication/SetupProfiles/SetupProfile4";
+import SetupProfile5 from "../screens/authentication/SetupProfiles/SetupProfile5";
+import SetupProfile6 from "../screens/authentication/SetupProfiles/SetupProfile6";
+import SetupProfile7 from "../screens/authentication/SetupProfiles/SetupProfile7";
 
 const Stack = createNativeStackNavigator<AuthenticationRoutes>();
 
 const Authentication = () => {
-  // React.useEffect(() => {
-  //   const init = async () => {
-  //     await RNBootSplash.hide();
-  //   };
-  //   init();
-  // }, []);
+  React.useEffect(() => {
+    const init = async () => {
+      await RNBootSplash.hide();
+    };
+    init();
+  }, []);
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name={Route.navLogin} component={Login} />
       <Stack.Screen name={Route.navSignup} component={Signup} />
       <Stack.Screen name={Route.navForgotPassword} component={ForgotPassword} />
