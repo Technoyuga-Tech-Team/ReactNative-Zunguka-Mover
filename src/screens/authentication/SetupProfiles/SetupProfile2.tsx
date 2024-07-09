@@ -1,51 +1,52 @@
-import {useFormik} from 'formik';
-import React, {useEffect, useState} from 'react';
-import {Platform, Text, TouchableOpacity, View} from 'react-native';
-import {makeStyles, useTheme} from 'react-native-elements';
+import { useFormik } from "formik";
+import React, { useEffect, useState } from "react";
+import { Platform, Text, TouchableOpacity, View } from "react-native";
+import { makeStyles, useTheme } from "react-native-elements";
 import {
   GooglePlaceData,
   GooglePlaceDetail,
-} from 'react-native-google-places-autocomplete';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useSelector} from 'react-redux';
-import {AuthNavigationProps} from '../../../types/navigation';
-import {Route} from '../../../constant/navigationConstants';
-import {useAppDispatch} from '../../../hooks/useAppDispatch';
-import {useMeQuery} from '../../../hooks/useMeQuery';
-import {selectUserProfileLoading} from '../../../store/userprofile/userprofile.selectors';
-import {getUrlExtension} from '../../../utils';
+} from "react-native-google-places-autocomplete";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
+import { AuthNavigationProps } from "../../../types/navigation";
+import { Route } from "../../../constant/navigationConstants";
+import { useAppDispatch } from "../../../hooks/useAppDispatch";
+import { useMeQuery } from "../../../hooks/useMeQuery";
+import { selectUserProfileLoading } from "../../../store/userprofile/userprofile.selectors";
+import { getUrlExtension } from "../../../utils";
 import {
   getImageFromCamera,
   getImageFromGallary,
   requestCameraPermission,
-} from '../../../utils/ImagePickerCameraGallary';
-import {SetupProfile2FormProps} from '../../../types/setupProfile.types';
-import {SetupProfile2ScreenSchema} from '../../../constant/formValidations';
-import {userSetupProfile} from '../../../store/userprofile/userprofile.thunk';
-import {setErrors} from '../../../store/global/global.slice';
-import {imagePickerProps} from '../../../types/common.types';
-import {LoadingState, ThemeProps} from '../../../types/global.types';
-import Loading from '../../../components/ui/Loading';
-import SetupProfileHeader from '../../../components/SetupProfileHeader';
-import {CustomTxtInput} from '../../../components/ui/CustomTextInput';
-import UploadProofPhotos from '../../../components/UploadProofPhotos';
-import RenderSelectedImage from '../../../components/RenderSelectedImage/RenderSelectedImage';
-import PrevNextCont from '../../../components/PrevNextCont';
-import ImagePickerPopup from '../../../components/ui/ImagePickerPopup';
-import {CURRENT_COUNTRY_CODE} from '../../../constant';
-import GooglePlaceAutoCompleteModal from '../../../components/GooglePlaceAutoCompleteModel';
-import Scale from '../../../utils/Scale';
-import LocationCrossIcon from '../../../components/ui/svg/LocationCrossIcon';
+} from "../../../utils/ImagePickerCameraGallary";
+import { SetupProfile2FormProps } from "../../../types/setupProfile.types";
+import { SetupProfile2ScreenSchema } from "../../../constant/formValidations";
+import { userSetupProfile } from "../../../store/userprofile/userprofile.thunk";
+import { setErrors } from "../../../store/global/global.slice";
+import { imagePickerProps } from "../../../types/common.types";
+import { LoadingState, ThemeProps } from "../../../types/global.types";
+import Loading from "../../../components/ui/Loading";
+import SetupProfileHeader from "../../../components/SetupProfileHeader";
+import { CustomTxtInput } from "../../../components/ui/CustomTextInput";
+import UploadProofPhotos from "../../../components/UploadProofPhotos";
+import RenderSelectedImage from "../../../components/RenderSelectedImage/RenderSelectedImage";
+import PrevNextCont from "../../../components/PrevNextCont";
+import ImagePickerPopup from "../../../components/ui/ImagePickerPopup";
+import { CURRENT_COUNTRY_CODE } from "../../../constant";
+import GooglePlaceAutoCompleteModal from "../../../components/GooglePlaceAutoCompleteModel";
+import Scale from "../../../utils/Scale";
+import LocationCrossIcon from "../../../components/ui/svg/LocationCrossIcon";
+import { UserRoleType } from "../../../types/user.types";
 
 const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
   navigation,
 }) => {
   const insets = useSafeAreaInsets();
-  const style = useStyles({insets});
-  const {theme} = useTheme();
+  const style = useStyles({ insets });
+  const { theme } = useTheme();
   const dispatch = useAppDispatch();
-  const {refetch} = useMeQuery({enabled: false});
+  const { refetch } = useMeQuery({ enabled: false });
 
   const loading = useSelector(selectUserProfileLoading);
 
@@ -54,26 +55,26 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
   const [visible, setVisible] = useState(false);
   const [visibleAddress, setVisibleAddress] = useState<boolean>(false);
   const [selectedImageForDelete, setSelectedImageForDelete] =
-    useState<string>('');
+    useState<string>("");
 
   useEffect(() => {
-    let unsubscribe = navigation.addListener('focus', async () => {
-      refetch().then(currentUser => {
+    let unsubscribe = navigation.addListener("focus", async () => {
+      refetch().then((currentUser) => {
         if (currentUser?.data?.user) {
           currentUser?.data?.user?.address_proofs?.length > 0 &&
-            setSelectedImage(currentUser?.data?.user?.address_proofs);
+            setSelectedImage(currentUser?.data?.user?.address_proofs as any);
           let arr: any = [];
           if (currentUser?.data?.user?.address_proofs.length > 0) {
-            currentUser?.data?.user?.address_proofs.map(ele => {
+            currentUser?.data?.user?.address_proofs.map((ele) => {
               arr.push({
                 name: `IMG-${new Date()}.${getUrlExtension(ele)}`,
                 type: `image/${getUrlExtension(ele)}`,
-                uri: Platform.OS === 'ios' ? ele.replace('file://', '') : ele,
+                uri: Platform.OS === "ios" ? ele.replace("file://", "") : ele,
               });
             });
             setImage(arr);
           }
-          setFieldValue('address', currentUser?.data?.user?.address);
+          setFieldValue("address", currentUser?.data?.user?.address);
         }
       });
     });
@@ -84,12 +85,12 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
   }, []);
 
   useEffect(() => {
-    if (selectedImageForDelete !== '') {
-      const filterArr = image.filter(ele => {
+    if (selectedImageForDelete !== "") {
+      const filterArr = image.filter((ele) => {
         return ele.name !== selectedImageForDelete;
       });
       setImage(filterArr);
-      setSelectedImageForDelete('');
+      setSelectedImageForDelete("");
     }
   }, [selectedImageForDelete]);
 
@@ -109,7 +110,7 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
   const onPressFromCamera = async () => {
     togglePopup();
     setTimeout(async () => {
-      if (Platform.OS === 'android') {
+      if (Platform.OS === "android") {
         const hasPermission = await requestCameraPermission();
         if (hasPermission) {
           openPickerCameraImage();
@@ -127,7 +128,7 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
       setImage([...image, imageObject]);
     } catch (error) {
       // Handle errors here if needed (e.g., display a user-friendly message)
-      console.error('Error using getImageFromCamera:', error);
+      console.error("Error using getImageFromCamera:", error);
     }
   };
 
@@ -135,15 +136,15 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
     togglePopup();
     setTimeout(async () => {
       try {
-        const imageObject = await getImageFromGallary({multiple: true});
+        const imageObject = await getImageFromGallary({ multiple: true });
         setSelectedImage([
           ...selectedImage,
-          ...imageObject.map((image: {uri: any}) => image.uri),
+          ...imageObject.map((image: { uri: any }) => image.uri),
         ]);
         setImage([...image, ...imageObject]);
       } catch (error) {
         // Handle errors here if needed (e.g., display a user-friendly message)
-        console.error('Error using getImageFromGallary:', error);
+        console.error("Error using getImageFromGallary:", error);
       }
     }, 1000);
   };
@@ -163,8 +164,8 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
     setFieldValue,
   } = useFormik<SetupProfile2FormProps>({
     validationSchema: SetupProfile2ScreenSchema,
-    initialValues: {address: ''},
-    onSubmit: async ({address}) => {
+    initialValues: { address: "" },
+    onSubmit: async ({ address }) => {
       if (image.length > 0) {
         const formData = new FormData();
 
@@ -173,34 +174,35 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
             name: val.name || `IMG-${new Date()}.${getUrlExtension(val.uri)}`,
             type: val.type,
             uri:
-              Platform.OS === 'ios' ? val.uri.replace('file://', '') : val.uri,
+              Platform.OS === "ios" ? val.uri.replace("file://", "") : val.uri,
           });
         });
 
-        formData.append('address', address);
-        formData.append('step', 2);
+        formData.append("address", address);
+        formData.append("step", 2);
+        formData.append("type", UserRoleType.MOVER);
 
         const result = await dispatch(
           userSetupProfile({
             formData: formData,
-          }),
+          })
         );
         if (userSetupProfile.fulfilled.match(result)) {
           if (result.payload?.data) {
-            if (result.payload?.data?.steps_count == 2) {
+            if (result.payload?.data?.mover_setup_step == 2) {
               navigation.navigate(Route.navSetupProfile3);
             }
           }
         } else {
-          console.log('errror userSetupProfile --->', result.payload);
+          console.log("errror userSetupProfile --->", result.payload);
         }
       } else {
         dispatch(
           setErrors({
-            message: 'Please attach address proof',
+            message: "Please attach address proof",
             status: 0,
             statusCode: null,
-          }),
+          })
         );
       }
     },
@@ -212,13 +214,14 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
 
   const onPressGetAddress = (
     data: GooglePlaceData | GooglePlaceDetail,
-    details: GooglePlaceDetail,
+    details: GooglePlaceDetail
   ) => {
     const location_address =
       data.description !== undefined
         ? data.description
         : data?.formatted_address;
-    setFieldValue('address', location_address);
+    console.log("location_address", location_address);
+    setFieldValue("address", location_address);
     toggleAddressModal();
   };
 
@@ -229,19 +232,21 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
   return (
     <KeyboardAwareScrollView
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={style.container}>
+      keyboardShouldPersistTaps={"handled"}
+      contentContainerStyle={style.container}
+    >
       {loading === LoadingState.CREATE && <Loading />}
       <SetupProfileHeader
-        title={'Add Address and Attach Document'}
+        title={"Add Address and Attach Document"}
         percent={2}
       />
       <View style={style.innerCont}>
         <CustomTxtInput
           textInputTitle="Address"
           placeholder="Enter your Address"
-          keyboardType={'default'}
-          onChangeText={handleChange('address')}
-          onBlur={handleBlur('address')}
+          keyboardType={"default"}
+          onChangeText={handleChange("address")}
+          onBlur={handleBlur("address")}
           value={values.address}
           error={errors.address}
           touched={touched.address}
@@ -251,7 +256,8 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
         <TouchableOpacity
           style={style.locationCont}
           activeOpacity={0.8}
-          onPress={onPressCurrentLocation}>
+          onPress={onPressCurrentLocation}
+        >
           <LocationCrossIcon color={theme?.colors?.primary} />
           <Text style={style.txtChooseLocation}>Choose current location</Text>
         </TouchableOpacity>
@@ -277,9 +283,10 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
       />
       <GooglePlaceAutoCompleteModal
         countryCode={CURRENT_COUNTRY_CODE}
-        onPressAddress={(data: GooglePlaceData, details: GooglePlaceDetail) =>
-          onPressGetAddress(data, details)
-        }
+        onPressAddress={(data: GooglePlaceData, details: GooglePlaceDetail) => {
+          console.log("data, details", data, details);
+          onPressGetAddress(data, details);
+        }}
         visiblePopup={visibleAddress}
         togglePopup={toggleAddressModal}
       />
@@ -307,8 +314,8 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
     marginLeft: 10,
   },
   locationCont: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginVertical: 5,
   },
   uploadPhotoCont: {
@@ -319,9 +326,9 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
     width: Scale(20),
     borderRadius: Scale(10),
     backgroundColor: theme.colors?.white,
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
     top: 8,
     right: 17,
   },

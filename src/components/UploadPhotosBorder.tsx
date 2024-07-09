@@ -4,14 +4,15 @@ import { makeStyles } from "react-native-elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTheme } from "react-native-elements";
 import { ThemeProps } from "../types/global.types";
-import PaperclipIcon from "./ui/svg/PaperclipIcon";
+import PlusSquareIcon from "./ui/svg/PlusSquareIcon";
+import Scale from "../utils/Scale";
 
-interface UploadProofPhotosProps {
+interface UploadPhotosBorderProps {
   title: string;
   onPressUploadImages: () => void;
 }
 
-const UploadProofPhotos: React.FC<UploadProofPhotosProps> = ({
+const UploadPhotosBorder: React.FC<UploadPhotosBorderProps> = ({
   title,
   onPressUploadImages,
 }) => {
@@ -19,21 +20,18 @@ const UploadProofPhotos: React.FC<UploadProofPhotosProps> = ({
   const style = useStyles({ insets });
   const { theme } = useTheme();
   return (
-    <View>
-      <Text style={style.txtTitle}>{title}</Text>
-      <TouchableOpacity
-        onPress={onPressUploadImages}
-        activeOpacity={0.8}
-        style={style.uploadCont}
-      >
-        <PaperclipIcon />
-        <Text style={style.txtUploadImg}>Upload Images</Text>
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity
+      onPress={onPressUploadImages}
+      activeOpacity={0.8}
+      style={style.uploadCont}
+    >
+      <PlusSquareIcon color={theme?.colors?.black} />
+      <Text style={style.txtUploadImg}>{title}</Text>
+    </TouchableOpacity>
   );
 };
 
-export default UploadProofPhotos;
+export default UploadPhotosBorder;
 
 const useStyles = makeStyles((theme, props: ThemeProps) => ({
   txtTitle: {
@@ -42,20 +40,20 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
     color: theme.colors?.primaryText,
   },
   uploadCont: {
-    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 5,
     paddingHorizontal: 10,
-    borderColor: "#706E6E",
     borderWidth: 1,
-    borderRadius: 20,
-    alignSelf: "flex-start",
-    marginTop: 10,
+    borderRadius: 8,
+    height: Scale(108),
+    width: Scale(227),
+    borderStyle: "dashed",
   },
   txtUploadImg: {
     fontSize: theme.fontSize?.fs12,
     fontFamily: theme.fontFamily?.regular,
-    color: theme.colors?.secondaryText,
-    marginLeft: 8,
+    color: theme.colors?.black,
+    marginTop: 10,
   },
 }));

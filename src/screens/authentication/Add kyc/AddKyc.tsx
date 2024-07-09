@@ -26,7 +26,10 @@ import { userVerifyId } from "../../../store/authentication/authentication.thunk
 import { setErrors, setSuccess } from "../../../store/global/global.slice";
 import { selectAuthenticationLoading } from "../../../store/authentication/authentication.selectors";
 import { useSelector } from "react-redux";
-import { CommonActions } from "@react-navigation/native";
+import { CommonActions, useNavigation } from "@react-navigation/native";
+import { UserRoleType } from "../../../types/user.types";
+import UploadPhotosBorder from "../../../components/UploadPhotosBorder";
+import { setNavigation } from "../../../utils/setNavigation";
 
 const AddKyc: React.FC<AuthNavigationProps<Route.navAddKyc>> = ({
   navigation,
@@ -37,6 +40,7 @@ const AddKyc: React.FC<AuthNavigationProps<Route.navAddKyc>> = ({
   const dispatch = useAppDispatch();
 
   const loading = useSelector(selectAuthenticationLoading);
+  const navigationRoute = useNavigation();
 
   const [country, setCountry] = useState("");
   const [countryError, setCountryError] = useState("");
@@ -145,6 +149,8 @@ const AddKyc: React.FC<AuthNavigationProps<Route.navAddKyc>> = ({
         const formData = new FormData();
         formData.append("country", `${country}`);
         formData.append("id_type", `${IdType}`);
+        formData.append("type", `${UserRoleType.MOVER}`);
+
         Object.entries(image).forEach(([_key, val]) => {
           formData.append(`kyc_documents[${_key}]`, {
             name:
@@ -158,17 +164,13 @@ const AddKyc: React.FC<AuthNavigationProps<Route.navAddKyc>> = ({
         const result = await dispatch(userVerifyId({ formData: formData }));
         if (userVerifyId.fulfilled.match(result)) {
           if (result.payload.status === 1) {
-            console.log("userAddress result - - - ", result.payload);
+            console.log("userVerifyId result - - - ", result.payload);
+
+            setNavigation(result.payload?.data, navigationRoute);
             dispatch(setSuccess(result.payload.message));
-            navigation.dispatch(
-              CommonActions.reset({
-                index: 0,
-                routes: [{ name: Route.navDashboard }],
-              })
-            );
           }
         } else {
-          console.log("userAddress error - - - ", result.payload);
+          console.log("userVerifyId error - - - ", result.payload);
         }
       } catch (error) {
         console.log("catch error - - - ", error);
@@ -252,7 +254,7 @@ const AddKyc: React.FC<AuthNavigationProps<Route.navAddKyc>> = ({
               onPressCloseIcon={onPressCloseIcon}
             />
           ) : (
-            <UploadProofPhotos
+            <UploadPhotosBorder
               title="Upload document"
               onPressUploadImages={onPressUploadImages}
             />

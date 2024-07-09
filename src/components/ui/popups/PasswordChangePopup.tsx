@@ -6,6 +6,7 @@ import { TouchableWithoutFeedback } from "react-native";
 import Scale from "../../../utils/Scale";
 import CustomButton from "../CustomButton";
 import FrameIcon from "../svg/FrameIcon";
+import { SCREEN_WIDTH } from "../../../constant";
 
 interface PasswordChangePopupProps {
   visiblePopup: boolean;
@@ -45,6 +46,7 @@ const PasswordChangePopup: React.FC<PasswordChangePopupProps> = ({
                 onPress={onPressBackToLogin}
                 title={"Back to Login"}
                 buttonWidth="half"
+                width={SCREEN_WIDTH - 100}
                 variant="primary"
                 type="solid"
               />

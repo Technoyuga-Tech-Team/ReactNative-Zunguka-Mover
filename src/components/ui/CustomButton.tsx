@@ -1,27 +1,30 @@
-import React, {ReactElement} from 'react';
-import {Platform, View} from 'react-native';
+import React, { ReactElement } from "react";
+import { Platform, View } from "react-native";
 import {
   Button as RNEButton,
   ButtonProps as RNEButtonProps,
   makeStyles,
-} from 'react-native-elements';
-import Scale from '../../utils/Scale';
-import {SCREEN_WIDTH} from '../../constant';
+  useTheme,
+} from "react-native-elements";
+import Scale from "../../utils/Scale";
+import { SCREEN_WIDTH } from "../../constant";
 
 interface CustomButtonProps extends RNEButtonProps {
-  variant?: 'primary' | 'secondary';
+  variant?: "primary" | "secondary";
   iconName?: string;
   iconColor?: string;
   iconSize?: number;
   rightIcon?: ReactElement;
   icon?: ReactElement;
-  buttonWidth: 'half' | 'full';
+  buttonWidth: "half" | "full";
+  width?: number;
   marginTop?: number;
+  backgroundColor?: string;
 }
 
-const CustomButton: React.FC<CustomButtonProps> = props => {
+const CustomButton: React.FC<CustomButtonProps> = (props) => {
   const {
-    variant = 'secondary',
+    variant = "secondary",
     iconColor,
     buttonStyle,
     titleStyle,
@@ -30,40 +33,49 @@ const CustomButton: React.FC<CustomButtonProps> = props => {
     rightIcon,
     icon,
     buttonWidth,
+    width,
     marginTop,
+    backgroundColor,
     ...otherProps
   } = props;
   const styles = useStyles(props);
-
+  const { theme } = useTheme();
   return (
     <View
       style={[
-        variant === 'primary'
+        variant === "primary"
           ? styles.primaryContainer
           : styles.secondaryContainer,
         containerStyle,
-        {justifyContent: 'center', marginTop: marginTop},
-      ]}>
+        { justifyContent: "center", marginTop: marginTop },
+      ]}
+    >
       <RNEButton
         type={type}
         containerStyle={[
-          variant === 'primary'
+          variant === "primary"
             ? styles.primaryContainer
             : styles.secondaryContainer,
           containerStyle,
         ]}
         buttonStyle={[
-          variant === 'primary' ? styles.primary : styles.secondary,
+          variant === "primary" ? styles.primary : styles.secondary,
           buttonStyle,
-          type === 'outline' &&
-            variant === 'secondary' &&
+          type === "outline" &&
+            variant === "secondary" &&
             styles.secondaryOutline,
+          {
+            backgroundColor:
+              variant === "primary" && type !== "outline"
+                ? backgroundColor
+                : theme?.colors?.transparent,
+          },
         ]}
         titleStyle={[
-          variant === 'primary' ? styles.primaryTitle : styles.secondaryTitle,
+          variant === "primary" ? styles.primaryTitle : styles.secondaryTitle,
           titleStyle,
-          type === 'outline' &&
-            variant === 'secondary' &&
+          type === "outline" &&
+            variant === "secondary" &&
             styles.txtSecondaryOutline,
         ]}
         icon={icon}
@@ -71,12 +83,13 @@ const CustomButton: React.FC<CustomButtonProps> = props => {
         {...otherProps}
       />
 
-      {buttonWidth === 'half' && rightIcon && (
+      {buttonWidth === "half" && rightIcon && (
         <View
           style={{
-            position: 'absolute',
+            position: "absolute",
             right: 10,
-          }}>
+          }}
+        >
           {rightIcon}
         </View>
       )}
@@ -86,38 +99,35 @@ const CustomButton: React.FC<CustomButtonProps> = props => {
 
 const useStyles = makeStyles((theme, props: CustomButtonProps) => ({
   shadow: {
-    shadowColor: 'rgba(111, 126, 201, 0.5)',
+    shadowColor: "rgba(111, 126, 201, 0.5)",
     shadowOffset: {
       width: 0,
       height: 0,
     },
-    shadowOpacity: Platform.OS === 'ios' ? 0.8 : 0.4,
+    shadowOpacity: Platform.OS === "ios" ? 0.8 : 0.4,
     shadowRadius: 50,
   },
   primaryContainer: {
     height: Scale(56),
-    alignSelf: 'center',
+    alignSelf: "center",
     borderRadius: Scale(32),
     backgroundColor: theme.colors?.primary,
   },
   secondaryContainer: {
     height: Scale(56),
-    alignSelf: 'center',
+    alignSelf: "center",
     borderRadius: Scale(32),
   },
   primary: {
     borderRadius: Scale(32),
     height: Scale(56),
-    width:
-      props.buttonWidth === 'half'
-        ? (SCREEN_WIDTH - 50) / 2
-        : SCREEN_WIDTH - 40,
+    width: props.buttonWidth === "half" ? props.width : SCREEN_WIDTH - 40,
     backgroundColor: theme.colors?.primary,
   },
   secondary: {
     backgroundColor:
-      props.type === 'outline' || props.type === 'clear'
-        ? 'transparent'
+      props.type === "outline" || props.type === "clear"
+        ? "transparent"
         : theme.colors?.secondary,
   },
   primaryTitle: {
@@ -139,10 +149,7 @@ const useStyles = makeStyles((theme, props: CustomButtonProps) => ({
     borderWidth: 1,
     borderRadius: Scale(32),
     height: Scale(56),
-    width:
-      props.buttonWidth === 'half'
-        ? (SCREEN_WIDTH - 50) / 2
-        : SCREEN_WIDTH - 40,
+    width: props.buttonWidth === "half" ? props.width : SCREEN_WIDTH - 40,
   },
   icon: {
     marginHorizontal: 3,

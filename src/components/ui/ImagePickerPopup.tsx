@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Modal,
   Platform,
@@ -6,14 +6,14 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
-} from 'react-native';
-import {makeStyles} from 'react-native-elements';
+} from "react-native";
+import { makeStyles } from "react-native-elements";
 
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import CustomButton from './CustomButton';
-import {HAS_NOTCH, HIT_SLOP, SCREEN_WIDTH} from '../../constant';
-import {ThemeProps} from '../../types/global.types';
-import Scale from '../../utils/Scale';
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import CustomButton from "./CustomButton";
+import { HAS_NOTCH, HIT_SLOP, SCREEN_WIDTH } from "../../constant";
+import { ThemeProps } from "../../types/global.types";
+import Scale from "../../utils/Scale";
 
 interface ImagePickerPopupProps {
   visiblePopup: boolean;
@@ -29,7 +29,7 @@ const ImagePickerPopup: React.FC<ImagePickerPopupProps> = ({
   onPressFromCamera,
 }) => {
   const insets = useSafeAreaInsets();
-  const style = useStyle({insets});
+  const style = useStyle({ insets });
 
   return (
     <Modal
@@ -38,7 +38,8 @@ const ImagePickerPopup: React.FC<ImagePickerPopupProps> = ({
       style={style.modalCont}
       transparent={true}
       animationType="none"
-      statusBarTranslucent={true}>
+      statusBarTranslucent={true}
+    >
       <TouchableWithoutFeedback onPress={togglePopup}>
         <View style={style.container}>
           <View style={style.innerCont}>
@@ -46,7 +47,7 @@ const ImagePickerPopup: React.FC<ImagePickerPopupProps> = ({
             <View style={style.buttonCont}>
               <CustomButton
                 onPress={onPressFromGallary}
-                title={'Gallary'}
+                title={"Gallary"}
                 buttonWidth="full"
                 variant="primary"
                 type="solid"
@@ -56,7 +57,7 @@ const ImagePickerPopup: React.FC<ImagePickerPopupProps> = ({
             <View style={style.buttonCont}>
               <CustomButton
                 onPress={onPressFromCamera}
-                title={'Camera'}
+                title={"Camera"}
                 buttonWidth="full"
                 variant="primary"
                 type="solid"
@@ -66,7 +67,8 @@ const ImagePickerPopup: React.FC<ImagePickerPopupProps> = ({
             <TouchableOpacity
               onPress={togglePopup}
               activeOpacity={0.8}
-              hitSlop={HIT_SLOP}>
+              hitSlop={HIT_SLOP}
+            >
               <Text style={style.txtLoginToAnypost1}>Cancel</Text>
             </TouchableOpacity>
           </View>
@@ -81,29 +83,29 @@ export default ImagePickerPopup;
 const useStyle = makeStyles((theme, props: ThemeProps) => ({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
+    alignItems: "center",
+    justifyContent: "flex-end",
     backgroundColor: theme.colors?.overlay,
     paddingBottom:
-      Platform.OS === 'ios'
+      Platform.OS === "ios"
         ? HAS_NOTCH
           ? props.insets.bottom
           : props.insets.bottom + 10
         : props.insets.bottom + 10,
   },
   modalCont: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
   },
   innerCont: {
-    height: 'auto',
-    width: '90%',
+    height: "auto",
+    width: "90%",
     backgroundColor: theme.colors?.white,
     borderRadius: 20,
     paddingHorizontal: 25,
     paddingVertical: 10,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    shadowColor: '#000',
+    alignItems: "center",
+    justifyContent: "space-between",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 1,
@@ -128,14 +130,14 @@ const useStyle = makeStyles((theme, props: ThemeProps) => ({
   txtLoginToAnypostDesc: {
     fontSize: theme.fontSize?.fs17,
     fontFamily: theme.fontFamily?.medium,
-    textAlign: 'center',
+    textAlign: "center",
     color: theme.colors?.secondaryText,
     lineHeight: 20,
     marginTop: 10,
   },
   buttonCont: {
-    alignItems: 'center',
-    width: '100%',
+    alignItems: "center",
+    width: "100%",
     marginTop: 10,
   },
   buttonRightMargin: {
@@ -146,14 +148,14 @@ const useStyle = makeStyles((theme, props: ThemeProps) => ({
   },
   iconCont: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   btnCont: {
     height: Scale(50),
     width: SCREEN_WIDTH - 100,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: Scale(4),
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: Scale(50 / 2),
   },
 }));

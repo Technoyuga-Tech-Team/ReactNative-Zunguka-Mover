@@ -1,58 +1,60 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
+  Image,
   ImageSourcePropType,
   Platform,
   Text,
   TouchableOpacity,
   View,
-} from 'react-native';
-import {makeStyles, useTheme} from 'react-native-elements';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useSelector} from 'react-redux';
-import {AuthNavigationProps} from '../../../types/navigation';
-import {Route} from '../../../constant/navigationConstants';
-import {useAppDispatch} from '../../../hooks/useAppDispatch';
-import {useMeQuery} from '../../../hooks/useMeQuery';
-import {selectUserProfileLoading} from '../../../store/userprofile/userprofile.selectors';
-import {BASE_PORT} from '../../../constant';
-import {getUrlExtension} from '../../../utils';
-import {userSetupProfile} from '../../../store/userprofile/userprofile.thunk';
-import {setErrors} from '../../../store/global/global.slice';
+} from "react-native";
+import { makeStyles, useTheme } from "react-native-elements";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
+import { AuthNavigationProps } from "../../../types/navigation";
+import { Route } from "../../../constant/navigationConstants";
+import { useAppDispatch } from "../../../hooks/useAppDispatch";
+import { useMeQuery } from "../../../hooks/useMeQuery";
+import { selectUserProfileLoading } from "../../../store/userprofile/userprofile.selectors";
+import { BASE_PORT, SCREEN_WIDTH } from "../../../constant";
+import { getUrlExtension } from "../../../utils";
+import { userSetupProfile } from "../../../store/userprofile/userprofile.thunk";
+import { setErrors } from "../../../store/global/global.slice";
 import {
   getImageFromCamera,
   getImageFromGallary,
   requestCameraPermission,
-} from '../../../utils/ImagePickerCameraGallary';
-import {AppImage} from '../../../components/AppImage/AppImage';
-import {LoadingState, ThemeProps} from '../../../types/global.types';
-import Loading from '../../../components/ui/Loading';
-import SetupProfileHeader from '../../../components/SetupProfileHeader';
-import CustomButton from '../../../components/ui/CustomButton';
-import UploadIcon from '../../../components/ui/svg/UploadIcon';
-import PrevNextCont from '../../../components/PrevNextCont';
-import ImagePickerPopup from '../../../components/ui/ImagePickerPopup';
-import Scale from '../../../utils/Scale';
+} from "../../../utils/ImagePickerCameraGallary";
+import { AppImage } from "../../../components/AppImage/AppImage";
+import { LoadingState, ThemeProps } from "../../../types/global.types";
+import Loading from "../../../components/ui/Loading";
+import SetupProfileHeader from "../../../components/SetupProfileHeader";
+import CustomButton from "../../../components/ui/CustomButton";
+import UploadIcon from "../../../components/ui/svg/UploadIcon";
+import PrevNextCont from "../../../components/PrevNextCont";
+import ImagePickerPopup from "../../../components/ui/ImagePickerPopup";
+import Scale from "../../../utils/Scale";
+import { UserRoleType } from "../../../types/user.types";
 
 const Profiles = [
-  {image: `http://${BASE_PORT}/images/profile1.png`},
-  {image: `http://${BASE_PORT}/images/profile2.png`},
-  {image: `http://${BASE_PORT}/images/profile3.png`},
-  {image: `http://${BASE_PORT}/images/profile4.png`},
-  {image: `http://${BASE_PORT}/images/profile5.png`},
-  {image: `http://${BASE_PORT}/images/profile6.png`},
-  {image: `http://${BASE_PORT}/images/profile7.png`},
+  { image: `http://${BASE_PORT}/images/profile1.png` },
+  { image: `http://${BASE_PORT}/images/profile2.png` },
+  { image: `http://${BASE_PORT}/images/profile3.png` },
+  { image: `http://${BASE_PORT}/images/profile4.png` },
+  { image: `http://${BASE_PORT}/images/profile5.png` },
+  { image: `http://${BASE_PORT}/images/profile6.png` },
+  { image: `http://${BASE_PORT}/images/profile7.png` },
 ];
 
 const SetupProfile1: React.FC<AuthNavigationProps<Route.navSetupProfile1>> = ({
   navigation,
 }) => {
   const insets = useSafeAreaInsets();
-  const style = useStyles({insets});
-  const {theme} = useTheme();
+  const style = useStyles({ insets });
+  const { theme } = useTheme();
   const dispatch = useAppDispatch();
-  const {refetch} = useMeQuery({enabled: false});
+  const { refetch } = useMeQuery({ enabled: false });
 
   const loading = useSelector(selectUserProfileLoading);
 
@@ -63,9 +65,9 @@ const SetupProfile1: React.FC<AuthNavigationProps<Route.navSetupProfile1>> = ({
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    let unsubscribe = navigation.addListener('focus', async () => {
-      refetch().then(currentUser => {
-        console.log('currentUser', currentUser);
+    let unsubscribe = navigation.addListener("focus", async () => {
+      refetch().then((currentUser) => {
+        console.log("currentUser", currentUser);
         if (currentUser?.data?.user) {
           currentUser?.data?.user?.profile_image &&
             setSelectedImage(currentUser?.data?.user?.profile_image);
@@ -73,7 +75,7 @@ const SetupProfile1: React.FC<AuthNavigationProps<Route.navSetupProfile1>> = ({
           let obj = {
             name: `${new Date().getTime()}.${getUrlExtension(img)}`,
             type: `image/${getUrlExtension(img)}`,
-            uri: Platform.OS === 'ios' ? img.replace('file://', '') : img,
+            uri: Platform.OS === "ios" ? img.replace("file://", "") : img,
           };
           currentUser?.data?.user?.profile_image && setImage(obj);
         }
@@ -92,30 +94,32 @@ const SetupProfile1: React.FC<AuthNavigationProps<Route.navSetupProfile1>> = ({
     if (selectedImage) {
       const formData = new FormData();
 
-      formData.append('profile_image', image);
-      formData.append('step', 1);
+      formData.append("profile_image", image);
+      formData.append("step", 1);
+      formData.append("type", UserRoleType.MOVER);
 
       const result = await dispatch(
         userSetupProfile({
           formData: formData,
-        }),
+        })
       );
       if (userSetupProfile.fulfilled.match(result)) {
+        console.log("result.payload", result.payload);
         if (result.payload?.data) {
-          if (result.payload?.data?.steps_count == 1) {
+          if (result.payload?.data?.mover_setup_step == 1) {
             navigation.navigate(Route.navSetupProfile2);
           }
         }
       } else {
-        console.log('errror userSetupProfile --->', result.payload);
+        console.log("errror userSetupProfile --->", result.payload);
       }
     } else {
       dispatch(
         setErrors({
-          message: 'Please upload or select the profile',
+          message: "Please upload or select the profile",
           status: 0,
           statusCode: null,
-        }),
+        })
       );
     }
   };
@@ -124,17 +128,17 @@ const SetupProfile1: React.FC<AuthNavigationProps<Route.navSetupProfile1>> = ({
   };
 
   const profile = selectedImage
-    ? typeof selectedImage === 'number'
+    ? typeof selectedImage === "number"
       ? selectedImage
-      : {uri: selectedImage}
-    : require('../../../assets/images/user-circle.png');
+      : { uri: selectedImage }
+    : require("../../../assets/images/user-circle.png");
 
   const onPressImage = (img: string) => {
     setSelectedImage(img);
     let obj = {
       name: `${new Date().getTime()}.${getUrlExtension(img)}`,
       type: `image/${getUrlExtension(img)}`,
-      uri: Platform.OS === 'ios' ? img.replace('file://', '') : img,
+      uri: Platform.OS === "ios" ? img.replace("file://", "") : img,
     };
     setImage(obj);
   };
@@ -142,7 +146,7 @@ const SetupProfile1: React.FC<AuthNavigationProps<Route.navSetupProfile1>> = ({
   const onPressFromCamera = async () => {
     togglePopup();
     setTimeout(async () => {
-      if (Platform.OS === 'android') {
+      if (Platform.OS === "android") {
         const hasPermission = await requestCameraPermission();
         if (hasPermission) {
           openPickerCameraImage();
@@ -160,7 +164,7 @@ const SetupProfile1: React.FC<AuthNavigationProps<Route.navSetupProfile1>> = ({
       setImage(imageObject); // Update image state (if applicable)
     } catch (error) {
       // Handle errors here if needed (e.g., display a user-friendly message)
-      console.error('Error using getImageFromCamera:', error);
+      console.error("Error using getImageFromCamera:", error);
     }
   };
 
@@ -168,12 +172,12 @@ const SetupProfile1: React.FC<AuthNavigationProps<Route.navSetupProfile1>> = ({
     togglePopup();
     setTimeout(async () => {
       try {
-        const imageObject = await getImageFromGallary({multiple: false});
+        const imageObject = await getImageFromGallary({ multiple: false });
         setSelectedImage(imageObject.uri); // Update selected image state (if applicable)
         setImage(imageObject); // Update image state (if applicable)
       } catch (error) {
         // Handle errors here if needed (e.g., display a user-friendly message)
-        console.error('Error using getImageFromGallary:', error);
+        console.error("Error using getImageFromGallary:", error);
       }
     }, 100);
   };
@@ -182,7 +186,7 @@ const SetupProfile1: React.FC<AuthNavigationProps<Route.navSetupProfile1>> = ({
     setVisible(!visible);
   };
 
-  const renderItem = ({item}: {item: {image: string}}) => {
+  const renderItem = ({ item }: { item: { image: string } }) => {
     const isSelected = selectedImage == item.image;
 
     return (
@@ -205,26 +209,23 @@ const SetupProfile1: React.FC<AuthNavigationProps<Route.navSetupProfile1>> = ({
   return (
     <KeyboardAwareScrollView
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={style.container}>
+      contentContainerStyle={style.container}
+    >
       {loading === LoadingState.CREATE && <Loading />}
-      <SetupProfileHeader title={'Upload Image'} percent={1} />
+      <SetupProfileHeader title={"Upload Image"} percent={1} />
       <View style={style.innerCont}>
-        <AppImage
-          source={profile}
-          style={style.profile}
-          resizeMode="cover"
-          tintColor={'#F2F2F2'}
-        />
+        <AppImage source={profile} style={style.profile} resizeMode="cover" />
         <View style={style.btnCont}>
           <CustomButton
             onPress={onPressUploadPhotos}
             title={`Upload Image`}
             buttonWidth="half"
+            width={SCREEN_WIDTH - 100}
             type="clear"
             icon={
               <UploadIcon
                 color={theme.colors?.primary}
-                style={{marginRight: 5}}
+                style={{ marginRight: 5 }}
               />
             }
             containerStyle={style.btnMessage}
@@ -267,7 +268,7 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
   },
   innerCont: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
     paddingTop: 50,
   },
   profile: {
@@ -283,13 +284,13 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
   },
   btnMessage: {
     backgroundColor: theme.colors?.white,
-    width: '100%',
+    width: "100%",
     height: Scale(50),
     borderRadius: 5,
     borderColor: theme.colors?.primary,
     borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   txtTitleStyle: {
     fontSize: theme.fontSize?.fs16,
@@ -297,19 +298,19 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
     color: theme.colors?.primary,
   },
   btnCont: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginTop: 50,
   },
   txtChoose: {
     fontSize: theme.fontSize?.fs12,
     fontFamily: theme.fontFamily?.regular,
     color: theme.colors?.secondaryText,
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     marginBottom: 5,
   },
   imagePickerCont: {
-    width: '100%',
+    width: "100%",
     marginTop: 20,
     paddingHorizontal: 20,
   },

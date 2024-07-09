@@ -1,6 +1,9 @@
 import { LoadingState } from "./global.types";
 
-export type UserRole = "mover" | "buyer_seller" | null;
+export enum UserRoleType {
+  BUYER_SELLER = 0,
+  MOVER = 1,
+}
 
 export type UserData = {
   id: number;
@@ -33,16 +36,19 @@ export type UserData = {
   iso: string;
   type: string;
   is_profile_completed: number;
+  is_mover_setup_profile_done: number;
   step: number;
+  mover_setup_step: number;
   profile_percentage: number;
   address: string;
   insurance_number: string;
-  insurance_copies: string;
-  address_proofs: string;
+  insurance_copies: [];
+  address_proofs: [];
   license_number: string;
-  license_copies: string;
+  license_copies: [];
   vehicle_type: string;
   city: string;
+  state: string;
   rate: number;
   avg_rate: number;
   total_user_rate: number;

@@ -1,40 +1,41 @@
-import {CommonActions} from '@react-navigation/native';
-import {useFormik} from 'formik';
-import React, {useEffect, useState} from 'react';
-import {Keyboard, Platform, Text, TouchableOpacity, View} from 'react-native';
-import {makeStyles, useTheme} from 'react-native-elements';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { CommonActions } from "@react-navigation/native";
+import { useFormik } from "formik";
+import React, { useEffect, useState } from "react";
+import { Keyboard, Platform, Text, TouchableOpacity, View } from "react-native";
+import { makeStyles, useTheme } from "react-native-elements";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useSelector} from 'react-redux';
-import {AuthNavigationProps} from '../../../types/navigation';
-import {Route} from '../../../constant/navigationConstants';
-import {useAppDispatch} from '../../../hooks/useAppDispatch';
-import {OTPScreenSchema} from '../../../constant/formValidations';
-import {HAS_NOTCH, HIT_SLOP} from '../../../constant';
-import Scale from '../../../utils/Scale';
-import CustomButton from '../../../components/ui/CustomButton';
-import {LoadingState, ThemeProps} from '../../../types/global.types';
-import SmoothOtpInput from '../../../components/SmoothOtpInput';
-import {AppImage} from '../../../components/AppImage/AppImage';
-import LeftIcon from '../../../components/ui/svg/LeftIcon';
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
+import { AuthNavigationProps } from "../../../types/navigation";
+import { Route } from "../../../constant/navigationConstants";
+import { useAppDispatch } from "../../../hooks/useAppDispatch";
+import { OTPScreenSchema } from "../../../constant/formValidations";
+import { HAS_NOTCH, HIT_SLOP } from "../../../constant";
+import Scale from "../../../utils/Scale";
+import CustomButton from "../../../components/ui/CustomButton";
+import { LoadingState, ThemeProps } from "../../../types/global.types";
+import SmoothOtpInput from "../../../components/SmoothOtpInput";
+import { AppImage } from "../../../components/AppImage/AppImage";
+import LeftIcon from "../../../components/ui/svg/LeftIcon";
 import {
   userOTPCode,
   userResendOTP,
-} from '../../../store/authentication/authentication.thunks';
-import {setSuccess} from '../../../store/global/global.slice';
-import {selectAuthenticationLoading} from '../../../store/authentication/authentication.selectors';
-import Loading from '../../../components/ui/Loading';
-import {saveAddress} from '../../../store/settings/settings.slice';
-import {OTPFormProps} from '../../../types/authentication.types';
+} from "../../../store/authentication/authentication.thunks";
+import { setSuccess } from "../../../store/global/global.slice";
+import { selectAuthenticationLoading } from "../../../store/authentication/authentication.selectors";
+import Loading from "../../../components/ui/Loading";
+import { saveAddress } from "../../../store/settings/settings.slice";
+import { OTPFormProps } from "../../../types/authentication.types";
+import { setNavigation } from "../../../utils/setNavigation";
 
 const EnterOTP: React.FC<AuthNavigationProps<Route.navEnterOTP>> = ({
   navigation,
   route,
 }) => {
   const insets = useSafeAreaInsets();
-  const style = useStyles({insets});
-  const {theme} = useTheme();
+  const style = useStyles({ insets });
+  const { theme } = useTheme();
   const dispatch = useAppDispatch();
 
   const loading = useSelector(selectAuthenticationLoading);
@@ -42,12 +43,12 @@ const EnterOTP: React.FC<AuthNavigationProps<Route.navEnterOTP>> = ({
   const phone = route?.params?.phone;
   const type = route?.params?.type;
 
-  const [time, setTime] = useState({minutes: 1, seconds: 0});
+  const [time, setTime] = useState({ minutes: 1, seconds: 0 });
 
   useEffect(() => {
     startInterval();
     return () => {
-      setTime({seconds: 0, minutes: 0});
+      setTime({ seconds: 0, minutes: 0 });
     };
   }, []);
 
@@ -60,31 +61,31 @@ const EnterOTP: React.FC<AuthNavigationProps<Route.navEnterOTP>> = ({
   const startInterval = () => {
     setTimeout(() => {
       if (time.seconds > 0) {
-        setTime({seconds: time.seconds - 1, minutes: time.minutes});
+        setTime({ seconds: time.seconds - 1, minutes: time.minutes });
       } else if (time.seconds === 0) {
         if (time.minutes > 0) {
-          setTime({minutes: time.minutes - 1, seconds: 59});
+          setTime({ minutes: time.minutes - 1, seconds: 59 });
         }
       }
     }, 1000);
   };
 
   const onPressResendCode = async () => {
-    let phone_number = phone && phone.replace(/ /g, '').replace('-', '');
+    let phone_number = phone && phone.replace(/ /g, "").replace("-", "");
 
     let obj = {
-      phone_number: phone_number && phone_number.replace('-', ''),
+      phone_number: phone_number && phone_number.replace("-", ""),
     };
 
     const result = await dispatch(userResendOTP(obj));
-    console.log('result', result);
+    console.log("result", result);
     if (userResendOTP.fulfilled.match(result)) {
       if (result?.payload?.status === 1) {
-        setTime({seconds: 0, minutes: 1});
+        setTime({ seconds: 0, minutes: 1 });
         dispatch(setSuccess(result.payload.message));
       }
     } else {
-      console.log('errror userOTPCode --->', result.payload);
+      console.log("errror userOTPCode --->", result.payload);
     }
   };
   const onPressBack = () => {
@@ -101,13 +102,13 @@ const EnterOTP: React.FC<AuthNavigationProps<Route.navEnterOTP>> = ({
     handleSubmit,
   } = useFormik<OTPFormProps>({
     validationSchema: OTPScreenSchema,
-    initialValues: {otp: ''},
-    onSubmit: async ({otp}) => {
-      let phone_number = phone && phone.replace(/ /g, '').replace('-', '');
+    initialValues: { otp: "" },
+    onSubmit: async ({ otp }) => {
+      let phone_number = phone && phone.replace(/ /g, "").replace("-", "");
 
       let obj = {
-        phone_number: phone_number && phone_number.replace('-', ''),
-        type: type,
+        phone_number: phone_number && phone_number.replace("-", ""),
+        action_type: type,
         code: otp,
       };
 
@@ -115,32 +116,24 @@ const EnterOTP: React.FC<AuthNavigationProps<Route.navEnterOTP>> = ({
       if (userOTPCode.fulfilled.match(result)) {
         if (result?.payload?.status === 1) {
           dispatch(setSuccess(result.payload.message));
-          if (type === 'otp_verification') {
-            dispatch(saveAddress(''));
-            // navigation.dispatch(
-            //   CommonActions.reset({
-            //     index: 0,
-            //     routes: [{ name: Route.navYourAddress }],
-            //   })
-            // );
-            navigation.dispatch(
-              CommonActions.reset({
-                index: 0,
-                routes: [
-                  {
-                    name: Route.navAuthentication,
-                  },
-                ],
-              }),
-            );
+          if (type === "otp_verification") {
+            let steps = result.payload?.data?.step;
+            console.log("steps", steps);
+            if (steps !== 2) {
+              if (steps == 0) {
+                navigation.navigate(Route.navAddKyc);
+              }
+            } else {
+              setNavigation(result.payload?.user, navigation);
+            }
           } else {
             navigation.navigate(Route.navResetPassword, {
-              phone: phone_number && phone_number.replace('-', ''),
+              phone: phone_number && phone_number.replace("-", ""),
             });
           }
         }
       } else {
-        console.log('errror userOTPCode --->', result.payload);
+        console.log("errror userOTPCode --->", result.payload);
       }
     },
   });
@@ -157,20 +150,23 @@ const EnterOTP: React.FC<AuthNavigationProps<Route.navEnterOTP>> = ({
   return (
     <KeyboardAwareScrollView
       bounces={false}
-      keyboardShouldPersistTaps={'handled'}
+      keyboardShouldPersistTaps={"handled"}
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={style.container}>
+      contentContainerStyle={style.container}
+    >
       {loading === LoadingState.CREATE && <Loading />}
       <View
         style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}>
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         <TouchableOpacity
           onPress={onPressBack}
           hitSlop={HIT_SLOP}
-          style={style.backBtnCont}>
+          style={style.backBtnCont}
+        >
           <LeftIcon color={theme.colors?.black} />
         </TouchableOpacity>
         <Text style={style.txtOtpVerification}>Otp verification</Text>
@@ -184,7 +180,7 @@ const EnterOTP: React.FC<AuthNavigationProps<Route.navEnterOTP>> = ({
       <Text style={style.txtDigitCode1}>We've sent a code to {phone}.</Text>
 
       <AppImage
-        source={require('../../../assets/images/MessagesOTP.png')}
+        source={require("../../../assets/images/MessagesOTP.png")}
         resizeMode="contain"
         style={style.icon}
       />
@@ -194,8 +190,8 @@ const EnterOTP: React.FC<AuthNavigationProps<Route.navEnterOTP>> = ({
           animated={false}
           cellSize={Scale(50)}
           cellSpacing={10}
-          onChangeText={handleChange('otp')}
-          onTextChange={handleChange('otp')}
+          onChangeText={handleChange("otp")}
+          onTextChange={handleChange("otp")}
           //   onBlur={handleBlur("otp")}
           value={values.otp}
           error={errors.otp}
@@ -209,7 +205,7 @@ const EnterOTP: React.FC<AuthNavigationProps<Route.navEnterOTP>> = ({
               Resend code
             </Text>
           ) : (
-            <Text style={{color: theme.colors?.pinkDark}}>
+            <Text style={{ color: theme.colors?.pinkDark }}>
               {time.minutes}:
               {time.seconds < 10 ? `0${time.seconds}` : time.seconds}
             </Text>
@@ -223,7 +219,7 @@ const EnterOTP: React.FC<AuthNavigationProps<Route.navEnterOTP>> = ({
             Keyboard.dismiss();
             handleSubmit();
           }}
-          title={'Verify Now'}
+          title={"Verify Now"}
           buttonWidth="full"
           variant="primary"
           type="solid"
@@ -262,7 +258,7 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
   },
   bottomCont: {
     paddingBottom:
-      Platform.OS === 'ios'
+      Platform.OS === "ios"
         ? HAS_NOTCH
           ? props.insets.bottom
           : props.insets.bottom + 10
@@ -272,7 +268,7 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
     color: theme.colors?.secondaryText,
     fontSize: theme.fontSize?.fs16,
     fontFamily: theme.fontFamily?.regular,
-    alignSelf: 'center',
+    alignSelf: "center",
     marginVertical: 20,
   },
   txtResendCode: {
@@ -288,14 +284,14 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
   txtDigitCode: {
     fontSize: theme.fontSize?.fs16,
     fontFamily: theme.fontFamily?.regular,
-    color: '#444444',
+    color: "#444444",
   },
   txtDigitCode1: {
     fontSize: theme.fontSize?.fs12,
     fontFamily: theme.fontFamily?.regular,
     color: theme?.colors?.lightGrey,
     lineHeight: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
   txtPhone: {
     fontSize: theme.fontSize?.fs16,
@@ -306,11 +302,11 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
     fontSize: theme.fontSize?.fs20,
     fontFamily: theme.fontFamily?.regular,
     color: theme.colors?.primaryText,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   icon: {
     height: Scale(230),
     width: Scale(230),
-    alignSelf: 'center',
+    alignSelf: "center",
   },
 }));
