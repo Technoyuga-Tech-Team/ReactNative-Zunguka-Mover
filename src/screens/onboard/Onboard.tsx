@@ -45,25 +45,25 @@ const Onboard: React.FC<MainNavigationProps<Route.navOnboard>> = ({
   }, []);
 
   // handle hardware back button click
-  useFocusEffect(
-    React.useCallback(() => {
-      const onBackPress = () => {
-        if (currentSlide === 0) {
-          return false;
-        } else {
-          sliderRef.current?.scrollToOffset({
-            offset: (currentSlide - 1) * wWidth,
-            animated: true,
-          });
-          setCurrentSlide((pv) => pv - 1);
-          return true;
-        }
-      };
-      BackHandler.addEventListener("hardwareBackPress", onBackPress);
-      return () =>
-        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
-    }, [currentSlide])
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     const onBackPress = () => {
+  //       if (currentSlide === 0) {
+  //         return false;
+  //       } else {
+  //         sliderRef.current?.scrollToOffset({
+  //           offset: (currentSlide - 1) * wWidth,
+  //           animated: true,
+  //         });
+  //         setCurrentSlide((pv) => pv - 1);
+  //         return true;
+  //       }
+  //     };
+  //     BackHandler.addEventListener("hardwareBackPress", onBackPress);
+  //     return () =>
+  //       BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+  //   }, [currentSlide])
+  // );
 
   // scroll to next slide
   // eslint-disable-next-line react-hooks/exhaustive-deps

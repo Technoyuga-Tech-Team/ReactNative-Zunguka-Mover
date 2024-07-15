@@ -1,5 +1,5 @@
-import {AuthLoadingState, LoadingState} from './global.types';
-import {UserData} from './user.types';
+import { AuthLoadingState, LoadingState } from "./global.types";
+import { UserData } from "./user.types";
 
 export interface LoginFormProps {
   phoneNumber: string;

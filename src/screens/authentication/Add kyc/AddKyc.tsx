@@ -106,12 +106,9 @@ const AddKyc: React.FC<AuthNavigationProps<Route.navAddKyc>> = ({
     togglePopup();
     setTimeout(async () => {
       try {
-        const imageObject = await getImageFromGallary({ multiple: true });
-        setSelectedImage([
-          ...selectedImage,
-          ...imageObject.map((image: { uri: any }) => image.uri),
-        ]);
-        setImage([...image, ...imageObject]);
+        const imageObject = await getImageFromGallary({ multiple: false });
+        setSelectedImage([...selectedImage, imageObject]);
+        setImage([...image, imageObject]);
       } catch (error) {
         // Handle errors here if needed (e.g., display a user-friendly message)
         console.error("Error using getImageFromGallary:", error);
@@ -147,7 +144,7 @@ const AddKyc: React.FC<AuthNavigationProps<Route.navAddKyc>> = ({
     if (isValid()) {
       try {
         const formData = new FormData();
-        formData.append("country", `${country}`);
+        formData.append("district", `${country}`);
         formData.append("id_type", `${IdType}`);
         formData.append("type", `${UserRoleType.MOVER}`);
 
@@ -244,7 +241,7 @@ const AddKyc: React.FC<AuthNavigationProps<Route.navAddKyc>> = ({
         <View
           style={{
             flex: 1,
-            alignItems: image && image.length > 0 ? "flex-start" : "center",
+            alignItems: "center",
             paddingHorizontal: 20,
           }}
         >

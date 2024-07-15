@@ -1,13 +1,13 @@
-import {View, Text} from 'react-native';
-import React from 'react';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {makeStyles, useTheme} from 'react-native-elements';
-import {ThemeProps} from '../types/global.types';
+import { View, Text } from "react-native";
+import React from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { makeStyles, useTheme } from "react-native-elements";
+import { ThemeProps } from "../types/global.types";
 
 const Home = () => {
   const insets = useSafeAreaInsets();
-  const style = useStyles({insets});
-  const {theme} = useTheme();
+  const style = useStyles({ insets });
+  const { theme } = useTheme();
   return (
     <View style={style.container}>
       <Text>Home</Text>

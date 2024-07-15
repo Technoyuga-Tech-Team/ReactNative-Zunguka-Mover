@@ -1,5 +1,5 @@
-import {useFormik} from 'formik';
-import React, {useEffect, useState} from 'react';
+import { useFormik } from "formik";
+import React, { useEffect, useState } from "react";
 import {
   Keyboard,
   Platform,
@@ -7,45 +7,47 @@ import {
   Text,
   TextInput,
   View,
-} from 'react-native';
+} from "react-native";
 import {
   CountryCode,
   TranslationLanguageCodeMap,
-} from 'react-native-country-picker-modal';
-import {makeStyles, useTheme} from 'react-native-elements';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import ReactNativePhoneInput from 'react-native-phone-input';
+} from "react-native-country-picker-modal";
+import { makeStyles, useTheme } from "react-native-elements";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import ReactNativePhoneInput from "react-native-phone-input";
 
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useSelector} from 'react-redux';
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
 
-import {setAdjustPan, setAdjustResize} from 'rn-android-keyboard-adjust';
-import {AuthNavigationProps} from '../../types/navigation';
-import {Route} from '../../constant/navigationConstants';
-import {useAppDispatch} from '../../hooks/useAppDispatch';
-import {getData} from '../../utils/asyncStorage';
-import {HAS_NOTCH, MAX_CHAR_LENGTH, USER_ROLE} from '../../constant';
-import {SignupScreenSchema} from '../../constant/formValidations';
-import {CustomTxtInput} from '../../components/ui/CustomTextInput';
-import CustomButton from '../../components/ui/CustomButton';
-import {setErrors} from '../../store/global/global.slice';
-import SocialAuthenticationView from '../../components/ui/SocialAuth/SocialAuthenticationView';
-import {LoadingState, ThemeProps} from '../../types/global.types';
-import Scale from '../../utils/Scale';
-import {PhoneNumberInput} from '../../components/ui/PhoneNumberInput';
-import CountryPickerModal from '../../components/ui/CountryPickerModal';
-import TermsAndCondition from '../../components/ui/TermsAndCondition';
-import {userRegistration} from '../../store/authentication/authentication.thunks';
-import {selectAuthenticationLoading} from '../../store/authentication/authentication.selectors';
-import Loading from '../../components/ui/Loading';
-import {SignupFormProps} from '../../types/authentication.types';
+import { setAdjustPan, setAdjustResize } from "rn-android-keyboard-adjust";
+import { AuthNavigationProps } from "../../types/navigation";
+import { Route } from "../../constant/navigationConstants";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { getData } from "../../utils/asyncStorage";
+import { HAS_NOTCH, MAX_CHAR_LENGTH, USER_ROLE } from "../../constant";
+import { SignupScreenSchema } from "../../constant/formValidations";
+import { CustomTxtInput } from "../../components/ui/CustomTextInput";
+import CustomButton from "../../components/ui/CustomButton";
+import { setErrors } from "../../store/global/global.slice";
+import SocialAuthenticationView from "../../components/ui/SocialAuth/SocialAuthenticationView";
+import { LoadingState, ThemeProps } from "../../types/global.types";
+import Scale from "../../utils/Scale";
+import { PhoneNumberInput } from "../../components/ui/PhoneNumberInput";
+import CountryPickerModal from "../../components/ui/CountryPickerModal";
+import TermsAndCondition from "../../components/ui/TermsAndCondition";
+import { userRegistration } from "../../store/authentication/authentication.thunks";
+import { selectAuthenticationLoading } from "../../store/authentication/authentication.selectors";
+import Loading from "../../components/ui/Loading";
+import { SignupFormProps } from "../../types/authentication.types";
+import InputFieldInfo from "../../components/ui/InputFieldInfo";
+import { keepSingleSpace } from "../../utils";
 
 const Signup: React.FC<AuthNavigationProps<Route.navSignup>> = ({
   navigation,
 }) => {
   const insets = useSafeAreaInsets();
-  const style = useStyles({insets});
-  const {theme} = useTheme();
+  const style = useStyles({ insets });
+  const { theme } = useTheme();
   const dispatch = useAppDispatch();
 
   const loading = useSelector(selectAuthenticationLoading);
@@ -60,16 +62,16 @@ const Signup: React.FC<AuthNavigationProps<Route.navSignup>> = ({
 
   const [visibleCountryPicker, setVisibleCountryPicker] =
     useState<boolean>(false);
-  const [countryCode, setCountryCode] = useState<CountryCode>('RW');
+  const [countryCode, setCountryCode] = useState<CountryCode>("RW");
   const [country, setCountry] = useState<string | TranslationLanguageCodeMap>(
-    '',
+    ""
   );
 
   const [checked, setChecked] = React.useState(false);
-  const [fcmToken, setFcmToken] = React.useState<string>('');
+  const [fcmToken, setFcmToken] = React.useState<string>("");
   const toggleCheckbox = () => setChecked(!checked);
 
-  const [userRole, setUserRole] = useState<string>('');
+  const [userRole, setUserRole] = useState<string>("");
 
   useEffect(() => {
     setAdjustResize();
@@ -79,7 +81,7 @@ const Signup: React.FC<AuthNavigationProps<Route.navSignup>> = ({
   }, []);
 
   useEffect(() => {
-    let unsubscribe = navigation.addListener('focus', async () => {
+    let unsubscribe = navigation.addListener("focus", async () => {
       const u_role = await getData(USER_ROLE);
       setUserRole(u_role);
     });
@@ -103,18 +105,18 @@ const Signup: React.FC<AuthNavigationProps<Route.navSignup>> = ({
     navigation.navigate(Route.navLogin);
   };
   const onPressFlag = () => {
-    setFieldValue('phoneNumber', '');
+    setFieldValue("phoneNumber", "");
     setVisibleCountryPicker(true);
   };
 
   const onPhoneInputChange = (value: string, iso2: string) => {
     setCountryCode(iso2 as CountryCode);
-    setFieldValue('phoneNumber', value);
+    setFieldValue("phoneNumber", value);
   };
 
   const onSelect = (
     country: string | TranslationLanguageCodeMap,
-    cca2: CountryCode,
+    cca2: CountryCode
   ) => {
     phoneRef?.current?.selectCountry(cca2.toLowerCase());
     setCountryCode(cca2);
@@ -141,13 +143,13 @@ const Signup: React.FC<AuthNavigationProps<Route.navSignup>> = ({
   } = useFormik<SignupFormProps>({
     validationSchema: SignupScreenSchema(countryCode),
     initialValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phoneNumber: '',
-      createPassword: '',
-      confirmPassword: '',
-      username: '',
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: "",
+      createPassword: "",
+      confirmPassword: "",
+      username: "",
     },
     onSubmit: async ({
       firstName,
@@ -158,27 +160,27 @@ const Signup: React.FC<AuthNavigationProps<Route.navSignup>> = ({
       createPassword,
       confirmPassword,
     }) => {
-      let phone_number = phoneNumber.replace(/ /g, '').replace('-', '');
+      let phone_number = phoneNumber.replace(/ /g, "").replace("-", "");
 
       const result = await dispatch(
         userRegistration({
-          first_name: firstName.trim(),
-          last_name: lastName.trim(),
+          first_name: keepSingleSpace(firstName.trim()),
+          last_name: keepSingleSpace(lastName.trim()),
           username: username.trim(),
           email: email.trim(),
           password: createPassword.trim(),
-          phone_number: phone_number.replace('-', ''),
+          phone_number: phone_number.replace("-", ""),
           iso: countryCode.toLowerCase(),
-          device_type: Platform.OS === 'ios' ? 'iOS' : 'Android',
+          device_type: Platform.OS === "ios" ? "iOS" : "Android",
           device_token: fcmToken,
-        }),
+        })
       );
       if (userRegistration.fulfilled.match(result)) {
         if (result.payload) {
-          console.log('result', result);
+          console.log("result", result);
           navigation.navigate(Route.navEnterOTP, {
-            phone: phone_number,
-            type: 'otp_verification',
+            phone: phoneNumber,
+            type: "otp_verification",
           });
         }
       }
@@ -187,12 +189,13 @@ const Signup: React.FC<AuthNavigationProps<Route.navSignup>> = ({
 
   return (
     <KeyboardAwareScrollView
-      keyboardShouldPersistTaps={'handled'}
+      keyboardShouldPersistTaps={"handled"}
       contentContainerStyle={style.scrollCont}
       showsVerticalScrollIndicator={false}
-      bounces={false}>
+      bounces={false}
+    >
       <StatusBar
-        barStyle={'dark-content'}
+        barStyle={"dark-content"}
         backgroundColor={theme.colors?.white}
       />
       {loading === LoadingState.CREATE && <Loading />}
@@ -206,10 +209,10 @@ const Signup: React.FC<AuthNavigationProps<Route.navSignup>> = ({
             placeholder="First name"
             returnKeyType="next"
             returnKeyLabel="next"
-            keyboardType={'default'}
+            keyboardType={"default"}
             maxLength={MAX_CHAR_LENGTH}
-            onChangeText={handleChange('firstName')}
-            onBlur={handleBlur('firstName')}
+            onChangeText={handleChange("firstName")}
+            onBlur={handleBlur("firstName")}
             value={values.firstName}
             error={errors.firstName}
             touched={touched.firstName}
@@ -221,39 +224,41 @@ const Signup: React.FC<AuthNavigationProps<Route.navSignup>> = ({
             placeholder="Last name"
             returnKeyType="next"
             returnKeyLabel="next"
-            keyboardType={'default'}
+            keyboardType={"default"}
             maxLength={MAX_CHAR_LENGTH}
-            onChangeText={handleChange('lastName')}
-            onBlur={handleBlur('lastName')}
+            onChangeText={handleChange("lastName")}
+            onBlur={handleBlur("lastName")}
             value={values.lastName}
             error={errors.lastName}
             touched={touched.lastName}
             onSubmitEditing={() => usernameRef.current?.focus()}
           />
+          <InputFieldInfo text={"Name view only for admin."} />
           <CustomTxtInput
             textInputTitle="Username"
             ref={usernameRef}
             placeholder="Username"
             returnKeyType="next"
             returnKeyLabel="next"
-            keyboardType={'default'}
+            keyboardType={"default"}
             maxLength={MAX_CHAR_LENGTH}
-            onChangeText={handleChange('username')}
-            onBlur={handleBlur('username')}
+            onChangeText={handleChange("username")}
+            onBlur={handleBlur("username")}
             value={values.username}
             error={errors.username}
             touched={touched.username}
             onSubmitEditing={() => emaiRef.current?.focus()}
           />
+          <InputFieldInfo text={"Username view for publicly"} />
           <CustomTxtInput
             textInputTitle="Email Address"
             ref={emaiRef}
             placeholder="Email Address"
             returnKeyType="next"
             returnKeyLabel="next"
-            keyboardType={'email-address'}
-            onChangeText={handleChange('email')}
-            onBlur={handleBlur('email')}
+            keyboardType={"email-address"}
+            onChangeText={handleChange("email")}
+            onBlur={handleBlur("email")}
             value={values.email}
             error={errors.email}
             touched={touched.email}
@@ -269,11 +274,11 @@ const Signup: React.FC<AuthNavigationProps<Route.navSignup>> = ({
             }
             initialValue={values.phoneNumber}
             textProps={{
-              placeholder: 'Phone Number',
+              placeholder: "Phone Number",
               placeholderTextColor: theme.colors?.secondaryText,
               style: style.txtInStyle,
-              returnKeyLabel: 'next',
-              returnKeyType: 'next',
+              returnKeyLabel: "next",
+              returnKeyType: "next",
               maxLength: 18,
               onSubmitEditing: () => passwordRef.current?.focus(),
             }}
@@ -292,8 +297,8 @@ const Signup: React.FC<AuthNavigationProps<Route.navSignup>> = ({
             textInputTitle="Create Password"
             placeholder="Password"
             ref={passwordRef}
-            onChangeText={handleChange('createPassword')}
-            onBlur={handleBlur('createPassword')}
+            onChangeText={handleChange("createPassword")}
+            onBlur={handleBlur("createPassword")}
             value={values.createPassword}
             error={errors.createPassword}
             touched={touched.createPassword}
@@ -308,8 +313,8 @@ const Signup: React.FC<AuthNavigationProps<Route.navSignup>> = ({
             textInputTitle="Confirm Password"
             placeholder="Confirm password"
             ref={confirmPasswordRef}
-            onChangeText={handleChange('confirmPassword')}
-            onBlur={handleBlur('confirmPassword')}
+            onChangeText={handleChange("confirmPassword")}
+            onBlur={handleBlur("confirmPassword")}
             value={values.confirmPassword}
             error={errors.confirmPassword}
             touched={touched.confirmPassword}
@@ -332,10 +337,10 @@ const Signup: React.FC<AuthNavigationProps<Route.navSignup>> = ({
               if (!checked) {
                 dispatch(
                   setErrors({
-                    message: 'Please agree with terms & condition',
+                    message: "Please agree with terms & conditions",
                     status: 0,
                     statusCode: null,
-                  }),
+                  })
                 );
               } else {
                 Keyboard.dismiss();
@@ -344,7 +349,7 @@ const Signup: React.FC<AuthNavigationProps<Route.navSignup>> = ({
             }}
             disabled={!isValid || loading === LoadingState.CREATE}
             loading={loading === LoadingState.CREATE}
-            title={'Sign up'}
+            title={"Sign up"}
             buttonWidth="full"
             variant="primary"
             type="solid"
@@ -352,14 +357,14 @@ const Signup: React.FC<AuthNavigationProps<Route.navSignup>> = ({
         </View>
 
         <View style={style.socialLoginCont}>
-          <SocialAuthenticationView
+          {/* <SocialAuthenticationView
             fromLogin={true}
             userRole={userRole}
             fcmToken={fcmToken}
-          />
+          /> */}
           <View>
             <Text style={style.txtAlreadyHaveAcc}>
-              Already have an account?{' '}
+              Already have an account?{" "}
               <Text onPress={onPressSignin} style={style.txtSignup}>
                 Sign In
               </Text>
@@ -383,19 +388,19 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
     fontSize: theme.fontSize?.fs20,
     fontFamily: theme.fontFamily?.medium,
     color: theme.colors?.textPrimary,
-    alignSelf: 'center',
+    alignSelf: "center",
     marginTop: 10,
   },
   title1: {
     fontSize: theme.fontSize?.fs12,
     fontFamily: theme.fontFamily?.regular,
     color: theme.colors?.secondaryText,
-    alignSelf: 'center',
+    alignSelf: "center",
     marginTop: 5,
   },
   iconCont: {
     paddingVertical: 40,
-    alignItems: 'center',
+    alignItems: "center",
   },
   txtInCont: {
     marginTop: 10,
@@ -405,7 +410,7 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
     fontSize: theme.fontSize?.fs16,
     fontFamily: theme.fontFamily?.regular,
     color: theme.colors?.textPrimary,
-    alignSelf: 'flex-end',
+    alignSelf: "flex-end",
     marginRight: 20,
   },
   btnCont: {
@@ -416,14 +421,14 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
     fontFamily: theme.fontFamily?.medium,
     color: theme.colors?.textSecondary,
     marginTop: 20,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   innerCont: {
     flex: 1,
   },
   txtDontHaveAcc: {
     marginVertical: 10,
-    textAlign: 'center',
+    textAlign: "center",
     color: theme.colors?.primaryText,
     paddingBottom: props.insets.bottom,
   },
@@ -431,9 +436,9 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
     color: theme.colors?.secondaryText,
     fontSize: theme.fontSize?.fs16,
     fontFamily: theme.fontFamily?.regular,
-    alignSelf: 'center',
+    alignSelf: "center",
     paddingBottom:
-      Platform.OS === 'ios'
+      Platform.OS === "ios"
         ? HAS_NOTCH
           ? props.insets.bottom
           : props.insets.bottom + 10
@@ -455,20 +460,20 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
   txtTC: {
     fontSize: theme.fontSize?.fs16,
     fontFamily: theme.fontFamily?.regular,
-    color: '#777986',
+    color: "#777986",
   },
   txtTC1: {
     fontSize: theme.fontSize?.fs16,
     fontFamily: theme.fontFamily?.regular,
-    color: '#212121',
+    color: "#212121",
   },
   tcContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 10,
   },
   socialLoginCont: {
-    alignItems: 'center',
+    alignItems: "center",
     paddingHorizontal: 10,
     paddingBottom: 10,
     marginTop: 10,

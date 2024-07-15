@@ -93,6 +93,50 @@ const timeElapsedString = (datetime: string | number | Date, full = false) => {
   return result ? result + " ago" : "just now";
 };
 
+const keepSingleSpace = (value: string) => {
+  const newValue = value.trim().replace(/\s{2,}/g, " ");
+  return newValue;
+};
+
+function formatPhoneNumber(number: string) {
+  // Split the number at the first space
+  const parts = number.split(" ");
+
+  // Check if there's a space
+  if (parts.length < 2) {
+    console.warn("No space found in phone number:", number);
+    return number; // Return the original number if no space is found
+  }
+
+  // Extract the first part (assuming it's not the country code)
+  const firstPart = parts[0];
+
+  const lastparts = number.split(" ").reverse(); // Reverse to get the last space first
+  // Check if there's a space
+  if (lastparts.length < 2) {
+    console.warn("No space found in phone number:", number);
+    return number; // Return the original number if no space is found
+  }
+
+  const lastPhoneNumber = lastparts[0];
+  const lastDigit = lastPhoneNumber.length <= 4 ? lastPhoneNumber.length : 4;
+  const lastFourDigits = lastPhoneNumber.slice(-`${lastDigit}`);
+
+  // Mask all digits except the lastDigit in the remaining part
+  const remainingDigits = parts
+    .slice(1)
+    .join("")
+    .slice(0, -`${lastDigit}`)
+    .replace(/./g, "*");
+
+  // Combine the formatted parts
+  const formattedNumber = `(${firstPart
+    .slice(1)
+    .replace(/./g, "*")}) ${remainingDigits} -${lastFourDigits}`;
+
+  return formattedNumber;
+}
+
 export {
   CreditDebitCardNumber,
   createArrayUseNumber,
@@ -100,4 +144,6 @@ export {
   getUrlExtension,
   onShare,
   timeElapsedString,
+  keepSingleSpace,
+  formatPhoneNumber,
 };

@@ -1,34 +1,34 @@
-import {useFormik} from 'formik';
-import React, {useEffect} from 'react';
-import {Keyboard, Platform, TextInput, View} from 'react-native';
-import {makeStyles, useTheme} from 'react-native-elements';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { useFormik } from "formik";
+import React, { useEffect } from "react";
+import { Keyboard, Platform, TextInput, View } from "react-native";
+import { makeStyles, useTheme } from "react-native-elements";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useSelector} from 'react-redux';
-import {setAdjustPan, setAdjustResize} from 'rn-android-keyboard-adjust';
-import {AuthNavigationProps} from '../../types/navigation';
-import {Route} from '../../constant/navigationConstants';
-import {useAppDispatch} from '../../hooks/useAppDispatch';
-import {selectUserData} from '../../store/settings/settings.selectors';
-import {selectAuthenticationLoading} from '../../store/authentication/authentication.selectors';
-import {ChangePasswordFormProps} from '../../types/authentication.types';
-import {ChangePasswordScreenSchema} from '../../constant/formValidations';
-import {userChangePassword} from '../../store/authentication/authentication.thunks';
-import {setSuccess} from '../../store/global/global.slice';
-import {LoadingState, ThemeProps} from '../../types/global.types';
-import Loading from '../../components/ui/Loading';
-import CustomHeader from '../../components/ui/CustomHeader';
-import {CustomTxtInput} from '../../components/ui/CustomTextInput';
-import CustomButton from '../../components/ui/CustomButton';
-import {HAS_NOTCH} from '../../constant';
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
+import { setAdjustPan, setAdjustResize } from "rn-android-keyboard-adjust";
+import { AuthNavigationProps } from "../../types/navigation";
+import { Route } from "../../constant/navigationConstants";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { selectUserData } from "../../store/settings/settings.selectors";
+import { selectAuthenticationLoading } from "../../store/authentication/authentication.selectors";
+import { ChangePasswordFormProps } from "../../types/authentication.types";
+import { ChangePasswordScreenSchema } from "../../constant/formValidations";
+import { userChangePassword } from "../../store/authentication/authentication.thunks";
+import { setSuccess } from "../../store/global/global.slice";
+import { LoadingState, ThemeProps } from "../../types/global.types";
+import Loading from "../../components/ui/Loading";
+import CustomHeader from "../../components/ui/CustomHeader";
+import { CustomTxtInput } from "../../components/ui/CustomTextInput";
+import CustomButton from "../../components/ui/CustomButton";
+import { HAS_NOTCH } from "../../constant";
 
 const ChangePassword: React.FC<
   AuthNavigationProps<Route.navChangePassword>
-> = ({navigation}) => {
+> = ({ navigation }) => {
   const insets = useSafeAreaInsets();
-  const style = useStyles({insets});
-  const {theme} = useTheme();
+  const style = useStyles({ insets });
+  const { theme } = useTheme();
   const passwordRef = React.useRef<TextInput>(null);
   const confirmPasswordRef = React.useRef<TextInput>(null);
 
@@ -56,13 +56,13 @@ const ChangePassword: React.FC<
     setFieldError,
   } = useFormik<ChangePasswordFormProps>({
     validationSchema: ChangePasswordScreenSchema,
-    initialValues: {currentPassword: '', password: '', confirmPassword: ''},
-    onSubmit: async ({currentPassword, password, confirmPassword}) => {
+    initialValues: { currentPassword: "", password: "", confirmPassword: "" },
+    onSubmit: async ({ currentPassword, password, confirmPassword }) => {
       const result = await dispatch(
         userChangePassword({
           old_password: currentPassword,
           password,
-        }),
+        })
       );
       if (userChangePassword.fulfilled.match(result)) {
         if (result.payload.status === 1) {
@@ -70,8 +70,8 @@ const ChangePassword: React.FC<
           navigation.goBack();
         }
       } else {
-        console.log('errror userChangePassword --->', result.payload);
-        setFieldError('currentPassword', result.payload?.message);
+        console.log("errror userChangePassword --->", result.payload);
+        setFieldError("currentPassword", result.payload?.message);
       }
     },
   });
@@ -79,8 +79,9 @@ const ChangePassword: React.FC<
   return (
     <KeyboardAwareScrollView
       bounces={false}
-      keyboardShouldPersistTaps={'handled'}
-      contentContainerStyle={style.container}>
+      keyboardShouldPersistTaps={"handled"}
+      contentContainerStyle={style.container}
+    >
       {loading === LoadingState.CREATE && <Loading />}
 
       <CustomHeader title="Change Password" />
@@ -89,8 +90,8 @@ const ChangePassword: React.FC<
         <CustomTxtInput
           textInputTitle="Current Password"
           placeholder="Enter current password"
-          onChangeText={handleChange('currentPassword')}
-          onBlur={handleBlur('currentPassword')}
+          onChangeText={handleChange("currentPassword")}
+          onBlur={handleBlur("currentPassword")}
           value={values.currentPassword}
           error={errors.currentPassword}
           touched={touched.currentPassword}
@@ -104,8 +105,8 @@ const ChangePassword: React.FC<
           textInputTitle="Create Password"
           placeholder="Enter password"
           ref={passwordRef}
-          onChangeText={handleChange('password')}
-          onBlur={handleBlur('password')}
+          onChangeText={handleChange("password")}
+          onBlur={handleBlur("password")}
           value={values.password}
           error={errors.password}
           touched={touched.password}
@@ -119,8 +120,8 @@ const ChangePassword: React.FC<
           textInputTitle="Confirm Password"
           placeholder="Enter confirm password"
           ref={confirmPasswordRef}
-          onChangeText={handleChange('confirmPassword')}
-          onBlur={handleBlur('confirmPassword')}
+          onChangeText={handleChange("confirmPassword")}
+          onBlur={handleBlur("confirmPassword")}
           value={values.confirmPassword}
           error={errors.confirmPassword}
           touched={touched.confirmPassword}
@@ -137,7 +138,7 @@ const ChangePassword: React.FC<
             Keyboard.dismiss();
             handleSubmit();
           }}
-          title={'Change Password'}
+          title={"Change Password"}
           buttonWidth="full"
           variant="primary"
           type="solid"
@@ -176,7 +177,7 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
   },
   bottomCont: {
     paddingBottom:
-      Platform.OS === 'ios'
+      Platform.OS === "ios"
         ? HAS_NOTCH
           ? props.insets.bottom
           : props.insets.bottom + 10
@@ -186,24 +187,24 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
     color: theme.colors?.secondaryText,
     fontSize: theme.fontSize?.fs16,
     fontFamily: theme.fontFamily?.regular,
-    alignSelf: 'center',
+    alignSelf: "center",
     marginBottom: 20,
   },
   txtResendCode: {
     color: theme.colors?.black,
     fontSize: theme.fontSize?.fs16,
     fontFamily: theme.fontFamily?.regular,
-    textDecorationLine: 'underline',
+    textDecorationLine: "underline",
   },
   error: {
     marginTop: 5,
     fontSize: theme.fontSize?.fs12,
     color: theme.colors?.error,
   },
-  iconCont: {alignSelf: 'center', marginVertical: 30},
+  iconCont: { alignSelf: "center", marginVertical: 30 },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 }));

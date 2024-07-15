@@ -140,7 +140,7 @@ const Login: React.FC<AuthNavigationProps<Route.navLogin>> = ({
         if (result.payload?.statusCode === 403) {
           if (result.payload?.status === 2) {
             navigation.navigate(Route.navEnterOTP, {
-              phone: result.payload?.phone_number,
+              phone: phoneNumber,
               type: "otp_verification",
             });
           }
@@ -281,20 +281,19 @@ const Login: React.FC<AuthNavigationProps<Route.navLogin>> = ({
             privacy policy
           </Text>
         </Text>
-
-        <View style={style.socialLoginCont}>
-          <SocialAuthenticationView
+      </View>
+      <View style={style.socialLoginCont}>
+        {/* <SocialAuthenticationView
             fromLogin={true}
             userRole={userRole}
             fcmToken={fcmToken}
-          />
-          <Text style={style.txtAlreadyHaveAcc}>
-            Don't have an account?{" "}
-            <Text onPress={onPressSignup} style={style.txtSignup}>
-              Create now!
-            </Text>
+          /> */}
+        <Text style={style.txtAlreadyHaveAcc}>
+          Don't have an account?{" "}
+          <Text onPress={onPressSignup} style={style.txtSignup}>
+            Create now!
           </Text>
-        </View>
+        </Text>
       </View>
     </KeyboardAwareScrollView>
   );

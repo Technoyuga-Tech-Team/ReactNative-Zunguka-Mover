@@ -42,7 +42,7 @@ import { EditProfileFormProps } from "../../types/authentication.types";
 import { imagePickerProps } from "../../types/common.types";
 import { LoadingState, ThemeProps } from "../../types/global.types";
 import { MainNavigationProps } from "../../types/navigation";
-import { getUrlExtension } from "../../utils";
+import { getUrlExtension, keepSingleSpace } from "../../utils";
 import {
   getImageFromCamera,
   getImageFromGallary,
@@ -122,8 +122,8 @@ const EditProfile: React.FC<MainNavigationProps<Route.navEditProfile>> = ({
   const onPressUpdateProfile = () => {};
 
   const onPressFlag = () => {
-    setFieldValue("phoneNumber", "");
-    setVisibleCountryPicker(true);
+    // setFieldValue("phoneNumber", "");
+    // setVisibleCountryPicker(true);
   };
 
   const onPhoneInputChange = (value: string, iso2: string) => {
@@ -183,8 +183,8 @@ const EditProfile: React.FC<MainNavigationProps<Route.navEditProfile>> = ({
     onSubmit: async ({ firstName, lastName, username, email, phoneNumber }) => {
       const result = await dispatch(
         userUpdateProfile({
-          first_name: firstName,
-          last_name: lastName,
+          first_name: keepSingleSpace(firstName.trim()),
+          last_name: keepSingleSpace(lastName.trim()),
           username: username,
           email,
           phone_number: phoneNumber,
@@ -192,6 +192,8 @@ const EditProfile: React.FC<MainNavigationProps<Route.navEditProfile>> = ({
       );
       if (userUpdateProfile.fulfilled.match(result)) {
         if (result.payload.status === 1) {
+          setFieldValue("firstName", keepSingleSpace(firstName));
+          setFieldValue("lastName", keepSingleSpace(lastName));
           dispatch(setUserData(result?.payload?.data));
           await setData(USER_DATA, result?.payload?.data);
           dispatch(setSuccess(result?.payload?.message));
@@ -374,6 +376,7 @@ const EditProfile: React.FC<MainNavigationProps<Route.navEditProfile>> = ({
                   placeholder: "Enter your phone number",
                   placeholderTextColor: theme.colors?.iconColor,
                   style: style.txtInStyle,
+                  editable: false,
                   returnKeyLabel: "done",
                   returnKeyType: "done",
                   onPressIn: () => {

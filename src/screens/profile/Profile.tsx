@@ -1,49 +1,47 @@
-import {CommonActions} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
-import {StatusBar, Text, View} from 'react-native';
-import {makeStyles, useTheme} from 'react-native-elements';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useSelector} from 'react-redux';
-import CustomButton from '../../components/ui/CustomButton';
-import ProfileAndName from '../../components/ui/Profile/ProfileAndName';
-import LogoutPopup from '../../components/ui/popups/LogoutPopup';
-import LogoutIcon from '../../components/ui/svg/LogoutIcon';
+import { CommonActions } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import { StatusBar, Text, View } from "react-native";
+import { makeStyles, useTheme } from "react-native-elements";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
+import CustomButton from "../../components/ui/CustomButton";
+import ProfileAndName from "../../components/ui/Profile/ProfileAndName";
+import LogoutPopup from "../../components/ui/popups/LogoutPopup";
+import LogoutIcon from "../../components/ui/svg/LogoutIcon";
 import {
   GOOGLE_WEB_CLIENT_ID,
   SCREEN_WIDTH,
   USER_DATA,
   secureStoreKeys,
-} from '../../constant';
-import {Route} from '../../constant/navigationConstants';
-import {useAppDispatch} from '../../hooks/useAppDispatch';
-import {selectUserData} from '../../store/settings/settings.selectors';
-import {ThemeProps} from '../../types/global.types';
-import {HomeNavigationProps} from '../../types/navigation';
-import Scale from '../../utils/Scale';
-import {setData} from '../../utils/asyncStorage';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import ProfileItem from '../../components/ui/Profile/ProfileItem';
-import CreditcardIcon from '../../components/ui/svg/CreditcardIcon';
-import MoneybillsIcon from '../../components/ui/svg/MoneybillsIcon';
-import InfocircleIcon from '../../components/ui/svg/InfocircleIcon';
-import DocslistIcon from '../../components/ui/svg/DocslistIcon';
-import ProfileIcon from '../../components/ui/svg/ProfileIcon';
+} from "../../constant";
+import { Route } from "../../constant/navigationConstants";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { selectUserData } from "../../store/settings/settings.selectors";
+import { ThemeProps } from "../../types/global.types";
+import { HomeNavigationProps } from "../../types/navigation";
+import Scale from "../../utils/Scale";
+import { setData } from "../../utils/asyncStorage";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import ProfileItem from "../../components/ui/Profile/ProfileItem";
+import CreditcardIcon from "../../components/ui/svg/CreditcardIcon";
+import MoneybillsIcon from "../../components/ui/svg/MoneybillsIcon";
+import InfocircleIcon from "../../components/ui/svg/InfocircleIcon";
+import DocslistIcon from "../../components/ui/svg/DocslistIcon";
+import ProfileIcon from "../../components/ui/svg/ProfileIcon";
 
 const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
   navigation,
 }) => {
   const insets = useSafeAreaInsets();
-  const style = useStyles({insets});
-  const {theme} = useTheme();
+  const style = useStyles({ insets });
+  const { theme } = useTheme();
   const dispatch = useAppDispatch();
   const userData = useSelector(selectUserData);
-
-  const userRole = userData?.type;
 
   const [visible, setVisible] = useState(false);
 
   const [profilePicture, setProfilePicture] = useState<string>(
-    userData?.profile_image,
+    userData?.profile_image
   );
 
   // useEffect(() => {
@@ -55,7 +53,7 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
   // }, []);
 
   useEffect(() => {
-    let unsubscribe = navigation.addListener('focus', async () => {
+    let unsubscribe = navigation.addListener("focus", async () => {
       setProfilePicture(userData?.profile_image);
     });
 
@@ -78,8 +76,8 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
     navigation.dispatch(
       CommonActions.reset({
         index: 0,
-        routes: [{name: Route.navAuthentication}],
-      }),
+        routes: [{ name: Route.navAuthentication }],
+      })
     );
   };
 
@@ -97,12 +95,14 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
     <View style={style.container}>
       <StatusBar
         backgroundColor={theme.colors?.white}
-        barStyle={'dark-content'}
+        barStyle={"dark-content"}
       />
       <Text style={style.txtProfile}>Profile</Text>
       <View style={style.profileCont}>
         <ProfileAndName
-          name={userData?.username}
+          name={`${userData?.first_name} ${
+            userData?.last_name !== null ? userData?.last_name : ""
+          }`}
           email={userData?.email}
           profileImage={Profile}
         />
@@ -110,8 +110,9 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
       <KeyboardAwareScrollView
         bounces={false}
         showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps={'handled'}
-        contentContainerStyle={style.scrollCont}>
+        keyboardShouldPersistTaps={"handled"}
+        contentContainerStyle={style.scrollCont}
+      >
         <ProfileItem
           name="My Profile"
           icon={<ProfileIcon color={theme.colors?.primary} />}
@@ -136,14 +137,14 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
           icon={<DocslistIcon color={theme.colors?.primary} />}
         />
       </KeyboardAwareScrollView>
-      <View style={{marginHorizontal: 20}}>
+      <View style={{ marginHorizontal: 20 }}>
         <CustomButton
           onPress={onPressLogoutPopup}
-          title={'Logout'}
+          title={"Logout"}
           buttonWidth="full"
           type="clear"
           icon={
-            <LogoutIcon color={theme.colors?.red} style={{marginRight: 5}} />
+            <LogoutIcon color={theme.colors?.red} style={{ marginRight: 5 }} />
           }
           containerStyle={style.btnLogout}
           buttonStyle={style.btnLogout1}
@@ -177,18 +178,18 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
   },
   btnLogout: {
     backgroundColor: theme.colors?.white,
-    width: '100%',
+    width: "100%",
     height: Scale(56),
     borderRadius: Scale(56 / 2),
     borderColor: theme.colors?.red,
     borderWidth: 1,
   },
   btnLogout1: {
-    width: '100%',
+    width: "100%",
     height: Scale(56),
     borderRadius: Scale(56 / 2),
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   txtTitleStyle: {
     fontSize: theme.fontSize?.fs15,
@@ -197,8 +198,8 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
   },
   bottomButton: {
     marginHorizontal: 20,
-    position: 'absolute',
-    alignSelf: 'center',
+    position: "absolute",
+    alignSelf: "center",
     bottom: 10,
     width: SCREEN_WIDTH - 40,
   },
@@ -207,7 +208,7 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
     fontFamily: theme.fontFamily?.bold,
     color: theme.colors?.black,
     lineHeight: 24,
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 20,
   },
 }));

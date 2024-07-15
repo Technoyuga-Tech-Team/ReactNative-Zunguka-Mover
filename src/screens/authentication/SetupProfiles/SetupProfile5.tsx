@@ -59,7 +59,7 @@ const SetupProfile5: React.FC<AuthNavigationProps<Route.navSetupProfile5>> = ({
       const formData = new FormData();
 
       formData.append("state", selectedState);
-      formData.append("city", selectedCity);
+      formData.append("sector", selectedCity);
       formData.append("step", 5);
       formData.append("type", UserRoleType.MOVER);
 

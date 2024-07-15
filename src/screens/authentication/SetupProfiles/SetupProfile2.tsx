@@ -60,11 +60,12 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
   useEffect(() => {
     let unsubscribe = navigation.addListener("focus", async () => {
       refetch().then((currentUser) => {
+        console.log("currentUser", currentUser);
         if (currentUser?.data?.user) {
           currentUser?.data?.user?.address_proofs?.length > 0 &&
             setSelectedImage(currentUser?.data?.user?.address_proofs as any);
           let arr: any = [];
-          if (currentUser?.data?.user?.address_proofs.length > 0) {
+          if (currentUser?.data?.user?.address_proofs?.length > 0) {
             currentUser?.data?.user?.address_proofs.map((ele) => {
               arr.push({
                 name: `IMG-${new Date()}.${getUrlExtension(ele)}`,
@@ -250,8 +251,8 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
           value={values.address}
           error={errors.address}
           touched={touched.address}
-          returnKeyType="next"
-          returnKeyLabel="next"
+          returnKeyType="done"
+          returnKeyLabel="done"
         />
         <TouchableOpacity
           style={style.locationCont}
