@@ -57,11 +57,9 @@ const SetupProfile3: React.FC<AuthNavigationProps<Route.navSetupProfile3>> = ({
         if (currentUser?.data?.user) {
           currentUser?.data?.user?.license_copies.length > 0 &&
             setSelectedImage(currentUser?.data?.user?.license_copies as any);
-          // currentUser?.data?.user?.license_copies.length > 0 &&
-          //   setImage(currentUser?.data?.user?.license_copies);
           let arr: any = [];
           if (currentUser?.data?.user?.license_copies.length > 0) {
-            currentUser?.data?.user?.license_copies.map((ele) => {
+            currentUser?.data?.user?.license_copies.map((ele: string) => {
               arr.push({
                 name: `IMG-${new Date()}.${getUrlExtension(ele)}`,
                 type: `image/${getUrlExtension(ele)}`,

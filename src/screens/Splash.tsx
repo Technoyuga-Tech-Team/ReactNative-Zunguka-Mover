@@ -8,7 +8,7 @@ import { Route } from "../constant/navigationConstants";
 import Scale from "../utils/Scale";
 import { useAppDispatch } from "../hooks/useAppDispatch";
 import { appAlreadyOpen, getData } from "../utils/asyncStorage";
-import { setUserData } from "../store/settings/settings.slice";
+import { saveAddress, setUserData } from "../store/settings/settings.slice";
 import { getUserData } from "../types/user.types";
 import { API } from "../constant/apiEndpoints";
 import { setNavigation } from "../utils/setNavigation";
@@ -29,8 +29,21 @@ const Splash: React.FC<SplashScreenProps> = () => {
       if (token) {
         const user_data = await getData(USER_DATA);
         dispatch(setUserData(user_data));
+        let steps = user_data.step;
+        let isStepCompleted = user_data.is_profile_completed;
+        let isVerify_by_Admin = user_data.is_kyc_verified_by_admin;
         setTimeout(() => {
-          setUpNavigation();
+          if (isStepCompleted == 1 && isVerify_by_Admin == 1) {
+            setUpNavigation();
+          } else {
+            if (steps == 0 || steps == 1) {
+              navigation.navigate(Route.navAddKyc);
+            } else if (steps == 2) {
+              // @ts-ignore
+              navigation.navigate(Route.navTakeSelfie);
+            }
+          }
+          // setUpNavigation();
         }, 2000);
       } else {
         if (await appAlreadyOpen()) {

@@ -137,6 +137,13 @@ function formatPhoneNumber(number: string) {
   return formattedNumber;
 }
 
+const getRandomFileName = () => {
+  var timestamp = new Date().toISOString().replace(/[-:.]/g, "");
+  var random = ("" + Math.random()).substring(2, 8);
+  var random_number = timestamp + random;
+  return random_number;
+};
+
 export {
   CreditDebitCardNumber,
   createArrayUseNumber,
@@ -146,4 +153,5 @@ export {
   timeElapsedString,
   keepSingleSpace,
   formatPhoneNumber,
+  getRandomFileName,
 };

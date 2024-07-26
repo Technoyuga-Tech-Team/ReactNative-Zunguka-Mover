@@ -38,6 +38,8 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
   const dispatch = useAppDispatch();
   const userData = useSelector(selectUserData);
 
+  console.log("userData", userData);
+
   const [visible, setVisible] = useState(false);
 
   const [profilePicture, setProfilePicture] = useState<string>(

@@ -44,6 +44,7 @@ export type AppRoutes = {
   PaymentToMover: undefined;
   VisitProfile: { is_rating: number };
   JobHistory: undefined;
+  TakeSelfie: undefined;
 };
 
 export type MoverRoute = {
@@ -113,6 +114,7 @@ export type AuthenticationRoutes = {
   AddKyc: undefined;
   ResetPassword: { phone?: string; email?: string };
   ChangePassword: undefined;
+  TakeSelfie: undefined;
 };
 
 export type BottomRoutes = {

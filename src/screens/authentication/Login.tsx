@@ -126,14 +126,25 @@ const Login: React.FC<AuthNavigationProps<Route.navLogin>> = ({
 
         if (result.payload?.status == 1) {
           let steps = result.payload?.user?.step;
-          console.log("steps", steps);
-          if (steps !== 2) {
-            if (steps == 0) {
-              navigation.navigate(Route.navAddKyc);
-            }
-          } else {
+          let isStepCompleted = result.payload?.user?.is_profile_completed;
+          let isVerify_by_Admin =
+            result.payload?.user?.is_kyc_verified_by_admin;
+          if (isStepCompleted == 1 && isVerify_by_Admin == 1) {
             setNavigation(result.payload?.user, navigationRoute);
+          } else {
+            if (steps == 0 || steps == 1) {
+              navigation.navigate(Route.navAddKyc);
+            } else if (steps == 2) {
+              navigation.navigate(Route.navTakeSelfie);
+            }
           }
+          // if (steps !== 2) {
+          //   if (steps == 0) {
+          //     navigation.navigate(Route.navAddKyc);
+          //   }
+          // } else {
+          //   setNavigation(result.payload?.user, navigationRoute);
+          // }
         }
       } else {
         console.log("errror userLogin --->", result.payload);

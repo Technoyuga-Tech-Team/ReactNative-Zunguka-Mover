@@ -40,8 +40,10 @@ const SetupProfile5: React.FC<AuthNavigationProps<Route.navSetupProfile5>> = ({
     let unsubscribe = navigation.addListener("focus", async () => {
       refetch().then((currentUser) => {
         if (currentUser?.data?.user) {
-          setSelectedState(currentUser?.data?.user?.state);
-          setSelectedCity(currentUser?.data?.user?.city);
+          currentUser?.data?.user?.state &&
+            setSelectedState(currentUser?.data?.user?.state);
+          currentUser?.data?.user?.city &&
+            setSelectedCity(currentUser?.data?.user?.city);
         }
       });
     });
@@ -55,7 +57,12 @@ const SetupProfile5: React.FC<AuthNavigationProps<Route.navSetupProfile5>> = ({
     navigation.goBack();
   };
   const onPressNext = async () => {
-    if (selectedState !== "" && selectedCity !== "") {
+    if (
+      selectedState &&
+      selectedState !== "" &&
+      selectedCity &&
+      selectedCity !== ""
+    ) {
       const formData = new FormData();
 
       formData.append("state", selectedState);

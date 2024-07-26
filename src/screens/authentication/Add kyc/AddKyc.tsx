@@ -162,8 +162,8 @@ const AddKyc: React.FC<AuthNavigationProps<Route.navAddKyc>> = ({
         if (userVerifyId.fulfilled.match(result)) {
           if (result.payload.status === 1) {
             console.log("userVerifyId result - - - ", result.payload);
-
-            setNavigation(result.payload?.data, navigationRoute);
+            navigation.navigate(Route.navTakeSelfie);
+            // setNavigation(result.payload?.data, navigationRoute);
             dispatch(setSuccess(result.payload.message));
           }
         } else {

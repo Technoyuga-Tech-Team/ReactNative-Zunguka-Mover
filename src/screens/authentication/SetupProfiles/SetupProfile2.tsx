@@ -60,13 +60,15 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
   useEffect(() => {
     let unsubscribe = navigation.addListener("focus", async () => {
       refetch().then((currentUser) => {
-        console.log("currentUser", currentUser);
+        console.log("currentUser", currentUser?.data?.user?.address_proofs);
         if (currentUser?.data?.user) {
           currentUser?.data?.user?.address_proofs?.length > 0 &&
-            setSelectedImage(currentUser?.data?.user?.address_proofs as any);
+            setSelectedImage(
+              currentUser?.data?.user?.address_proofs as string[]
+            );
           let arr: any = [];
           if (currentUser?.data?.user?.address_proofs?.length > 0) {
-            currentUser?.data?.user?.address_proofs.map((ele) => {
+            currentUser?.data?.user?.address_proofs.map((ele: string) => {
               arr.push({
                 name: `IMG-${new Date()}.${getUrlExtension(ele)}`,
                 type: `image/${getUrlExtension(ele)}`,
@@ -218,9 +220,12 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
     details: GooglePlaceDetail
   ) => {
     const location_address =
+      // @ts-ignore
       data.description !== undefined
-        ? data.description
-        : data?.formatted_address;
+        ? // @ts-ignore
+          data.description
+        : // @ts-ignore
+          data?.formatted_address;
     console.log("location_address", location_address);
     setFieldValue("address", location_address);
     toggleAddressModal();
@@ -229,6 +234,8 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
   const onPressCloseIcon = (item: imagePickerProps) => {
     setSelectedImageForDelete(item.name);
   };
+
+  console.log("image", image);
 
   return (
     <KeyboardAwareScrollView
@@ -282,15 +289,20 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
         onPressFromCamera={onPressFromCamera}
         onPressFromGallary={onPressFromGallary}
       />
-      <GooglePlaceAutoCompleteModal
-        countryCode={CURRENT_COUNTRY_CODE}
-        onPressAddress={(data: GooglePlaceData, details: GooglePlaceDetail) => {
-          console.log("data, details", data, details);
-          onPressGetAddress(data, details);
-        }}
-        visiblePopup={visibleAddress}
-        togglePopup={toggleAddressModal}
-      />
+      {visibleAddress && (
+        <GooglePlaceAutoCompleteModal
+          countryCode={CURRENT_COUNTRY_CODE}
+          onPressAddress={(
+            data: GooglePlaceData,
+            details: GooglePlaceDetail
+          ) => {
+            console.log("data, details", data, details);
+            onPressGetAddress(data, details);
+          }}
+          visiblePopup={visibleAddress}
+          togglePopup={toggleAddressModal}
+        />
+      )}
     </KeyboardAwareScrollView>
   );
 };

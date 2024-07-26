@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Text, TouchableOpacity, View } from "react-native";
+import {
+  Modal,
+  PermissionsAndroid,
+  Platform,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { CountryCode } from "react-native-country-picker-modal";
 import { makeStyles, useTheme } from "react-native-elements";
 import {
@@ -13,6 +20,9 @@ import { ThemeProps } from "../types/global.types";
 import Scale from "../utils/Scale";
 import BackIcon from "./ui/svg/BackIcon";
 import { GOOGLE_MAP_API_KEY } from "../constant";
+import Geolocation from "react-native-geolocation-service";
+import { useAppDispatch } from "../hooks/useAppDispatch";
+import { setErrors } from "../store/global/global.slice";
 
 navigator.geolocation = require("react-native-geolocation-service");
 interface GooglePlaceAutoCompleteModalProps {
@@ -29,16 +39,59 @@ const GooglePlaceAutoCompleteModal: React.FC<
   const { theme } = useTheme();
   const style = useStyle({ insets });
 
+  const dispatch = useAppDispatch();
+
   const textinRef = React.useRef<GooglePlacesAutocompleteRef>(null);
 
   const [focuseKeyboard, setFocuseKeyboard] = useState(false);
+  const [locationEnabled, setLocationEnabled] = useState(false);
+
+  useEffect(() => {
+    const requestLocationPermission = async () => {
+      if (Platform.OS === "ios") {
+        await Geolocation.requestAuthorization("whenInUse");
+        setLocationEnabled(true);
+      } else {
+        try {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            {
+              title: "Location Access Required",
+              message: "This App needs to Access your location",
+              buttonPositive: "ok",
+            }
+          );
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            //To Check, If Permission is granted
+            setLocationEnabled(true);
+          } else {
+            dispatch(
+              setErrors({
+                message: "Location permission Denied",
+                status: 0,
+                statusCode: null,
+              })
+            );
+            setLocationEnabled(false);
+          }
+        } catch (err) {
+          setLocationEnabled(false);
+          console.log(err);
+        }
+      }
+    };
+    requestLocationPermission();
+    return () => {
+      // Geolocation.clearWatch();
+    };
+  }, []);
 
   useEffect(() => {
     textinRef.current?.focus();
     setFocuseKeyboard(true);
   }, []);
 
-  const country_ = countryCode.toLocaleLowerCase() ?? "RW";
+  const country_ = countryCode.toLocaleLowerCase() ?? "rw";
 
   return (
     <Modal
@@ -68,7 +121,7 @@ const GooglePlaceAutoCompleteModal: React.FC<
           query={{
             key: GOOGLE_MAP_API_KEY,
             language: "en",
-            components: `country:${country_}`,
+            components: `country:rw`,
           }}
           autoFillOnNotFound={true}
           currentLocation={true}

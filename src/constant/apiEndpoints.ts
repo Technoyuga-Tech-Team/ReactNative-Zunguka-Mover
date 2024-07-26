@@ -13,6 +13,7 @@ export const API = {
   ADD_ADDRESS: "/add-address",
   // Verify ID (kyc)
   VERIFY_KYC: "/verify-kyc",
+  VERIFY_SELFIE: "/add-selfie",
 
   // profile
   UPDATE_PROFILE: "/profile",

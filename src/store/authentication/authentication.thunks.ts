@@ -440,3 +440,44 @@ export const userVerifyId = createAsyncThunk<
     return data;
   }
 );
+
+// Add KYC
+export const userSelfieVerification = createAsyncThunk<
+  any,
+  {
+    formData: FormData;
+  },
+  { state: RootReduxState; rejectValue: FetchResponseError }
+>(
+  "authentication/userSelfieVerification",
+  async ({ formData }, { dispatch, rejectWithValue }) => {
+    const { errors, data } = await dispatch(
+      fetchAction<TokenPayload>(
+        {
+          url: API.VERIFY_SELFIE,
+          method: "POST",
+          data: formData,
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        },
+        true
+      )
+    );
+
+    if (errors) {
+      return rejectWithValue(errors);
+    }
+
+    if (data?.data) {
+      dispatch(setUserData(data?.data));
+      setData(USER_DATA, data?.data);
+    }
+
+    if (data?.authorization) {
+      await setData(secureStoreKeys.JWT_TOKEN, data?.authorization.token);
+    }
+
+    return data;
+  }
+);

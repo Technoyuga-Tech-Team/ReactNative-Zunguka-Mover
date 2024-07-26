@@ -14,6 +14,7 @@ import AddKyc from "../screens/authentication/Add kyc/AddKyc";
 import EditProfile from "../screens/profile/EditProfile";
 import ResetPassword from "../screens/authentication/ResetPassword";
 import ChangePassword from "../screens/profile/ChangePassword";
+import TakeSelfie from "../screens/authentication/TakeSelfie";
 
 const Stack = createNativeStackNavigator<AppRoutes>();
 
@@ -36,6 +37,8 @@ const MainStack = () => {
         <Stack.Screen name={Route.navDashboard} component={Bottombar} />
         <Stack.Screen name={Route.navAddKyc} component={AddKyc} />
         <Stack.Screen name={Route.navEditProfile} component={EditProfile} />
+        <Stack.Screen name={Route.navTakeSelfie} component={TakeSelfie} />
+
         <Stack.Screen
           name={Route.navChangePassword}
           component={ChangePassword}

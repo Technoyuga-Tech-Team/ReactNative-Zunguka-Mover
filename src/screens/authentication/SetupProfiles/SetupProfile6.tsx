@@ -36,7 +36,8 @@ const SetupProfile6: React.FC<AuthNavigationProps<Route.navSetupProfile6>> = ({
     let unsubscribe = navigation.addListener("focus", async () => {
       refetch().then((currentUser) => {
         if (currentUser?.data?.user) {
-          setSelectedVehicle(currentUser?.data?.user?.vehicle_type);
+          currentUser?.data?.user?.vehicle_type &&
+            setSelectedVehicle(currentUser?.data?.user?.vehicle_type);
         }
       });
     });

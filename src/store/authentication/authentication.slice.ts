@@ -8,6 +8,7 @@ import {
   userOTPCode,
   userRegistration,
   userResetPassword,
+  userSelfieVerification,
   userVerifyId,
 } from "./authentication.thunks";
 
@@ -37,7 +38,8 @@ const authentication = createSlice({
           userChangePassword.pending,
           userOTPCode.pending,
           userResetPassword.pending,
-          userVerifyId.pending
+          userVerifyId.pending,
+          userSelfieVerification.pending
         ),
         (state) => {
           state.loading = LoadingState.CREATE;
@@ -52,13 +54,15 @@ const authentication = createSlice({
           userOTPCode.fulfilled,
           userResetPassword.fulfilled,
           userVerifyId.fulfilled,
+          userSelfieVerification.fulfilled,
           userLogin.rejected,
           userRegistration.rejected,
           userForgotPassword.rejected,
           userChangePassword.rejected,
           userOTPCode.rejected,
           userResetPassword.rejected,
-          userVerifyId.rejected
+          userVerifyId.rejected,
+          userSelfieVerification.rejected
         ),
         (state) => {
           state.loading = LoadingState.REMOVE;

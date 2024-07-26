@@ -38,13 +38,13 @@ import Scale from "../../../utils/Scale";
 import { UserRoleType } from "../../../types/user.types";
 
 const Profiles = [
-  { image: `http://${BASE_PORT}/images/profile1.png` },
-  { image: `http://${BASE_PORT}/images/profile2.png` },
-  { image: `http://${BASE_PORT}/images/profile3.png` },
-  { image: `http://${BASE_PORT}/images/profile4.png` },
-  { image: `http://${BASE_PORT}/images/profile5.png` },
-  { image: `http://${BASE_PORT}/images/profile6.png` },
-  { image: `http://${BASE_PORT}/images/profile7.png` },
+  { image: `http://${BASE_PORT}/avtars/1.png` },
+  { image: `http://${BASE_PORT}/avtars/2.png` },
+  { image: `http://${BASE_PORT}/avtars/3.png` },
+  { image: `http://${BASE_PORT}/avtars/4.png` },
+  { image: `http://${BASE_PORT}/avtars/5.png` },
+  { image: `http://${BASE_PORT}/avtars/6.png` },
+  { image: `http://${BASE_PORT}/avtars/7.png` },
 ];
 
 const SetupProfile1: React.FC<AuthNavigationProps<Route.navSetupProfile1>> = ({
@@ -193,6 +193,7 @@ const SetupProfile1: React.FC<AuthNavigationProps<Route.navSetupProfile1>> = ({
       <TouchableOpacity onPress={() => onPressImage(item.image)}>
         <AppImage
           source={item.image}
+          // @ts-ignore
           style={[
             style.profile1,
             {
@@ -232,7 +233,7 @@ const SetupProfile1: React.FC<AuthNavigationProps<Route.navSetupProfile1>> = ({
             titleStyle={style.txtTitleStyle}
           />
         </View>
-        {/* <View style={style.imagePickerCont}>
+        <View style={style.imagePickerCont}>
           <Text style={style.txtChoose}>or choose one:</Text>
           <FlatList
             data={Profiles}
@@ -241,7 +242,7 @@ const SetupProfile1: React.FC<AuthNavigationProps<Route.navSetupProfile1>> = ({
             horizontal
             showsHorizontalScrollIndicator={false}
           />
-        </View> */}
+        </View>
       </View>
       <PrevNextCont
         onPressNext={onPressNext}

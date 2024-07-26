@@ -1,5 +1,11 @@
 import React from "react";
-import { Image, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  StyleProp,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from "react-native";
 import { makeStyles, useTheme } from "react-native-elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeProps } from "../../../types/global.types";
@@ -12,12 +18,14 @@ interface ProfileImageProps {
   profileImage: string;
   onPressCamera?: () => void;
   showIcon?: boolean;
+  imageStyle: StyleProp<ViewStyle>;
 }
 
 const ProfileImage: React.FC<ProfileImageProps> = ({
   profileImage,
   onPressCamera,
   showIcon = true,
+  imageStyle,
 }) => {
   const insets = useSafeAreaInsets();
   const style = useStyles({ insets });
@@ -27,7 +35,11 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
     profileImage || require("../../../assets/images/placeholder.jpg");
   return (
     <View style={style.container}>
-      <AppImage style={style.profile} source={Profile} resizeMode="cover" />
+      <AppImage
+        style={[style.profile, imageStyle]}
+        source={Profile}
+        resizeMode="cover"
+      />
       {showIcon && (
         <TouchableOpacity
           onPress={onPressCamera && onPressCamera}
