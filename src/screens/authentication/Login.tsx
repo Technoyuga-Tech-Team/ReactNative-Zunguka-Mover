@@ -132,10 +132,24 @@ const Login: React.FC<AuthNavigationProps<Route.navLogin>> = ({
           if (isStepCompleted == 1 && isVerify_by_Admin == 1) {
             setNavigation(result.payload?.user, navigationRoute);
           } else {
-            if (steps == 0 || steps == 1) {
-              navigation.navigate(Route.navAddKyc);
-            } else if (steps == 2) {
-              navigation.navigate(Route.navTakeSelfie);
+            if (steps == 0) {
+              // navigation.navigate(Route.navAddKyc);
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{ name: Route.navAddKyc }],
+                })
+              );
+            } else if (steps == 2 || steps == 3) {
+              // navigation.navigate(Route.navTakeSelfie, { fromflow: false });
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [
+                    { name: Route.navTakeSelfie, params: { fromflow: false } },
+                  ],
+                })
+              );
             }
           }
           // if (steps !== 2) {

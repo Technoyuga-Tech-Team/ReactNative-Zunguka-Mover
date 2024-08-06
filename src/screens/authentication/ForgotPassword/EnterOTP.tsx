@@ -201,15 +201,33 @@ const EnterOTP: React.FC<AuthNavigationProps<Route.navEnterOTP>> = ({
             console.log("steps", steps);
             if (steps !== 2) {
               if (steps == 0) {
-                navigation.navigate(Route.navAddKyc);
+                navigation.dispatch(
+                  CommonActions.reset({
+                    index: 0,
+                    routes: [{ name: Route.navAddKyc }],
+                  })
+                );
               }
             } else {
               setNavigation(result.payload?.user, navigation);
             }
           } else {
-            navigation.navigate(Route.navResetPassword, {
-              phone: phone_number && phone_number.replace("-", ""),
-            });
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [
+                  {
+                    name: Route.navAddKyc,
+                    params: {
+                      phone: phone_number && phone_number.replace("-", ""),
+                    },
+                  },
+                ],
+              })
+            );
+            // navigation.navigate(Route.navResetPassword, {
+            //   phone: phone_number && phone_number.replace("-", ""),
+            // });
           }
         }
       } else {

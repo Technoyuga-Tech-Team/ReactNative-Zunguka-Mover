@@ -430,11 +430,10 @@ export const userVerifyId = createAsyncThunk<
     if (errors) {
       return rejectWithValue(errors);
     }
-
-    if (data?.authorization) {
-      dispatch(setUserData(data?.user));
-      setData(USER_DATA, data?.user);
-      await setData(secureStoreKeys.JWT_TOKEN, data?.authorization.token);
+    console.log("data --   -- - - - - - - - ", data);
+    if (data?.data) {
+      dispatch(setUserData(data?.data));
+      setData(USER_DATA, data?.data);
     }
 
     return data;

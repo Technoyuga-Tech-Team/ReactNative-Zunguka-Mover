@@ -29,18 +29,39 @@ const Splash: React.FC<SplashScreenProps> = () => {
       if (token) {
         const user_data = await getData(USER_DATA);
         dispatch(setUserData(user_data));
+        console.log("user_data", user_data);
         let steps = user_data.step;
+        console.log("steps", steps);
         let isStepCompleted = user_data.is_profile_completed;
+        console.log("isStepCompleted", isStepCompleted);
+
         let isVerify_by_Admin = user_data.is_kyc_verified_by_admin;
+        console.log("isVerify_by_Admin", isVerify_by_Admin);
+
         setTimeout(() => {
           if (isStepCompleted == 1 && isVerify_by_Admin == 1) {
             setUpNavigation();
           } else {
-            if (steps == 0 || steps == 1) {
-              navigation.navigate(Route.navAddKyc);
-            } else if (steps == 2) {
+            if (steps == 0) {
               // @ts-ignore
-              navigation.navigate(Route.navTakeSelfie);
+              // navigation.navigate(Route.navAddKyc);
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{ name: Route.navAddKyc }],
+                })
+              );
+            } else if (steps == 2 || steps == 3) {
+              // @ts-ignore
+              // navigation.navigate(Route.navTakeSelfie, { fromflow: false });
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [
+                    { name: Route.navTakeSelfie, params: { fromflow: false } },
+                  ],
+                })
+              );
             }
           }
           // setUpNavigation();

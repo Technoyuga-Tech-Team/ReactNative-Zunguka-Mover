@@ -114,7 +114,7 @@ export type AuthenticationRoutes = {
   AddKyc: undefined;
   ResetPassword: { phone?: string; email?: string };
   ChangePassword: undefined;
-  TakeSelfie: undefined;
+  TakeSelfie: { fromflow?: boolean };
 };
 
 export type BottomRoutes = {
@@ -147,87 +147,24 @@ export type TopPackageRoutes = {
 };
 
 export type HomeRoutes = {
-  Home: undefined;
+  MoverAuthentication: undefined;
+  MoverDashboard: undefined;
   HomeMover: undefined;
-  Search: {
-    screen: Search1;
-    params: { userType: string; category_ids?: number };
-  };
-  Search1: { userType: string; category_ids?: number };
-  Add: undefined;
-  Storefront: undefined;
-  Profile: undefined;
-  EditProfile: undefined;
-  VisitProfile: { item: any };
-  SavedItems: undefined;
-  PurchasedHistory: undefined;
-  Messaging: undefined;
-  Chatroom: { receiver_id: number };
-  ChangePassword: undefined;
-  ProductDetails: { itemId: number };
-  TransactionHistory: undefined;
-  TransactionDetails: { item: GetProductDetailsDataProps };
-  NotificationSetting: undefined;
-  ProductFilter: {
-    onGoBack: ({
-      category_ids: string,
-      min_price: number,
-      max_price: number,
-      payment_terms: string,
-      city: string,
-      state: string,
-      sort: string,
-    }) => void;
-  };
-  Notification: undefined;
-  AllDeals: undefined;
-  ModeOfPayment: undefined;
-  CardDetails: { from: string; package_details_id?: string };
-  AddCard: undefined;
-  ModeOfDelivery: undefined;
-  DeliveryDetails: undefined;
-  DeliveryCompleteAndRateDriver: {
-    user_id: string;
-    package_details_id: string;
-  };
-  AllCategories: undefined;
-  UpcomingPackages: undefined;
-  OngoingPackages: undefined;
-  CompletedPackages: undefined;
-  ReviewAndRating: undefined;
-  PackageDetails: undefined;
-  DeliveryDetails1: { package_details_id: string; from?: string };
-  SelectMover: undefined;
-  MoverHistory: undefined;
-  Withdraw: { earning: string };
   Earnings: undefined;
-  ConfirmSelfPickup: undefined;
-  RequestToMover: undefined;
-  JobHistory: undefined;
-  PaymentToMover: {
-    pickup_Address: string;
-    delivery_Address: string;
-    price: string;
-    item_name: string;
+  ReviewAndRating: undefined;
+  PackageDetails: {
     package_details_id: string;
+    pickupLatLng: { lat: number; lng: number };
+    destinationLatLng: { lat: number; lng: number };
+    canStartJob: boolean;
+    canEndJob: boolean;
+    buyerSellerId: string;
   };
-  CategoryProduct: {
-    userType: string;
-    category_ids?: number;
-    categoryName?: string;
-  };
-  PackageInfo: { mover_id?: number } | undefined;
-  ConfirmPackageInfo: {
-    itmeName: string;
-    size: string;
-    pickupAddress: string;
-    deliveryAddress: string;
-    receiverName: string;
-    date: string;
-    time: string;
-    pickupLatlng: { lat: number; lng: number };
-    deliveryLatlng: { lat: number; lng: number };
-  };
+  DeliveryDetails: undefined;
+  DeliveryDetails1: { package_details_id: string; from?: string };
+  Withdraw: { earning: string };
+  PayoutHistory: undefined;
+  Chatroom: { receiver_id: string };
 };
 
 export type SellAnItemRoutes = {

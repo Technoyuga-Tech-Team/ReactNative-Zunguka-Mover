@@ -36,19 +36,16 @@ export type UserData = {
   iso: string;
   type: string;
   is_profile_completed: number;
-  is_mover_setup_profile_done: number;
   step: number;
-  mover_setup_step: number;
   profile_percentage: number;
   address: string;
   insurance_number: string;
-  insurance_copies: [];
-  address_proofs: [];
+  insurance_copies: string;
+  address_proofs: string;
   license_number: string;
-  license_copies: [];
+  license_copies: string;
   vehicle_type: string;
   city: string;
-  state: string;
   rate: number;
   avg_rate: number;
   total_user_rate: number;
@@ -72,6 +69,7 @@ export type UserData = {
   id_type: null;
   is_kyc_verified_by_admin: number;
   selfie_image: string;
+  is_selfie_uploaded: number;
 };
 
 export interface getUserData {

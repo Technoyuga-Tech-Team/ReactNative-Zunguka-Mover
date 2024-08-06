@@ -2,11 +2,15 @@ import React from "react";
 import { ActivityIndicator, View } from "react-native";
 import { makeStyles, useTheme } from "react-native-elements";
 
-const Loading = () => {
+interface LoadingProps {
+  backgroundColor?: string;
+}
+
+const Loading: React.FC<LoadingProps> = ({ backgroundColor }) => {
   const style = useStyles();
   const { theme } = useTheme();
   return (
-    <View style={style.container}>
+    <View style={[style.container, { backgroundColor }]}>
       <ActivityIndicator size={"large"} color={theme?.colors?.primary} />
     </View>
   );

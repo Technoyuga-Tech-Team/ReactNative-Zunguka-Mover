@@ -1,35 +1,33 @@
-import { View, Text, Platform } from "react-native";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { AuthNavigationProps } from "../../../types/navigation";
-import { Route } from "../../../constant/navigationConstants";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Platform, Text, View } from "react-native";
 import { makeStyles, useTheme } from "react-native-elements";
-import { useAppDispatch } from "../../../hooks/useAppDispatch";
-import { LoadingState, ThemeProps } from "../../../types/global.types";
-import CustomHeader from "../../../components/ui/CustomHeader";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import CustomButton from "../../../components/ui/CustomButton";
-import KycIcon from "../../../components/ui/svg/KycIcon";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
 import CustomDropdown from "../../../components/Dropdown/CustomDropdown";
-import { COUNTRIES, ID_TYPES } from "../../../constant";
 import RenderSelectedImage from "../../../components/RenderSelectedImage/RenderSelectedImage";
-import { imagePickerProps } from "../../../types/common.types";
-import UploadProofPhotos from "../../../components/UploadProofPhotos";
+import UploadPhotosBorder from "../../../components/UploadPhotosBorder";
+import CustomButton from "../../../components/ui/CustomButton";
+import CustomHeader from "../../../components/ui/CustomHeader";
 import ImagePickerPopup from "../../../components/ui/ImagePickerPopup";
+import KycIcon from "../../../components/ui/svg/KycIcon";
+import { COUNTRIES, ID_TYPES } from "../../../constant";
+import { Route } from "../../../constant/navigationConstants";
+import { useAppDispatch } from "../../../hooks/useAppDispatch";
+import { selectAuthenticationLoading } from "../../../store/authentication/authentication.selectors";
+import { userVerifyId } from "../../../store/authentication/authentication.thunks";
+import { setErrors, setSuccess } from "../../../store/global/global.slice";
+import { imagePickerProps } from "../../../types/common.types";
+import { LoadingState, ThemeProps } from "../../../types/global.types";
+import { AuthNavigationProps } from "../../../types/navigation";
+import { UserRoleType } from "../../../types/user.types";
+import { getUrlExtension } from "../../../utils";
 import {
   getImageFromCamera,
   getImageFromGallary,
   requestCameraPermission,
 } from "../../../utils/ImagePickerCameraGallary";
-import { getUrlExtension } from "../../../utils";
-import { userVerifyId } from "../../../store/authentication/authentication.thunks";
-import { setErrors, setSuccess } from "../../../store/global/global.slice";
-import { selectAuthenticationLoading } from "../../../store/authentication/authentication.selectors";
-import { useSelector } from "react-redux";
-import { CommonActions, useNavigation } from "@react-navigation/native";
-import { UserRoleType } from "../../../types/user.types";
-import UploadPhotosBorder from "../../../components/UploadPhotosBorder";
-import { setNavigation } from "../../../utils/setNavigation";
 
 const AddKyc: React.FC<AuthNavigationProps<Route.navAddKyc>> = ({
   navigation,
@@ -161,8 +159,16 @@ const AddKyc: React.FC<AuthNavigationProps<Route.navAddKyc>> = ({
         const result = await dispatch(userVerifyId({ formData: formData }));
         if (userVerifyId.fulfilled.match(result)) {
           if (result.payload.status === 1) {
-            console.log("userVerifyId result - - - ", result.payload);
-            navigation.navigate(Route.navTakeSelfie);
+            console.log("userVerifyId result - - -", result.payload);
+            // navigation.navigate(Route.navTakeSelfie, { fromflow: true });
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [
+                  { name: Route.navTakeSelfie, params: { fromflow: true } },
+                ],
+              })
+            );
             // setNavigation(result.payload?.data, navigationRoute);
             dispatch(setSuccess(result.payload.message));
           }
