@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import React, { useEffect } from "react";
-import { View } from "react-native";
+import { KeyboardAvoidingView, Text, View } from "react-native";
 import { makeStyles, useTheme } from "react-native-elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -106,15 +106,12 @@ const SetupProfile7: React.FC<AuthNavigationProps<Route.navSetupProfile7>> = ({
     >
       {loading === LoadingState.CREATE && <Loading />}
       <SetupProfileHeader title={"Rate"} percent={10} />
-      <View style={style.innerCont}>
+      <KeyboardAvoidingView behavior="padding" style={style.innerCont}>
         <CustomTxtInput
           icon={
-            <DollerCircleIcon
-              height={20}
-              width={20}
-              color={theme.colors?.black}
-              style={{ marginRight: 5 }}
-            />
+            <View style={style.rfCont}>
+              <Text style={style.txtrf}>R₣</Text>
+            </View>
           }
           textInputTitle="Rate Per KM"
           placeholder="Enter your rate"
@@ -127,7 +124,7 @@ const SetupProfile7: React.FC<AuthNavigationProps<Route.navSetupProfile7>> = ({
           returnKeyType="next"
           returnKeyLabel="next"
         />
-      </View>
+      </KeyboardAvoidingView>
       <PrevNextCont onPressNext={handleSubmit} onPressPrev={onPressPrev} />
     </KeyboardAwareScrollView>
   );
@@ -145,5 +142,20 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
     flex: 1,
     paddingTop: 50,
     paddingHorizontal: 20,
+  },
+  txtrf: {
+    color: theme.colors?.white,
+    fontFamily: theme.fontFamily?.bold,
+    fontSize: theme.fontSize?.fs10,
+  },
+  rfCont: {
+    height: 25,
+    width: 25,
+    borderRadius: 20,
+    backgroundColor: theme?.colors?.black,
+    alignItems: "center",
+    justifyContent: "center",
+    overflow: "hidden",
+    marginRight: 5,
   },
 }));

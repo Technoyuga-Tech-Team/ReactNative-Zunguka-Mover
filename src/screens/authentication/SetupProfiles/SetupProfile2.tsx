@@ -1,6 +1,13 @@
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
-import { Platform, Text, TouchableOpacity, View } from "react-native";
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { makeStyles, useTheme } from "react-native-elements";
 import {
   GooglePlaceData,
@@ -38,6 +45,7 @@ import GooglePlaceAutoCompleteModal from "../../../components/GooglePlaceAutoCom
 import Scale from "../../../utils/Scale";
 import LocationCrossIcon from "../../../components/ui/svg/LocationCrossIcon";
 import { UserRoleType } from "../../../types/user.types";
+import { setAdjustPan, setAdjustResize } from "rn-android-keyboard-adjust";
 
 const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
   navigation,
@@ -56,6 +64,13 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
   const [visibleAddress, setVisibleAddress] = useState<boolean>(false);
   const [selectedImageForDelete, setSelectedImageForDelete] =
     useState<string>("");
+
+  useEffect(() => {
+    setAdjustResize();
+    return () => {
+      setAdjustPan();
+    };
+  }, []);
 
   useEffect(() => {
     let unsubscribe = navigation.addListener("focus", async () => {
@@ -100,9 +115,7 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
   const onPressPrev = () => {
     navigation.goBack();
   };
-  const onPressNext = () => {
-    navigation.navigate(Route.navSetupProfile3);
-  };
+
   const onPressCurrentLocation = () => {
     setVisibleAddress(true);
   };
@@ -229,6 +242,7 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
     console.log("location_address", location_address);
     setFieldValue("address", location_address);
     toggleAddressModal();
+    Keyboard.dismiss();
   };
 
   const onPressCloseIcon = (item: imagePickerProps) => {
@@ -248,7 +262,7 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
         title={"Add Address and Attach Document"}
         percent={2}
       />
-      <View style={style.innerCont}>
+      <KeyboardAvoidingView behavior="padding" style={style.innerCont}>
         <CustomTxtInput
           textInputTitle="Address"
           placeholder="Enter your Address"
@@ -281,8 +295,9 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
             onPressCloseIcon={onPressCloseIcon}
           />
         )}
-      </View>
+      </KeyboardAvoidingView>
       <PrevNextCont onPressNext={handleSubmit} onPressPrev={onPressPrev} />
+
       <ImagePickerPopup
         visiblePopup={visible}
         togglePopup={togglePopup}

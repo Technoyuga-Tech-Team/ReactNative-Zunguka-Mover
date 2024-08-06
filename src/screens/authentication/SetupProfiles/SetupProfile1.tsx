@@ -36,6 +36,7 @@ import PrevNextCont from "../../../components/PrevNextCont";
 import ImagePickerPopup from "../../../components/ui/ImagePickerPopup";
 import Scale from "../../../utils/Scale";
 import { UserRoleType } from "../../../types/user.types";
+import { CommonActions } from "@react-navigation/native";
 
 const Profiles = [
   { image: `http://${BASE_PORT}/avtars/1.png` },
@@ -88,7 +89,12 @@ const SetupProfile1: React.FC<AuthNavigationProps<Route.navSetupProfile1>> = ({
   }, []);
 
   const onPressPrev = () => {
-    navigation.goBack();
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: Route.navAuthentication }],
+      })
+    );
   };
   const onPressNext = async () => {
     if (selectedImage) {
@@ -247,7 +253,7 @@ const SetupProfile1: React.FC<AuthNavigationProps<Route.navSetupProfile1>> = ({
       <PrevNextCont
         onPressNext={onPressNext}
         onPressPrev={onPressPrev}
-        isDisable={true}
+        isDisable={false}
       />
       <ImagePickerPopup
         visiblePopup={visible}

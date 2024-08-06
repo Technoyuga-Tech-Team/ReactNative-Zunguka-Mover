@@ -235,9 +235,9 @@ export const SetupProfile4ScreenSchema = Yup.object().shape({
     ),
 });
 export const SetupProfile7ScreenSchema = Yup.object().shape({
-  rate: Yup.string()
-    .trim()
+  rate: Yup.number()
     .required("Rate is required")
+    .moreThan(0, "Rate should be greter then 0")
     .test("noSpecialChars", no_specialChar_space_allow, (value) =>
       NO_SPECIAL_CHAR.test(value)
     ),

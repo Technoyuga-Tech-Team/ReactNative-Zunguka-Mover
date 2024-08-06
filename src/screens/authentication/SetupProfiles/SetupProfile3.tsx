@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
-import { Platform, View } from "react-native";
+import { KeyboardAvoidingView, Platform, View } from "react-native";
 import { makeStyles, useTheme } from "react-native-elements";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -210,7 +210,7 @@ const SetupProfile3: React.FC<AuthNavigationProps<Route.navSetupProfile3>> = ({
     >
       {loading === LoadingState.CREATE && <Loading />}
       <SetupProfileHeader title={"Licence Details"} percent={4} />
-      <View style={style.innerCont}>
+      <KeyboardAvoidingView behavior="padding" style={style.innerCont}>
         <CustomTxtInput
           textInputTitle="License Number"
           placeholder="Enter your license number"
@@ -236,7 +236,7 @@ const SetupProfile3: React.FC<AuthNavigationProps<Route.navSetupProfile3>> = ({
             onPressCloseIcon={onPressCloseIcon}
           />
         )}
-      </View>
+      </KeyboardAvoidingView>
       <PrevNextCont onPressNext={handleSubmit} onPressPrev={onPressPrev} />
       <ImagePickerPopup
         visiblePopup={visible}

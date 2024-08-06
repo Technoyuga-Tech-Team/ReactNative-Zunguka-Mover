@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
-import { Platform, View } from "react-native";
+import { KeyboardAvoidingView, Platform, View } from "react-native";
 import { makeStyles, useTheme } from "react-native-elements";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -91,10 +91,7 @@ const SetupProfile4: React.FC<AuthNavigationProps<Route.navSetupProfile4>> = ({
   const onPressPrev = () => {
     navigation.goBack();
   };
-  const onPressNext = () => {
-    navigation.navigate(Route.navSetupProfile5);
-  };
-  const onPressCurrentLocation = () => {};
+
   const onPressUploadImages = () => {
     setVisible(true);
   };
@@ -214,7 +211,7 @@ const SetupProfile4: React.FC<AuthNavigationProps<Route.navSetupProfile4>> = ({
     >
       {loading === LoadingState.CREATE && <Loading />}
       <SetupProfileHeader title={"Insurance Details"} percent={6} />
-      <View style={style.innerCont}>
+      <KeyboardAvoidingView behavior="padding" style={style.innerCont}>
         <CustomTxtInput
           textInputTitle="Insurance Number"
           placeholder="Enter your insurance number"
@@ -240,7 +237,7 @@ const SetupProfile4: React.FC<AuthNavigationProps<Route.navSetupProfile4>> = ({
             onPressCloseIcon={onPressCloseIcon}
           />
         )}
-      </View>
+      </KeyboardAvoidingView>
       <PrevNextCont
         onPressNext={handleSubmit}
         onPressSkip={onPressSkip}
