@@ -71,7 +71,9 @@ const Home: React.FC<HomeNavigationProps<Route.navHomeMover>> = ({
     };
   }, []);
 
-  const onPressNotification = () => {};
+  const onPressNotification = () => {
+    navigation.navigate(Route.navInbox);
+  };
 
   const onRefresh = () => {
     refetch().then();

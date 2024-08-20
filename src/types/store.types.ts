@@ -4,6 +4,7 @@ import { SettingsStateProps } from "./settings.types";
 import { AuthenticationState } from "./authentication.types";
 import { UserProfileState } from "./user.types";
 import { MoverBookingState } from "./moverBooking.types";
+import { MyEarningState } from "./myEarning.types";
 
 export interface RootReduxState {
   global: GlobalState;
@@ -11,6 +12,7 @@ export interface RootReduxState {
   authentication: AuthenticationState;
   userProfile: UserProfileState;
   moverBooking: MoverBookingState;
+  myEarning: MyEarningState;
 }
 
 export type AppDispatch = ThunkDispatch<
