@@ -28,6 +28,7 @@ import MoneybillsIcon from "../../components/ui/svg/MoneybillsIcon";
 import InfocircleIcon from "../../components/ui/svg/InfocircleIcon";
 import DocslistIcon from "../../components/ui/svg/DocslistIcon";
 import ProfileIcon from "../../components/ui/svg/ProfileIcon";
+import StarOutlineIcon from "../../components/ui/svg/StarOutlineIcon";
 
 const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
   navigation,
@@ -92,6 +93,10 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
   const onPressCardDetails = () => {};
   const onPressTransactionHistroy = () => {};
 
+  const onPressReviewsAndRating = () => {
+    navigation.navigate(Route.navReviewAndRating);
+  };
+
   const Profile = profilePicture;
   return (
     <View style={style.container}>
@@ -124,6 +129,17 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
           name="Card Details"
           icon={<CreditcardIcon color={theme.colors?.primary} />}
           onPress={onPressCardDetails}
+        />
+        <ProfileItem
+          name="Reviews and Rating"
+          icon={
+            <StarOutlineIcon
+              color={theme.colors?.primary}
+              height={22}
+              width={22}
+            />
+          }
+          onPress={onPressReviewsAndRating}
         />
         <ProfileItem
           name="Transaction History"

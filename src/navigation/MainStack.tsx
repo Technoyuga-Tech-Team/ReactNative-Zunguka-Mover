@@ -15,6 +15,9 @@ import EditProfile from "../screens/profile/EditProfile";
 import ResetPassword from "../screens/authentication/ResetPassword";
 import ChangePassword from "../screens/profile/ChangePassword";
 import TakeSelfie from "../screens/authentication/TakeSelfie";
+import PayoutHistory from "../screens/PayoutHistory";
+import RatingAndReviews from "../screens/RatingAndReviews";
+import Withdraw from "../screens/Withdraw";
 
 const Stack = createNativeStackNavigator<AppRoutes>();
 
@@ -44,6 +47,12 @@ const MainStack = () => {
           component={ChangePassword}
         />
         <Stack.Screen name={Route.navResetPassword} component={ResetPassword} />
+        <Stack.Screen name={Route.navPayoutHistory} component={PayoutHistory} />
+        <Stack.Screen
+          name={Route.navReviewAndRating}
+          component={RatingAndReviews}
+        />
+        <Stack.Screen name={Route.navWithdraw} component={Withdraw} />
       </Stack.Navigator>
     </GestureHandlerRootView>
   );

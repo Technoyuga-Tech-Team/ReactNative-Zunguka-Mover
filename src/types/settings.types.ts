@@ -5,4 +5,5 @@ export interface SettingsStateProps {
   userData: UserData;
   errorFromSocial: boolean;
   address: string;
+  notificationCount: number;
 }

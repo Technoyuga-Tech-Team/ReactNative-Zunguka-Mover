@@ -72,6 +72,7 @@ const initialState: SettingsStateProps = {
   },
   errorFromSocial: false,
   address: "",
+  notificationCount: 0,
 };
 
 const settings = createSlice({
@@ -93,10 +94,18 @@ const settings = createSlice({
     saveAddress: (state, action: PayloadAction<string>) => {
       state.address = action.payload;
     },
+    setSaveNotificationCount: (state, action: PayloadAction<number>) => {
+      state.notificationCount = action.payload;
+    },
   },
 });
 
-export const { isDarkMode, setUserData, setErrorFromSocial, saveAddress } =
-  settings.actions;
+export const {
+  isDarkMode,
+  setUserData,
+  setErrorFromSocial,
+  saveAddress,
+  setSaveNotificationCount,
+} = settings.actions;
 
 export default settings.reducer;

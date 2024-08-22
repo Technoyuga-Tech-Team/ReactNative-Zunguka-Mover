@@ -1,18 +1,19 @@
-import {QueryKey, useQuery, UseQueryOptions} from 'react-query';
-import {getUserData} from '../types/user.types';
-import {fetch} from '../store/fetch';
-import {QueryKeys} from '../constant/queryKeys';
-import {API} from '../constant/apiEndpoints';
+import { QueryKey, useQuery, UseQueryOptions } from "react-query";
+import { getUserData } from "../types/user.types";
+import { fetch } from "../store/fetch";
+import { QueryKeys } from "../constant/queryKeys";
+import { API } from "../constant/apiEndpoints";
 
 export const useMeQuery = (
-  options?: UseQueryOptions<getUserData, unknown, getUserData, QueryKey>,
+  options?: UseQueryOptions<getUserData, unknown, getUserData, QueryKey>
 ) => {
   return useQuery(
     QueryKeys.ME,
+    // @ts-ignore
     async () => {
-      const {data, errors, statusCode} = await fetch<getUserData>({
+      const { data, errors, statusCode } = await fetch<getUserData>({
         url: API.ME,
-        method: 'GET',
+        method: "GET",
       });
 
       if (errors) {
@@ -24,6 +25,6 @@ export const useMeQuery = (
 
       return data;
     },
-    options,
+    options
   );
 };

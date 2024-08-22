@@ -21,9 +21,9 @@ import {
 import { selectUserData } from "../store/settings/settings.selectors";
 import { setUserData } from "../store/settings/settings.slice";
 import { LoadingState, ThemeProps } from "../types/global.types";
-import { HomeNavigationProps } from "../types/navigation";
+import { MoverHomeNavigationProps } from "../types/navigation";
 
-const Home: React.FC<HomeNavigationProps<Route.navHomeMover>> = ({
+const Home: React.FC<MoverHomeNavigationProps<Route.navHomeMover>> = ({
   navigation,
 }) => {
   const insets = useSafeAreaInsets();

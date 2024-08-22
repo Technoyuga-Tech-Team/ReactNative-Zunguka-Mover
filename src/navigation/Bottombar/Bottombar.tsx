@@ -8,7 +8,7 @@ import Home from "../../screens/Home";
 import Inbox from "../../screens/Inbox/Inbox";
 import Profile from "../../screens/profile/Profile";
 import Earnings from "../../screens/Earnings";
-import Package from "../../screens/Package";
+import Pacakge from "../../screens/Packages/Pacakge";
 
 const Bottombar = () => {
   const Tab = createBottomTabNavigator<BottomRoutes>();
@@ -27,7 +27,7 @@ const Bottombar = () => {
     >
       <Tab.Screen name={Route.navHome} component={Home} />
       <Tab.Screen name={Route.navEarnings} component={Earnings} />
-      <Tab.Screen name={Route.navPackage} component={Package} />
+      <Tab.Screen name={Route.navPackage} component={Pacakge} />
       <Tab.Screen name={Route.navInbox} component={Inbox} />
       <Tab.Screen name={Route.navProfile} component={Profile} />
     </Tab.Navigator>

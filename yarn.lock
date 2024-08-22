@@ -1661,6 +1661,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@notifee/react-native@^7.8.2":
+  version "7.8.2"
+  resolved "https://registry.yarnpkg.com/@notifee/react-native/-/react-native-7.8.2.tgz#72d3199ae830b4128ddaef3c1c2f11604759c9c4"
+  integrity sha512-VG4IkWJIlOKqXwa3aExC3WFCVCGCC9BA55Ivg0SMRfEs+ruvYy/zlLANcrVGiPtgkUEryXDhA8SXx9+JcO8oLA==
+
 "@react-native-async-storage/async-storage@1.19.3":
   version "1.19.3"
   resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.19.3.tgz#ad5fe3ed0a82d4624aa4500321c1e09c02daeb46"
@@ -2258,6 +2263,14 @@
   integrity sha512-K/RHIXGaBfSpn9ErLyQvm/jYKDpfsG2dpNsRilAClBCodFV99JRvr4xAA6pRyPslj3nv0XjV7ezZRpn1c5ifgg==
   dependencies:
     "@react-navigation/elements" "^1.3.31"
+
+"@react-navigation/material-top-tabs@^6.6.14":
+  version "6.6.14"
+  resolved "https://registry.yarnpkg.com/@react-navigation/material-top-tabs/-/material-top-tabs-6.6.14.tgz#48877ba5e1038d089439fede39ac5aab99c13c28"
+  integrity sha512-kfNQt3BInQusEc8A+PDWaKmRQNaCrSqngcOQwUe1uNizJdZJEFdfaInivtBFW2LcQqtzgIHK/am2TgK0Pos6og==
+  dependencies:
+    color "^4.2.3"
+    warn-once "^0.1.0"
 
 "@react-navigation/native-stack@^6.9.11", "@react-navigation/native-stack@^6.9.26":
   version "6.11.0"
@@ -7708,6 +7721,11 @@ react-native-marquee@^0.5.0:
   dependencies:
     "@react-navigation/native-stack" "^6.9.11"
 
+react-native-pager-view@^6.3.4:
+  version "6.3.4"
+  resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-6.3.4.tgz#a4b6b5c43c52b8faabbfe67807b9fb1555a2f018"
+  integrity sha512-4PEQd52EOwWcfiFJZ4VGSlY+GZfumvUzNbAozsMEgJaLvOHOMMl+Arfsc0txgtGdS49uEiHFLLZthZQzxx/Mog==
+
 react-native-paper@^5.12.3:
   version "5.12.5"
   resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-5.12.5.tgz#e255c47f7bf2deb2dd90eaf3831473ef33e400b8"
@@ -7790,6 +7808,11 @@ react-native-snackbar@^2.6.2:
   resolved "https://registry.yarnpkg.com/react-native-snackbar/-/react-native-snackbar-2.6.2.tgz#7c0d0d93bfb5822fb1f41f00d29383f522c02185"
   integrity sha512-edAubZJiBowwQUXJV5oXbMqitQ9vw7JzWUCczeTPVo6lRa+FzsUjiCQBHdWBbCw/N8/Q7jgKg4juNXU/bXZdXg==
 
+react-native-stars@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/react-native-stars/-/react-native-stars-1.2.2.tgz#33be6890264df418f0b9f321ce4351de0744c533"
+  integrity sha512-ROoluqPqv93ycUV3Mwf/p1fFW2TOcb6juhGrMb5oNYYTa0aTe4WgnboipNWLe5viDlC8XYLS+g5WpZBvCzwFkw==
+
 react-native-svg@^15.3.0:
   version "15.5.0"
   resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-15.5.0.tgz#208647f2f1266a0a214f16e1b807fdc3ee7c0869"
@@ -7798,6 +7821,13 @@ react-native-svg@^15.3.0:
     css-select "^5.1.0"
     css-tree "^1.1.3"
     warn-once "0.1.1"
+
+react-native-tab-view@^3.5.2:
+  version "3.5.2"
+  resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-3.5.2.tgz#2789b8af6148b16835869566bf13dc3b0e6c1b46"
+  integrity sha512-nE5WqjbeEPsWQx4mtz81QGVvgHRhujTNIIZiMCx3Bj6CBFDafbk7XZp9ocmtzXUQaZ4bhtVS43R4FIiR4LboJw==
+  dependencies:
+    use-latest-callback "^0.1.5"
 
 react-native-vector-icons@^10.1.0:
   version "10.1.0"

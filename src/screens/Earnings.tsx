@@ -65,7 +65,7 @@ const Earnings: React.FC<MoverHomeNavigationProps<Route.navEarnings>> = ({
   }, []);
 
   useEffect(() => {
-    getMyEarningData(10, 1);
+    // getMyEarningData(10, 1);
   }, [startDate, endDate]);
 
   useEffect(() => {
