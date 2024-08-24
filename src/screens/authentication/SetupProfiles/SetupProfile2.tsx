@@ -61,6 +61,7 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
   const [selectedImage, setSelectedImage] = useState<any[]>([]);
   const [image, setImage] = useState<any[]>([]);
   const [visible, setVisible] = useState(false);
+  const [latlng, setLatLng] = useState({ lat: 0, lng: 0 });
   const [visibleAddress, setVisibleAddress] = useState<boolean>(false);
   const [selectedImageForDelete, setSelectedImageForDelete] =
     useState<string>("");
@@ -195,6 +196,8 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
         });
 
         formData.append("address", address);
+        formData.append("latitude", latlng.lat);
+        formData.append("longitude", latlng.lng);
         formData.append("step", 2);
         formData.append("type", UserRoleType.MOVER);
 
@@ -241,6 +244,10 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
           data?.formatted_address;
     console.log("location_address", location_address);
     setFieldValue("address", location_address);
+    setLatLng({
+      lat: Number(details?.geometry?.location?.lat),
+      lng: Number(details?.geometry?.location?.lng),
+    });
     toggleAddressModal();
     Keyboard.dismiss();
   };
@@ -274,6 +281,8 @@ const SetupProfile2: React.FC<AuthNavigationProps<Route.navSetupProfile2>> = ({
           touched={touched.address}
           returnKeyType="done"
           returnKeyLabel="done"
+          onPress={onPressCurrentLocation}
+          onPressIn={onPressCurrentLocation}
         />
         <TouchableOpacity
           style={style.locationCont}

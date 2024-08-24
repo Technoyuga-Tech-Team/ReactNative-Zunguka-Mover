@@ -55,7 +55,7 @@ const SetupProfile4: React.FC<AuthNavigationProps<Route.navSetupProfile4>> = ({
       refetch().then((currentUser) => {
         if (currentUser?.data?.user) {
           currentUser?.data?.user?.insurance_copies.length > 0 &&
-            setSelectedImage(currentUser?.data?.user?.insurance_copies as any);
+            setSelectedImage(currentUser?.data?.user?.insurance_copies);
           let arr: any = [];
           if (currentUser?.data?.user?.insurance_copies.length > 0) {
             currentUser?.data?.user?.insurance_copies.map((ele: string) => {

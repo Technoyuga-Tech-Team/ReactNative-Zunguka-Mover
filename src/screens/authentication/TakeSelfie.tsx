@@ -1,3 +1,8 @@
+import {
+  CommonActions,
+  NavigationProp,
+  useNavigation,
+} from "@react-navigation/native";
 import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -9,13 +14,16 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import RNBootSplash from "react-native-bootsplash";
 import { RNCamera } from "react-native-camera";
 import { makeStyles, useTheme } from "react-native-elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
 import { Images } from "../../assets/images";
 import { AppImage } from "../../components/AppImage/AppImage";
 import CustomButton from "../../components/ui/CustomButton";
 import CustomHeader from "../../components/ui/CustomHeader";
+import Loading from "../../components/ui/Loading";
 import ProfileImage from "../../components/ui/Profile/ProfileImage";
 import {
   HIT_SLOP2,
@@ -25,29 +33,22 @@ import {
 } from "../../constant";
 import { Route } from "../../constant/navigationConstants";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { useMeQuery } from "../../hooks/useMeQuery";
+import { selectAuthenticationLoading } from "../../store/authentication/authentication.selectors";
+import { userSelfieVerification } from "../../store/authentication/authentication.thunks";
 import { setErrors, setSuccess } from "../../store/global/global.slice";
+import { selectUserData } from "../../store/settings/settings.selectors";
+import { setUserData } from "../../store/settings/settings.slice";
 import { imagePickerProps } from "../../types/common.types";
 import { LoadingState, ThemeProps } from "../../types/global.types";
-import { AuthNavigationProps } from "../../types/navigation";
+import { AppRoutes, MainNavigationProps } from "../../types/navigation";
 import { getRandomFileName, getUrlExtension } from "../../utils";
 import Scale from "../../utils/Scale";
-import { notifyMessage } from "../../utils/notifyMessage";
-import { userSelfieVerification } from "../../store/authentication/authentication.thunks";
-import { CommonActions, useNavigation } from "@react-navigation/native";
-import RNBootSplash from "react-native-bootsplash";
-import { selectUserData } from "../../store/settings/settings.selectors";
-import { useSelector } from "react-redux";
-import { getUserData } from "../../types/user.types";
-import { API } from "../../constant/apiEndpoints";
-import { fetch } from "../../store/fetch";
-import { setUserData } from "../../store/settings/settings.slice";
 import { setData } from "../../utils/asyncStorage";
-import { selectAuthenticationLoading } from "../../store/authentication/authentication.selectors";
-import { useMeQuery } from "../../hooks/useMeQuery";
-import Loading from "../../components/ui/Loading";
+import { notifyMessage } from "../../utils/notifyMessage";
 import { setNavigation } from "../../utils/setNavigation";
 
-const TakeSelfie: React.FC<AuthNavigationProps<Route.navTakeSelfie>> = ({
+const TakeSelfie: React.FC<MainNavigationProps<Route.navTakeSelfie>> = ({
   navigation,
   route,
 }) => {
@@ -58,7 +59,7 @@ const TakeSelfie: React.FC<AuthNavigationProps<Route.navTakeSelfie>> = ({
   const { fromflow } = route.params;
 
   const dispatch = useAppDispatch();
-  const navigationRoute = useNavigation();
+  const navigationRoute = useNavigation<NavigationProp<AppRoutes>>();
   const userData = useSelector(selectUserData);
 
   const loading = useSelector(selectAuthenticationLoading);

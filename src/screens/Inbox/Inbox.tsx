@@ -17,7 +17,7 @@ import CustomHeader from "../../components/ui/CustomHeader";
 import { GetNotificationDataList } from "../../types/notification.types";
 import NotificationListing from "../../components/Notification/NotificationListing";
 
-const Inbox: React.FC<HomeNavigationProps<Route.navNotification>> = ({
+const Inbox: React.FC<HomeNavigationProps<Route.navInbox>> = ({
   navigation,
 }) => {
   const insets = useSafeAreaInsets();

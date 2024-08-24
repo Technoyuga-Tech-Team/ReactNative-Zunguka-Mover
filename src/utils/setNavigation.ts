@@ -1,10 +1,11 @@
 import { CommonActions, NavigationProp } from "@react-navigation/native";
 import { UserData } from "../types/user.types";
 import { Route } from "../constant/navigationConstants";
+import { AppRoutes } from "../types/navigation";
 
 export const setNavigation = async (
   currentUser: UserData,
-  navigation: NavigationProp<{}>
+  navigation: NavigationProp<AppRoutes>
 ) => {
   console.log("currentUser", currentUser);
   if (currentUser?.is_verified == 0) {

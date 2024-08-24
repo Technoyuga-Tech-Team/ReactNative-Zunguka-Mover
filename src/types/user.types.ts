@@ -40,12 +40,13 @@ export type UserData = {
   profile_percentage: number;
   address: string;
   insurance_number: string;
-  insurance_copies: string;
-  address_proofs: string;
+  insurance_copies: any;
+  address_proofs: any;
   license_number: string;
-  license_copies: string;
+  license_copies: any;
   vehicle_type: string;
   city: string;
+  state: string;
   rate: number;
   avg_rate: number;
   total_user_rate: number;
@@ -70,6 +71,8 @@ export type UserData = {
   is_kyc_verified_by_admin: number;
   selfie_image: string;
   is_selfie_uploaded: number;
+  is_mover_setup_profile_done: number;
+  mover_setup_step: number;
 };
 
 export interface getUserData {

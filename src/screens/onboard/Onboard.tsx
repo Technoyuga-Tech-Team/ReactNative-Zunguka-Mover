@@ -1,29 +1,19 @@
-import { CommonActions, useFocusEffect } from "@react-navigation/native";
+import { CommonActions } from "@react-navigation/native";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
-import {
-  Animated,
-  BackHandler,
-  Dimensions,
-  FlatList,
-  StatusBar,
-  View,
-  ViewToken,
-} from "react-native";
+import { Animated, FlatList, StatusBar, View, ViewToken } from "react-native";
 import RNBootSplash from "react-native-bootsplash";
 import { makeStyles, useTheme } from "react-native-elements";
 // relative path
 
 import SliderItem from "../../components/Onboard/SliderItem";
+import CustomButton from "../../components/ui/CustomButton";
+import Paginator from "../../components/ui/Paginator";
 import { SLIDER } from "../../constant";
 import { Route } from "../../constant/navigationConstants";
 import { MainNavigationProps } from "../../types/navigation";
-import { setOpenFirstTime } from "../../utils/asyncStorage";
 import { createArrayUseNumber } from "../../utils";
-import CustomButton from "../../components/ui/CustomButton";
-import Paginator from "../../components/ui/Paginator";
-
-const { width: wWidth } = Dimensions.get("window");
+import { setOpenFirstTime } from "../../utils/asyncStorage";
 
 const Onboard: React.FC<MainNavigationProps<Route.navOnboard>> = ({
   navigation,
@@ -44,29 +34,6 @@ const Onboard: React.FC<MainNavigationProps<Route.navOnboard>> = ({
     setOpenFirstTime().then();
   }, []);
 
-  // handle hardware back button click
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     const onBackPress = () => {
-  //       if (currentSlide === 0) {
-  //         return false;
-  //       } else {
-  //         sliderRef.current?.scrollToOffset({
-  //           offset: (currentSlide - 1) * wWidth,
-  //           animated: true,
-  //         });
-  //         setCurrentSlide((pv) => pv - 1);
-  //         return true;
-  //       }
-  //     };
-  //     BackHandler.addEventListener("hardwareBackPress", onBackPress);
-  //     return () =>
-  //       BackHandler.removeEventListener("hardwareBackPress", onBackPress);
-  //   }, [currentSlide])
-  // );
-
-  // scroll to next slide
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const nextSlide = async () => {
     if (currentSlide < SLIDER.length - 1) {
       sliderRef.current?.scrollToIndex({ index: currentSlide + 1 });
@@ -91,10 +58,6 @@ const Onboard: React.FC<MainNavigationProps<Route.navOnboard>> = ({
       setCurrentSlide(viewableItems[0].index as number);
     }
   ).current;
-
-  const scrollToIndex = (index: number) => {
-    sliderRef.current?.scrollToIndex({ index });
-  };
 
   const onPressLogin = () => {
     navigation.dispatch(

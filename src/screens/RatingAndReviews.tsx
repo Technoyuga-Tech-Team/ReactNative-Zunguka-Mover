@@ -3,19 +3,20 @@ import { View } from "react-native";
 import { makeStyles, useTheme } from "react-native-elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
+import StarWithRate from "../components/StarWithRate";
+import CustomHeader from "../components/ui/CustomHeader";
+import NoDataFound from "../components/ui/NoDataFound";
+import { Route } from "../constant/navigationConstants";
 import { useAppDispatch } from "../hooks/useAppDispatch";
 import { selectMoverBookingLoading } from "../store/MoverBooking/moverBooking.selectors";
-import { selectUserData } from "../store/settings/settings.selectors";
-import { MoverHomeNavigationProps } from "../types/navigation";
-import { Route } from "../constant/navigationConstants";
 import { getMoverRatingHistory } from "../store/MoverBooking/moverBooking.thunk";
+import { selectUserData } from "../store/settings/settings.selectors";
 import { LoadingState, ThemeProps } from "../types/global.types";
-import CustomHeader from "../components/ui/CustomHeader";
-import StarWithRate from "../components/StarWithRate";
-import NoDataFound from "../components/ui/NoDataFound";
+import { MainNavigationProps } from "../types/navigation";
+import RatingList from "../components/Rating/RatingList";
 
 const RatingAndReviews: React.FC<
-  MoverHomeNavigationProps<Route.navPayoutHistory>
+  MainNavigationProps<Route.navReviewAndRating>
 > = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const style = useStyles({ insets });

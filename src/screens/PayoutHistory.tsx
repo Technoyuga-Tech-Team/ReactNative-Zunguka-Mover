@@ -101,7 +101,6 @@ const PayoutHistory: React.FC<
               onMomentumScrollEnd={onEndReached}
               showsVerticalScrollIndicator={false}
               renderItem={({ item }) => {
-                console.log("status", item.status);
                 return (
                   <View style={style.itemCont}>
                     <Text style={style.txtDate}>

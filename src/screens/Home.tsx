@@ -23,7 +23,7 @@ import { setUserData } from "../store/settings/settings.slice";
 import { LoadingState, ThemeProps } from "../types/global.types";
 import { MoverHomeNavigationProps } from "../types/navigation";
 
-const Home: React.FC<MoverHomeNavigationProps<Route.navHomeMover>> = ({
+const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   navigation,
 }) => {
   const insets = useSafeAreaInsets();

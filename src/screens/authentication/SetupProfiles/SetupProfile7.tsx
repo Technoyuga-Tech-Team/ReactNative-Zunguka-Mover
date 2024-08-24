@@ -1,25 +1,24 @@
+import { CommonActions } from "@react-navigation/native";
 import { useFormik } from "formik";
 import React, { useEffect } from "react";
 import { KeyboardAvoidingView, Text, View } from "react-native";
 import { makeStyles, useTheme } from "react-native-elements";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { AuthNavigationProps } from "../../../types/navigation";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
+import PrevNextCont from "../../../components/PrevNextCont";
+import SetupProfileHeader from "../../../components/SetupProfileHeader";
+import { CustomTxtInput } from "../../../components/ui/CustomTextInput";
+import Loading from "../../../components/ui/Loading";
+import { SetupProfile7ScreenSchema } from "../../../constant/formValidations";
 import { Route } from "../../../constant/navigationConstants";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { useMeQuery } from "../../../hooks/useMeQuery";
-import { useSelector } from "react-redux";
 import { selectUserProfileLoading } from "../../../store/userprofile/userprofile.selectors";
-import { SetupProfile7FormProps } from "../../../types/setupProfile.types";
-import { SetupProfile7ScreenSchema } from "../../../constant/formValidations";
 import { userSetupProfile } from "../../../store/userprofile/userprofile.thunk";
-import { CommonActions } from "@react-navigation/native";
 import { LoadingState, ThemeProps } from "../../../types/global.types";
-import Loading from "../../../components/ui/Loading";
-import SetupProfileHeader from "../../../components/SetupProfileHeader";
-import { CustomTxtInput } from "../../../components/ui/CustomTextInput";
-import DollerCircleIcon from "../../../components/ui/svg/DollerCircleIcon";
-import PrevNextCont from "../../../components/PrevNextCont";
+import { AuthNavigationProps } from "../../../types/navigation";
+import { SetupProfile7FormProps } from "../../../types/setupProfile.types";
 import { UserRoleType } from "../../../types/user.types";
 
 const SetupProfile7: React.FC<AuthNavigationProps<Route.navSetupProfile7>> = ({
@@ -37,10 +36,7 @@ const SetupProfile7: React.FC<AuthNavigationProps<Route.navSetupProfile7>> = ({
     let unsubscribe = navigation.addListener("focus", async () => {
       refetch().then((currentUser) => {
         if (currentUser?.data?.user) {
-          setFieldValue(
-            "rate",
-            currentUser?.data?.user?.rate as unknown as string
-          );
+          setFieldValue("rate", currentUser?.data?.user?.rate);
         }
       });
     });

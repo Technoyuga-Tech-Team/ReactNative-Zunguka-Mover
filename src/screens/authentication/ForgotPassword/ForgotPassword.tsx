@@ -59,7 +59,7 @@ const ForgotPassword: React.FC<
   };
 
   const onPhoneInputChange = (value: string, iso2: string) => {
-    setCountryCode(iso2);
+    setCountryCode(iso2 as CountryCode);
     setFieldValue("phoneNumber", value);
   };
 

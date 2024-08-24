@@ -1,23 +1,28 @@
-import { CommonActions, useNavigation } from "@react-navigation/native";
+import {
+  CommonActions,
+  NavigationProp,
+  useNavigation,
+} from "@react-navigation/native";
 import React, { useEffect } from "react";
 import { StatusBar, View } from "react-native";
 import { makeStyles, useTheme } from "react-native-elements";
 import FastImage from "react-native-fast-image";
 import { USER_DATA, secureStoreKeys } from "../constant";
-import { Route } from "../constant/navigationConstants";
-import Scale from "../utils/Scale";
-import { useAppDispatch } from "../hooks/useAppDispatch";
-import { appAlreadyOpen, getData } from "../utils/asyncStorage";
-import { saveAddress, setUserData } from "../store/settings/settings.slice";
-import { getUserData } from "../types/user.types";
 import { API } from "../constant/apiEndpoints";
-import { setNavigation } from "../utils/setNavigation";
+import { Route } from "../constant/navigationConstants";
+import { useAppDispatch } from "../hooks/useAppDispatch";
 import { fetch } from "../store/fetch";
+import { setUserData } from "../store/settings/settings.slice";
+import { getUserData } from "../types/user.types";
+import { appAlreadyOpen, getData } from "../utils/asyncStorage";
+import Scale from "../utils/Scale";
+import { setNavigation } from "../utils/setNavigation";
+import { AppRoutes } from "../types/navigation";
 
 interface SplashScreenProps {}
 
 const Splash: React.FC<SplashScreenProps> = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<AppRoutes>>();
   const styles = useStyles();
   const { theme } = useTheme();
   const dispatch = useAppDispatch();

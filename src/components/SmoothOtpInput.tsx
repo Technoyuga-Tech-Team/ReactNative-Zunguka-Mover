@@ -17,36 +17,36 @@ import { RFValue } from "react-native-responsive-fontsize";
 import { SCREEN_HEIGHT } from "../constant";
 
 type CounterProps = {
-  value: string;
-  codeLength: number;
+  animated: boolean;
   cellSize: number;
   cellSpacing: number;
-  placeholder: string;
-  mask: any;
-  maskDelay: number;
-  password: boolean;
-  autoFocus: boolean;
-  restrictToNumbers: boolean;
-  containerStyle: ViewStyle;
-  cellStyle: ViewStyle;
-  cellStyleFocused: ViewStyle;
-  cellStyleFilled: ViewStyle;
-  textStyle: TextStyle;
-  textStyleFocused: TextStyle;
-  animated: boolean;
-  animationFocused: any;
-  onFulfill: (code: string) => void;
   onChangeText: (text: string) => void;
-  onBackspace: () => void;
   onTextChange: (text: string) => void;
-  onFocus: () => void;
-  onBlur?: () => void;
-  keyboardType: KeyboardTypeOptions | undefined;
-  editable: boolean;
-  inputProps: TextInputProps;
-  disableFullscreenUI: any;
-  touched?: boolean;
+  value: string;
   error?: string;
+  touched?: boolean;
+  codeLength: number;
+  placeholder?: string;
+  mask?: any;
+  maskDelay?: number;
+  password?: boolean;
+  autoFocus?: boolean;
+  restrictToNumbers?: boolean;
+  containerStyle?: ViewStyle;
+  cellStyle?: ViewStyle;
+  cellStyleFocused?: ViewStyle;
+  cellStyleFilled?: ViewStyle;
+  textStyle?: TextStyle;
+  textStyleFocused?: TextStyle;
+  animationFocused?: any;
+  onFulfill?: (code?: string) => void;
+  onBackspace?: () => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
+  keyboardType?: KeyboardTypeOptions | undefined;
+  editable?: boolean;
+  inputProps?: TextInputProps;
+  disableFullscreenUI?: any;
 };
 
 type CounterState = {
@@ -101,6 +101,7 @@ export default class SmoothOtpInput extends React.Component<
         reject(new Error("Animations are disabled"))
       );
     }
+    // @ts-ignore
     return this.ref.current[animation](duration);
   };
 
@@ -134,6 +135,7 @@ export default class SmoothOtpInput extends React.Component<
 
     // handle password mask
     const maskDelay = password && code.length > this.props.value.length; // only when input new char
+    // @ts-ignore
     this.setState({ maskDelay });
 
     if (maskDelay) {

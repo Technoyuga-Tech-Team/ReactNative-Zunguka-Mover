@@ -44,16 +44,16 @@ export type AppRoutes = {
   PaymentToMover: undefined;
   VisitProfile: { is_rating: number };
   JobHistory: undefined;
-  TakeSelfie: undefined;
+  TakeSelfie: { fromflow?: boolean };
   PayoutHistory: undefined;
   ReviewAndRating: undefined;
-  Withdraw: undefined;
+  Withdraw: { earning: string };
 };
 
 export type MoverRoute = {
   MoverAuthentication: undefined;
   MoverDashboard: undefined;
-  HomeMover: undefined;
+  Home: undefined;
   Earnings: undefined;
   ReviewAndRating: undefined;
   PackageDetails: {
@@ -165,7 +165,8 @@ export type HomeRoutes = {
   CompletedPackages: undefined;
   OngoingPackages: undefined;
   UpcomingPackages: undefined;
-  Notification: undefined;
+  Inbox: undefined;
+  Profile: undefined;
 };
 
 export type SellAnItemRoutes = {

@@ -5,7 +5,11 @@ import { RFValue } from "react-native-responsive-fontsize";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { MoverHomeNavigationProps } from "../types/navigation";
+import {
+  HomeNavigationProps,
+  MainNavigationProps,
+  MoverHomeNavigationProps,
+} from "../types/navigation";
 import { Route } from "../constant/navigationConstants";
 import { useAppDispatch } from "../hooks/useAppDispatch";
 import { selectMyEarningLoading } from "../store/MyEarning/myEarning.selector";
@@ -16,7 +20,7 @@ import CustomButton from "../components/ui/CustomButton";
 import { LoadingState, ThemeProps } from "../types/global.types";
 import { SCREEN_HEIGHT } from "../constant";
 
-const Withdraw: React.FC<MoverHomeNavigationProps<Route.navWithdraw>> = ({
+const Withdraw: React.FC<MainNavigationProps<Route.navWithdraw>> = ({
   navigation,
   route,
 }) => {

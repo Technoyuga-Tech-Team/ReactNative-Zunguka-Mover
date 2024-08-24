@@ -1,4 +1,8 @@
-import { CommonActions, useNavigation } from "@react-navigation/native";
+import {
+  CommonActions,
+  NavigationProp,
+  useNavigation,
+} from "@react-navigation/native";
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import {
@@ -17,28 +21,26 @@ import { makeStyles, useTheme } from "react-native-elements";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { setAdjustPan, setAdjustResize } from "rn-android-keyboard-adjust";
+import ReactNativePhoneInput from "react-native-phone-input";
+import { useSelector } from "react-redux";
 // Relative paths
 import { AppImage } from "../../components/AppImage/AppImage";
 import CountryPickerModal from "../../components/ui/CountryPickerModal";
 import CustomButton from "../../components/ui/CustomButton";
 import { CustomTxtInput } from "../../components/ui/CustomTextInput";
+import Loading from "../../components/ui/Loading";
 import { PhoneNumberInput } from "../../components/ui/PhoneNumberInput";
-import SocialAuthenticationView from "../../components/ui/SocialAuth/SocialAuthenticationView";
 import { USER_ROLE } from "../../constant";
 import { LoginScreenSchema } from "../../constant/formValidations";
 import { Route } from "../../constant/navigationConstants";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { selectAuthenticationLoading } from "../../store/authentication/authentication.selectors";
+import { userLogin } from "../../store/authentication/authentication.thunks";
+import { LoginFormProps } from "../../types/authentication.types";
 import { LoadingState, ThemeProps } from "../../types/global.types";
-import { AuthNavigationProps } from "../../types/navigation";
+import { AppRoutes, AuthNavigationProps } from "../../types/navigation";
 import Scale from "../../utils/Scale";
 import { getData } from "../../utils/asyncStorage";
-import ReactNativePhoneInput from "react-native-phone-input";
-import { userLogin } from "../../store/authentication/authentication.thunks";
-import Loading from "../../components/ui/Loading";
-import { useSelector } from "react-redux";
-import { selectAuthenticationLoading } from "../../store/authentication/authentication.selectors";
-import { saveAddress } from "../../store/settings/settings.slice";
-import { LoginFormProps } from "../../types/authentication.types";
 import { setNavigation } from "../../utils/setNavigation";
 
 const Login: React.FC<AuthNavigationProps<Route.navLogin>> = ({
@@ -49,7 +51,7 @@ const Login: React.FC<AuthNavigationProps<Route.navLogin>> = ({
   const { theme } = useTheme();
 
   const dispatch = useAppDispatch();
-  const navigationRoute = useNavigation();
+  const navigationRoute = useNavigation<NavigationProp<AppRoutes>>();
   const loading = useSelector(selectAuthenticationLoading);
 
   const emaiRef = React.useRef<TextInput>(null);
@@ -188,7 +190,7 @@ const Login: React.FC<AuthNavigationProps<Route.navLogin>> = ({
   };
 
   const onPhoneInputChange = (value: string, iso2: string) => {
-    setCountryCode(iso2);
+    setCountryCode(iso2 as CountryCode);
     setFieldValue("phoneNumber", value);
   };
 
@@ -207,10 +209,6 @@ const Login: React.FC<AuthNavigationProps<Route.navLogin>> = ({
   };
   const onClosePickerModal = () => {
     setVisibleCountryPicker(false);
-  };
-
-  const onPressBack = () => {
-    navigation.navigate(Route.navSelectRoll);
   };
 
   return (

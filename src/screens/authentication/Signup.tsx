@@ -15,32 +15,30 @@ import {
 import { makeStyles, useTheme } from "react-native-elements";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import ReactNativePhoneInput from "react-native-phone-input";
-
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
-
 import { setAdjustPan, setAdjustResize } from "rn-android-keyboard-adjust";
-import { AuthNavigationProps } from "../../types/navigation";
-import { Route } from "../../constant/navigationConstants";
-import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { getData } from "../../utils/asyncStorage";
+
+import CountryPickerModal from "../../components/ui/CountryPickerModal";
+import CustomButton from "../../components/ui/CustomButton";
+import { CustomTxtInput } from "../../components/ui/CustomTextInput";
+import InputFieldInfo from "../../components/ui/InputFieldInfo";
+import Loading from "../../components/ui/Loading";
+import { PhoneNumberInput } from "../../components/ui/PhoneNumberInput";
+import TermsAndCondition from "../../components/ui/TermsAndCondition";
 import { HAS_NOTCH, MAX_CHAR_LENGTH, USER_ROLE } from "../../constant";
 import { SignupScreenSchema } from "../../constant/formValidations";
-import { CustomTxtInput } from "../../components/ui/CustomTextInput";
-import CustomButton from "../../components/ui/CustomButton";
-import { setErrors } from "../../store/global/global.slice";
-import SocialAuthenticationView from "../../components/ui/SocialAuth/SocialAuthenticationView";
-import { LoadingState, ThemeProps } from "../../types/global.types";
-import Scale from "../../utils/Scale";
-import { PhoneNumberInput } from "../../components/ui/PhoneNumberInput";
-import CountryPickerModal from "../../components/ui/CountryPickerModal";
-import TermsAndCondition from "../../components/ui/TermsAndCondition";
-import { userRegistration } from "../../store/authentication/authentication.thunks";
+import { Route } from "../../constant/navigationConstants";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { selectAuthenticationLoading } from "../../store/authentication/authentication.selectors";
-import Loading from "../../components/ui/Loading";
+import { userRegistration } from "../../store/authentication/authentication.thunks";
+import { setErrors } from "../../store/global/global.slice";
 import { SignupFormProps } from "../../types/authentication.types";
-import InputFieldInfo from "../../components/ui/InputFieldInfo";
+import { LoadingState, ThemeProps } from "../../types/global.types";
+import { AuthNavigationProps } from "../../types/navigation";
 import { keepSingleSpace } from "../../utils";
+import { getData } from "../../utils/asyncStorage";
+import Scale from "../../utils/Scale";
 
 const Signup: React.FC<AuthNavigationProps<Route.navSignup>> = ({
   navigation,
