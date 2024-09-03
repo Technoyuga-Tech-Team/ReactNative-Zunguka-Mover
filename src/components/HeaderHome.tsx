@@ -15,6 +15,7 @@ interface HeaderHomeProps {
   onPressNotification: () => void;
   avgRate: number;
   totalUserRate: number;
+  notificationCount: number;
 }
 
 const HeaderHome: React.FC<HeaderHomeProps> = ({
@@ -22,6 +23,7 @@ const HeaderHome: React.FC<HeaderHomeProps> = ({
   onPressNotification,
   avgRate,
   totalUserRate,
+  notificationCount,
 }) => {
   const insets = useSafeAreaInsets();
   const style = useStyles({ insets });
@@ -54,6 +56,7 @@ const HeaderHome: React.FC<HeaderHomeProps> = ({
             onPress={onPressNotification}
           >
             <BellIcon color={theme?.colors?.primaryVibrant} />
+            {notificationCount > 0 && <View style={style.redDot} />}
           </TouchableOpacity>
         </View>
         <View>
@@ -127,5 +130,16 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
   },
   searchIcon: {
     marginHorizontal: 10,
+  },
+  redDot: {
+    height: Scale(12),
+    width: Scale(12),
+    borderRadius: Scale(12 / 2),
+    backgroundColor: theme.colors?.pinkDark,
+    borderWidth: 1.5,
+    borderColor: theme.colors?.white,
+    position: "absolute",
+    right: 4,
+    top: 2.5,
   },
 }));

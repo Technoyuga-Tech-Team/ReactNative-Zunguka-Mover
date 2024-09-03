@@ -42,6 +42,7 @@ import { AppRoutes, AuthNavigationProps } from "../../types/navigation";
 import Scale from "../../utils/Scale";
 import { getData } from "../../utils/asyncStorage";
 import { setNavigation } from "../../utils/setNavigation";
+import { useGetFCMToken } from "../../hooks/useGetFCMToken";
 
 const Login: React.FC<AuthNavigationProps<Route.navLogin>> = ({
   navigation,
@@ -85,19 +86,19 @@ const Login: React.FC<AuthNavigationProps<Route.navLogin>> = ({
     };
   }, []);
 
-  // useEffect(() => {
-  //   const Init = async () => {
-  //     useGetFCMToken()
-  //       .then((token) => {
-  //         console.log(" - - - - - - FCM token - - - - - - ", token);
-  //         setFcmToken(token);
-  //       })
-  //       .catch((err) => {
-  //         console.log(" - - - - - - FCM token error- - - - - - ", err);
-  //       });
-  //   };
-  //   Init();
-  // }, []);
+  useEffect(() => {
+    const Init = async () => {
+      useGetFCMToken()
+        .then((token) => {
+          console.log(" - - - - - - FCM token - - - - - - ", token);
+          setFcmToken(token);
+        })
+        .catch((err) => {
+          console.log(" - - - - - - FCM token error- - - - - - ", err);
+        });
+    };
+    Init();
+  }, []);
 
   const {
     handleChange,

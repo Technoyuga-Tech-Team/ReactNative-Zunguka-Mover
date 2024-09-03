@@ -36,7 +36,6 @@ export type AppRoutes = {
   SelectMover: undefined;
   PackageInfo: undefined;
   ConfirmPackageInfo: undefined;
-  DeliveryDetails1: undefined;
   MoverHistory: undefined;
   ConfirmSelfPickup: undefined;
   CategoryProduct: undefined;
@@ -48,6 +47,7 @@ export type AppRoutes = {
   PayoutHistory: undefined;
   ReviewAndRating: undefined;
   Withdraw: { earning: string };
+  DeliveryDetails1: { package_details_id: string; from?: string };
 };
 
 export type MoverRoute = {
@@ -70,6 +70,7 @@ export type MoverRoute = {
   PayoutHistory: undefined;
   Chatroom: { receiver_id: string };
   Inbox: undefined;
+  Notification: undefined;
 };
 
 export type MoverAuthenticationRoutes = {
@@ -125,7 +126,7 @@ export type BottomRoutes = {
   Home: undefined;
   Earnings: undefined;
   Package: undefined;
-  Inbox: undefined;
+  Alert: undefined;
   Profile: undefined;
 };
 
@@ -167,6 +168,8 @@ export type HomeRoutes = {
   UpcomingPackages: undefined;
   Inbox: undefined;
   Profile: undefined;
+  Notification: undefined;
+  DeliveryCompleteAndRateDriver: undefined;
 };
 
 export type SellAnItemRoutes = {

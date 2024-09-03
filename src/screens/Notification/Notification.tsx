@@ -1,30 +1,27 @@
-import notifee from "@notifee/react-native";
 import React, { useEffect, useState } from "react";
-import { Platform, View } from "react-native";
+import { View } from "react-native";
 import { makeStyles, useTheme } from "react-native-elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useSelector } from "react-redux";
+import NotificationListing from "../../components/Notification/NotificationListing";
+import CustomHeader from "../../components/ui/CustomHeader";
+import { BASE_URL, secureStoreKeys } from "../../constant";
+import { API } from "../../constant/apiEndpoints";
+import { Route } from "../../constant/navigationConstants";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { selectUserData } from "../../store/settings/settings.selectors";
+import { setSaveNotificationCount } from "../../store/settings/settings.slice";
 import { ThemeProps } from "../../types/global.types";
 import { HomeNavigationProps } from "../../types/navigation";
-import { getData } from "../../utils/asyncStorage";
-import { Route } from "../../constant/navigationConstants";
-import { setSaveNotificationCount } from "../../store/settings/settings.slice";
-import { BASE_URL, HAS_NOTCH, secureStoreKeys } from "../../constant";
-import { API } from "../../constant/apiEndpoints";
-import CustomHeader from "../../components/ui/CustomHeader";
 import { GetNotificationDataList } from "../../types/notification.types";
-import NotificationListing from "../../components/Notification/NotificationListing";
+import { getData } from "../../utils/asyncStorage";
 
-const Inbox: React.FC<HomeNavigationProps<Route.navInbox>> = ({
+const Notification: React.FC<HomeNavigationProps<Route.navNotification>> = ({
   navigation,
 }) => {
   const insets = useSafeAreaInsets();
   const style = useStyles({ insets });
   const { theme } = useTheme();
+
   const dispatch = useAppDispatch();
-  const userData = useSelector(selectUserData);
 
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
@@ -35,7 +32,6 @@ const Inbox: React.FC<HomeNavigationProps<Route.navInbox>> = ({
   );
 
   useEffect(() => {
-    notifee.cancelDisplayedNotifications();
     const unsubscribe = navigation.addListener("focus", () => {
       dispatch(setSaveNotificationCount(0));
       getNotifications(10, 1);
@@ -86,11 +82,9 @@ const Inbox: React.FC<HomeNavigationProps<Route.navInbox>> = ({
     }
   };
 
-  const isMover = userData?.type === "mover";
-
   return (
     <View style={style.container}>
-      <CustomHeader title="Inbox" isBackVisible={false} />
+      <CustomHeader title="Notification" />
       <NotificationListing
         notificationData={notifications}
         notificationLoading={loading}
@@ -101,18 +95,20 @@ const Inbox: React.FC<HomeNavigationProps<Route.navInbox>> = ({
   );
 };
 
-export default Inbox;
+export default Notification;
 
 const useStyles = makeStyles((theme, props: ThemeProps) => ({
   container: {
     flex: 1,
-    paddingBottom:
-      Platform.OS === "ios"
-        ? HAS_NOTCH
-          ? props.insets.bottom
-          : props.insets.bottom + 10
-        : props.insets.bottom + 10,
     backgroundColor: theme.colors?.background,
     paddingTop: props.insets.top,
+  },
+  txtHeaderTitle: {
+    fontSize: theme.fontSize?.fs20,
+    fontFamily: theme.fontFamily?.bold,
+    color: theme.colors?.black,
+    lineHeight: 24,
+    textAlign: "center",
+    marginVertical: 20,
   },
 }));

@@ -26,6 +26,11 @@ if linkage != nil
 end
 
 target 'zunguka_mover' do
+  
+  pod 'GoogleUtilities', :modular_headers => true
+  pod 'FirebaseCoreInternal', :modular_headers => true
+  pod 'FirebaseCore', :modular_headers => true
+
   config = use_native_modules!
 
   # Flags change depending on the env values.

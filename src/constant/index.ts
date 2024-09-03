@@ -20,6 +20,8 @@ export const userType = "buyer_seller";
 export const User_Role_Buyer_Seller = "buyer_seller";
 export const User_Role_Mover = "mover";
 
+export const RWF = "RW₣";
+
 /* when you sent a build please set to RW*/
 export const CURRENT_COUNTRY_CODE = "RW";
 

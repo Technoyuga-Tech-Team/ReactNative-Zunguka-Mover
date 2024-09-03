@@ -1,39 +1,38 @@
-import React from 'react';
-import {SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
-import {makeStyles, useTheme} from 'react-native-elements';
+import React from "react";
+import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import { makeStyles, useTheme } from "react-native-elements";
 
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useDispatch} from 'react-redux';
-import FavouriteIcon from '../../components/ui/svg/FavouriteIcon';
-import HomeIcon from '../../components/ui/svg/HomeIcon';
-import SellIcon from '../../components/ui/svg/SellIcon';
-import UserIcon from '../../components/ui/svg/UserIcon';
-import {HIT_SLOP, SCREEN_WIDTH} from '../../constant';
-import {Route} from '../../constant/navigationConstants';
-import {ThemeProps} from '../../types/global.types';
-import Scale from '../../utils/Scale';
-import InboxIcon from '../../components/ui/svg/InboxIcon';
-import EarningIcon from '../../components/ui/svg/EarningIcon';
-import PackageIcon from '../../components/ui/svg/PackageIcon';
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
+import AlertIcon from "../../components/ui/svg/AlertIcon";
+import EarningIcon from "../../components/ui/svg/EarningIcon";
+import HomeIcon from "../../components/ui/svg/HomeIcon";
+import PackageIcon from "../../components/ui/svg/PackageIcon";
+import UserIcon from "../../components/ui/svg/UserIcon";
+import { HIT_SLOP, SCREEN_WIDTH } from "../../constant";
+import { Route } from "../../constant/navigationConstants";
+import { getNotificationCount } from "../../store/settings/settings.selectors";
+import { ThemeProps } from "../../types/global.types";
+import Scale from "../../utils/Scale";
 
-const BottomTabBar = ({state, navigation}: any) => {
-  const dispatch = useDispatch();
+const BottomTabBar = ({ state, navigation }: any) => {
+  const notificationCount = useSelector(getNotificationCount);
 
   const insets = useSafeAreaInsets();
-  const Style = useStyle({insets});
+  const Style = useStyle({ insets });
 
-  const {theme} = useTheme();
+  const { theme } = useTheme();
 
   return (
     <>
       <View style={Style.mainCont}>
         <View style={Style.container}>
           {state?.routes.map(
-            (route: {name: Route; key: string}, index: number) => {
+            (route: { name: Route; key: string }, index: number) => {
               const isFocused = state.index === index;
               const onPress = () => {
                 const event = navigation.emit({
-                  type: 'tabPress',
+                  type: "tabPress",
                   target: route.key,
                 });
 
@@ -47,7 +46,8 @@ const BottomTabBar = ({state, navigation}: any) => {
                   onPress={onPress}
                   activeOpacity={0.8}
                   hitSlop={HIT_SLOP}
-                  style={Style.iconCont}>
+                  style={Style.iconCont}
+                >
                   {route.name === Route.navHome ? (
                     <HomeIcon
                       color={
@@ -78,16 +78,19 @@ const BottomTabBar = ({state, navigation}: any) => {
                       height={25}
                       width={25}
                     />
-                  ) : route.name === Route.navInbox ? (
-                    <InboxIcon
-                      color={
-                        isFocused
-                          ? theme.colors?.primary
-                          : theme.colors?.unselectedIconColor
-                      }
-                      height={22}
-                      width={22}
-                    />
+                  ) : route.name === Route.navAlert ? (
+                    <>
+                      <AlertIcon
+                        color={
+                          isFocused
+                            ? theme.colors?.primary
+                            : theme.colors?.unselectedIconColor
+                        }
+                        height={22}
+                        width={22}
+                      />
+                      {notificationCount > 0 && <View style={Style.redDot} />}
+                    </>
                   ) : (
                     <UserIcon
                       color={
@@ -108,12 +111,13 @@ const BottomTabBar = ({state, navigation}: any) => {
                           ? theme.colors?.primary
                           : theme.colors?.unselectedIconColor,
                       },
-                    ]}>
+                    ]}
+                  >
                     {route.name}
                   </Text>
                 </TouchableOpacity>
               );
-            },
+            }
           )}
         </View>
       </View>
@@ -129,9 +133,9 @@ const useStyle = makeStyles((theme, props: ThemeProps) => ({
     height: Scale(70),
     width: SCREEN_WIDTH,
     backgroundColor: theme.colors?.white,
-    position: 'absolute',
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
+    position: "absolute",
+    alignItems: "flex-end",
+    justifyContent: "flex-end",
     borderTopColor: theme.colors?.border,
     borderTopWidth: 2,
     bottom: props.insets.bottom,
@@ -140,19 +144,19 @@ const useStyle = makeStyles((theme, props: ThemeProps) => ({
     height: Scale(60),
     width: SCREEN_WIDTH,
     backgroundColor: theme.colors?.background,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-evenly",
   },
   iconCont: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     width: 70,
   },
   container2: {
     height: Scale(60),
-    width: '100%',
-    flexDirection: 'row',
+    width: "100%",
+    flexDirection: "row",
     backgroundColor: theme.colors?.white,
   },
   dividerCont: {
@@ -165,16 +169,16 @@ const useStyle = makeStyles((theme, props: ThemeProps) => ({
     height: Scale(60),
     borderTopLeftRadius: 20,
     backgroundColor: theme.colors?.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   recruterCont: {
     flex: 1,
     height: Scale(60),
     borderTopRightRadius: 20,
     backgroundColor: theme.colors?.secondary,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   txtlogin: {
     fontSize: theme.fontSize?.fs16,
@@ -186,9 +190,9 @@ const useStyle = makeStyles((theme, props: ThemeProps) => ({
     width: Scale(35),
     borderRadius: Scale(35) / 2,
     backgroundColor: theme.colors?.secondary,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 1,
@@ -196,7 +200,7 @@ const useStyle = makeStyles((theme, props: ThemeProps) => ({
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
     elevation: 3,
-    position: 'absolute',
+    position: "absolute",
     top: -18,
   },
   bottomFlex: {
@@ -210,5 +214,16 @@ const useStyle = makeStyles((theme, props: ThemeProps) => ({
   },
   circlePlusCont: {
     marginBottom: 25,
+  },
+  redDot: {
+    height: Scale(12),
+    width: Scale(12),
+    borderRadius: Scale(12 / 2),
+    backgroundColor: theme.colors?.pinkDark,
+    borderWidth: 1.5,
+    borderColor: theme.colors?.white,
+    position: "absolute",
+    right: 25,
+    top: 0,
   },
 }));

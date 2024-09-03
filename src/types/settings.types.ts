@@ -6,4 +6,6 @@ export interface SettingsStateProps {
   errorFromSocial: boolean;
   address: string;
   notificationCount: number;
+  isNewPackageDelivered: number;
+  moverInfo: UserData;
 }

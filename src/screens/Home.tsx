@@ -18,7 +18,10 @@ import {
   approveRejectMoverRequeste,
   moverRequestedDetails,
 } from "../store/MoverBooking/moverBooking.thunk";
-import { selectUserData } from "../store/settings/settings.selectors";
+import {
+  getNotificationCount,
+  selectUserData,
+} from "../store/settings/settings.selectors";
 import { setUserData } from "../store/settings/settings.slice";
 import { LoadingState, ThemeProps } from "../types/global.types";
 import { MoverHomeNavigationProps } from "../types/navigation";
@@ -33,6 +36,7 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
 
   const userData = useSelector(selectUserData);
   const loading = useSelector(selectMoverBookingLoading);
+  const notificationCount = useSelector(getNotificationCount);
 
   const [name, setName] = useState(userData?.username);
   const [requestData, setRequestData] = useState<any[]>([]);
@@ -71,13 +75,24 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
     };
   }, []);
 
+  useEffect(() => {
+    let unsubscribe = navigation.addListener("focus", async () => {
+      refetch().then();
+      getMoverRequestedData();
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   const onPressNotification = () => {
-    navigation.navigate(Route.navInbox);
+    navigation.navigate(Route.navNotification);
   };
 
   const onRefresh = () => {
     refetch().then();
-    // getMoverRequestedData();
+    getMoverRequestedData();
   };
 
   const getMoverRequestedData = async () => {
@@ -100,6 +115,7 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   };
 
   const onPressItem = (item: any) => {
+    console.log("item", item);
     if (item.status === "completed" || item.status === "startjob") {
       navigation.navigate(Route.navPackageDetails, {
         package_details_id: item?.id,
@@ -231,6 +247,7 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
         onPressNotification={onPressNotification}
         avgRate={userData?.avg_rate}
         totalUserRate={userData?.total_user_rate}
+        notificationCount={notificationCount}
       />
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
@@ -290,7 +307,7 @@ export default Home;
 const useStyles = makeStyles((theme, props: ThemeProps) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors?.background,
+    backgroundColor: theme.colors?.lightBg,
   },
   scrollCont: {
     flexGrow: 1,

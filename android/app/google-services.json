@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "180847193334",
+    "project_id": "zunguka-mover",
+    "storage_bucket": "zunguka-mover.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:180847193334:android:b1ca2767494727895b90d7",
+        "android_client_info": {
+          "package_name": "com.zunguka_mover"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDf3wXRa14MIm9RhtuNfwB-020HmAZUG4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -73,7 +73,7 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
   const delivery_point_lng = parseFloat(selectedItem?.delivery_point_lng) || 0;
 
   useEffect(() => {
-    // getPackageDetails();
+    getPackageDetails();
   }, [selectedItem]);
 
   const getPackageDetails = async () => {

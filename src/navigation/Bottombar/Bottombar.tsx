@@ -28,7 +28,7 @@ const Bottombar = () => {
       <Tab.Screen name={Route.navHome} component={Home} />
       <Tab.Screen name={Route.navEarnings} component={Earnings} />
       <Tab.Screen name={Route.navPackage} component={Pacakge} />
-      <Tab.Screen name={Route.navInbox} component={Inbox} />
+      <Tab.Screen name={Route.navAlert} component={Inbox} />
       <Tab.Screen name={Route.navProfile} component={Profile} />
     </Tab.Navigator>
   );

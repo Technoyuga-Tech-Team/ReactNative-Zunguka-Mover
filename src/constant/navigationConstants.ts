@@ -76,4 +76,5 @@ export enum Route {
   navPaymentToMover = "PaymentToMover",
   navJobHistory = "JobHistory",
   navPayoutHistory = "PayoutHistory",
+  navAlert = "Alert",
 }

@@ -18,6 +18,8 @@ import TakeSelfie from "../screens/authentication/TakeSelfie";
 import PayoutHistory from "../screens/PayoutHistory";
 import RatingAndReviews from "../screens/RatingAndReviews";
 import Withdraw from "../screens/Withdraw";
+import Notification from "../screens/Notification/Notification";
+import DeliveryDetails1 from "../screens/DeliveryDetails1";
 
 const Stack = createNativeStackNavigator<AppRoutes>();
 
@@ -53,6 +55,11 @@ const MainStack = () => {
           component={RatingAndReviews}
         />
         <Stack.Screen name={Route.navWithdraw} component={Withdraw} />
+        <Stack.Screen name={Route.navNotification} component={Notification} />
+        <Stack.Screen
+          name={Route.navDeliveryDetails1}
+          component={DeliveryDetails1}
+        />
       </Stack.Navigator>
     </GestureHandlerRootView>
   );

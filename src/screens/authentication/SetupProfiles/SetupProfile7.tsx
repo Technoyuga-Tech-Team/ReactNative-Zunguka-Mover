@@ -20,6 +20,7 @@ import { LoadingState, ThemeProps } from "../../../types/global.types";
 import { AuthNavigationProps } from "../../../types/navigation";
 import { SetupProfile7FormProps } from "../../../types/setupProfile.types";
 import { UserRoleType } from "../../../types/user.types";
+import { RWF } from "../../../constant";
 
 const SetupProfile7: React.FC<AuthNavigationProps<Route.navSetupProfile7>> = ({
   navigation,
@@ -106,7 +107,7 @@ const SetupProfile7: React.FC<AuthNavigationProps<Route.navSetupProfile7>> = ({
         <CustomTxtInput
           icon={
             <View style={style.rfCont}>
-              <Text style={style.txtrf}>R₣</Text>
+              <Text style={style.txtrf}>{RWF}</Text>
             </View>
           }
           textInputTitle="Rate Per KM"
