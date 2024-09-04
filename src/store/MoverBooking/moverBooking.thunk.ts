@@ -121,21 +121,28 @@ export const moverRequestedDetails = createAsyncThunk<
 export const approveRejectMoverRequeste = createAsyncThunk<
   any,
   {
-    id: number;
+    package_details_id: number;
     status: "confirmed" | "cancelled" | "startjob" | "endjob";
+    reason?: string;
   },
   { state: RootReduxState; rejectValue: FetchResponseError }
 >(
   "moverBooking/approveRejectMoverRequeste",
-  async ({ id, status }, { dispatch, rejectWithValue }) => {
+  async (
+    { package_details_id, status, reason },
+    { dispatch, rejectWithValue }
+  ) => {
     const { errors, data } = await dispatch(
       fetchAction<TokenPayload1>(
         {
           url: API.REJECT_MOVER_REQUESTE,
           method: "POST",
           data: {
-            id,
+            package_details_id,
             status,
+            ...(reason && {
+              reason,
+            }),
           },
         },
         true
@@ -292,7 +299,7 @@ export const getMoverRatingHistory = createAsyncThunk<
     const { errors, data } = await dispatch(
       fetchAction<TokenPayload1>(
         {
-          url: `${API.GET_MOVER_RATING_HISTORY}?limit=${limit}&offset=${offset}`,
+          url: `${API.GET_MOVER_RATING_HISTORY}/${limit}/${offset}`,
           method: "POST",
         },
         true

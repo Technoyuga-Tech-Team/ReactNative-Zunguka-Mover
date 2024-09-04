@@ -1,4 +1,5 @@
 import { Share } from "react-native";
+import * as Yup from "yup";
 
 const getUrlExtension = (url: string) => {
   return url?.split(/[#?]/)[0]?.split(".")?.pop()?.trim();
@@ -144,6 +145,29 @@ const getRandomFileName = () => {
   return random_number;
 };
 
+const hasEmail = (text: string) => {
+  const emailMatch = text.match(/(\S+@\S+\.\S+)/);
+  if (emailMatch) {
+    return Yup.string().email(emailMatch[0]);
+  } else {
+    return false;
+  }
+};
+
+const hasPhone = (text: string) => {
+  const rgx = /\d{10}/;
+  const phoneMatch = text.match(rgx);
+  console.log("phoneMatch", phoneMatch);
+  if (phoneMatch) {
+    return Yup.string().test("phone", "", (value) => {
+      console.log("value", value);
+      return rgx.test(value);
+    });
+  } else {
+    return false;
+  }
+};
+
 export {
   CreditDebitCardNumber,
   createArrayUseNumber,
@@ -154,4 +178,6 @@ export {
   keepSingleSpace,
   formatPhoneNumber,
   getRandomFileName,
+  hasEmail,
+  hasPhone,
 };

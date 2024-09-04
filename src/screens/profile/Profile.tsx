@@ -2,18 +2,21 @@ import { CommonActions } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { StatusBar, Text, View } from "react-native";
 import { makeStyles, useTheme } from "react-native-elements";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import CustomButton from "../../components/ui/CustomButton";
 import ProfileAndName from "../../components/ui/Profile/ProfileAndName";
+import ProfileItem from "../../components/ui/Profile/ProfileItem";
 import LogoutPopup from "../../components/ui/popups/LogoutPopup";
+import CreditcardIcon from "../../components/ui/svg/CreditcardIcon";
+import DocslistIcon from "../../components/ui/svg/DocslistIcon";
+import InfocircleIcon from "../../components/ui/svg/InfocircleIcon";
 import LogoutIcon from "../../components/ui/svg/LogoutIcon";
-import {
-  GOOGLE_WEB_CLIENT_ID,
-  SCREEN_WIDTH,
-  USER_DATA,
-  secureStoreKeys,
-} from "../../constant";
+import MoneybillsIcon from "../../components/ui/svg/MoneybillsIcon";
+import ProfileIcon from "../../components/ui/svg/ProfileIcon";
+import StarOutlineIcon from "../../components/ui/svg/StarOutlineIcon";
+import { SCREEN_WIDTH, USER_DATA, secureStoreKeys } from "../../constant";
 import { Route } from "../../constant/navigationConstants";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { selectUserData } from "../../store/settings/settings.selectors";
@@ -21,14 +24,6 @@ import { ThemeProps } from "../../types/global.types";
 import { HomeNavigationProps } from "../../types/navigation";
 import Scale from "../../utils/Scale";
 import { setData } from "../../utils/asyncStorage";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import ProfileItem from "../../components/ui/Profile/ProfileItem";
-import CreditcardIcon from "../../components/ui/svg/CreditcardIcon";
-import MoneybillsIcon from "../../components/ui/svg/MoneybillsIcon";
-import InfocircleIcon from "../../components/ui/svg/InfocircleIcon";
-import DocslistIcon from "../../components/ui/svg/DocslistIcon";
-import ProfileIcon from "../../components/ui/svg/ProfileIcon";
-import StarOutlineIcon from "../../components/ui/svg/StarOutlineIcon";
 
 const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
   navigation,
@@ -47,14 +42,6 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
     userData?.profile_image
   );
 
-  // useEffect(() => {
-  //   GoogleSignin.configure({
-  //     webClientId: GOOGLE_WEB_CLIENT_ID,
-  //     offlineAccess: true,
-  //     // scopes: ['https://www.googleapis.com/auth/user.phonenumbers.read'],
-  //   });
-  // }, []);
-
   useEffect(() => {
     let unsubscribe = navigation.addListener("focus", async () => {
       setProfilePicture(userData?.profile_image);
@@ -69,11 +56,7 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
     setVisible(!visible);
   };
   const onPressLogout = async () => {
-    // if (userData.is_social == 1) {
-    //   await GoogleSignin.signOut();
-    // }
     setVisible(false);
-    // dispatch(logout());
     await setData(secureStoreKeys.JWT_TOKEN, null);
     await setData(USER_DATA, null);
     navigation.dispatch(

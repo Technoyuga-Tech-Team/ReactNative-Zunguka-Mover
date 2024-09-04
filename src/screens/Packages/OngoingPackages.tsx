@@ -28,7 +28,7 @@ const OngoingPackages: React.FC<
   useEffect(() => {
     let unsubscribe = navigation.addListener("focus", async () => {
       setOngoingData([]);
-      // getOngoingData(10, 1);
+      getOngoingData(10, 1);
     });
 
     return () => {

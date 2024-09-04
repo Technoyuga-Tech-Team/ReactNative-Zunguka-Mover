@@ -35,6 +35,7 @@ declare module "react-native-elements/dist/config/colors" {
     primaryLight: string;
     primaryLightest: string;
     greyed2Color: string;
+    greyed: string;
   }
 }
 

@@ -3,6 +3,7 @@ import { Text, View } from "react-native";
 import { makeStyles, useTheme } from "react-native-elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeProps } from "../../types/global.types";
+import BlurView from "react-native-blur-effect";
 
 interface BorderBottomItemProps {
   title: string;
@@ -65,14 +66,7 @@ const BorderBottomItem: React.FC<BorderBottomItemProps> = ({
             </Text>
           </View>
         </View>
-        {/* {showblur && (
-          <BlurView
-            style={style.absolute}
-            blurType="light"
-            blurAmount={4}
-            reducedTransparencyFallbackColor="white"
-          />
-        )} */}
+        {showblur && <BlurView style={style.absolute} blurRadius={3} />}
       </>
     );
   }

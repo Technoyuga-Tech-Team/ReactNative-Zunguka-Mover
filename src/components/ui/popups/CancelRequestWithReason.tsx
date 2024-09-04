@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   Text,
+  TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
@@ -9,20 +10,30 @@ import {
 import { makeStyles, useTheme } from "react-native-elements";
 import CustomButton from "../CustomButton";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../constant";
+import { CustomTxtInput } from "../CustomTextInput";
+import Scale from "../../../utils/Scale";
 
-interface LogoutPopupProps {
+interface CancelRequestWithReasonProps {
   visiblePopup: boolean;
   togglePopup: () => void;
-  onPressLogout: () => void;
+  onPressOk: (reason: string) => void;
 }
 
-const LogoutPopup: React.FC<LogoutPopupProps> = ({
+const CancelRequestWithReason: React.FC<CancelRequestWithReasonProps> = ({
   visiblePopup,
   togglePopup,
-  onPressLogout,
+  onPressOk,
 }) => {
   const style = useStyle();
   const { theme } = useTheme();
+
+  const [reason, setReason] = useState("");
+  const [errorReason, setErrorReason] = useState("");
+
+  const onChangeText = (txt: string) => {
+    setErrorReason("");
+    setReason(txt);
+  };
 
   return (
     <Modal
@@ -40,14 +51,30 @@ const LogoutPopup: React.FC<LogoutPopupProps> = ({
       ></TouchableOpacity>
       <View style={style.container1}>
         <View style={style.innerCont}>
-          <Text style={style.txtLoginToZunguka}>Log Out?</Text>
-          <Text style={style.txtLoginToZunguka1}>
-            Are you sure you want to log out from Zunguka?
-          </Text>
+          <Text style={style.txtLoginToZunguka}>Provide cancel reason</Text>
+
+          <CustomTxtInput
+            placeholder="Provide resaon"
+            returnKeyType="done"
+            returnKeyLabel="done"
+            keyboardType={"default"}
+            onChangeText={(val) => onChangeText(val)}
+            value={reason}
+            error={errorReason}
+            touched={errorReason !== ""}
+            textInputStyle={style.txtInCont}
+          />
           <View style={style.buttonCont}>
             <CustomButton
-              onPress={onPressLogout}
-              title={"Yes, Log Out"}
+              onPress={() => {
+                if (reason !== "") {
+                  onPressOk(reason);
+                  setReason("");
+                } else {
+                  setErrorReason("Please provide reason");
+                }
+              }}
+              title={"Submit"}
               buttonWidth="half"
               width={SCREEN_WIDTH - 100}
               variant="primary"
@@ -61,7 +88,7 @@ const LogoutPopup: React.FC<LogoutPopupProps> = ({
   );
 };
 
-export default LogoutPopup;
+export default CancelRequestWithReason;
 
 const useStyle = makeStyles((theme) => ({
   container: {
@@ -85,7 +112,7 @@ const useStyle = makeStyles((theme) => ({
     width: "100%",
     backgroundColor: theme.colors?.white,
     borderRadius: 20,
-    paddingVertical: 20,
+    paddingVertical: 10,
     alignItems: "center",
     justifyContent: "space-between",
     shadowColor: "#000",
@@ -135,5 +162,14 @@ const useStyle = makeStyles((theme) => ({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  txtInCont: {
+    height: Scale(53),
+    width: SCREEN_WIDTH - 80,
+    justifyContent: "center",
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    borderWidth: 1,
+    borderColor: theme?.colors?.secondaryText,
   },
 }));

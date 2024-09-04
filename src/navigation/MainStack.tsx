@@ -20,6 +20,8 @@ import RatingAndReviews from "../screens/RatingAndReviews";
 import Withdraw from "../screens/Withdraw";
 import Notification from "../screens/Notification/Notification";
 import DeliveryDetails1 from "../screens/DeliveryDetails1";
+import PackageDetails from "../screens/Packages/PackageDetails";
+import Chatroom from "../screens/chat/Chatroom";
 
 const Stack = createNativeStackNavigator<AppRoutes>();
 
@@ -60,6 +62,11 @@ const MainStack = () => {
           name={Route.navDeliveryDetails1}
           component={DeliveryDetails1}
         />
+        <Stack.Screen
+          name={Route.navPackageDetails}
+          component={PackageDetails}
+        />
+        <Stack.Screen name={Route.navChatroom} component={Chatroom} />
       </Stack.Navigator>
     </GestureHandlerRootView>
   );

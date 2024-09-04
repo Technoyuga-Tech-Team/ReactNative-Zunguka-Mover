@@ -22,6 +22,7 @@ import PredefineOTPCodeView from "../components/ui/PredefineOTPCodeView";
 import MoverItem from "../components/Mover/MoverItem";
 import BorderBottomItem from "../components/DeliveryDetails/BorderBottomItem";
 import RatingPopup from "../components/ui/popups/RatingPopup";
+import { RWF } from "../constant";
 
 const DeliveryDetails1: React.FC<
   MainNavigationProps<Route.navDeliveryDetails1>
@@ -192,11 +193,6 @@ const DeliveryDetails1: React.FC<
         )}
         <View style={{ flex: 1, marginTop: 10 }}>
           <BorderBottomItem
-            title="Item name"
-            value={deliveryDetailsData?.item_name}
-            from_mover={false}
-          />
-          <BorderBottomItem
             title="Receiver"
             value={deliveryDetailsData?.receiver_name}
             from_mover={false}
@@ -216,6 +212,11 @@ const DeliveryDetails1: React.FC<
             numberOfLines={3}
             showblur={from_mover ? true : false}
           />
+          <BorderBottomItem
+            title="Item name"
+            value={deliveryDetailsData?.item_name}
+            from_mover={false}
+          />
           {deliveryDetailsData?.item_size && (
             <BorderBottomItem
               title="Size"
@@ -223,20 +224,24 @@ const DeliveryDetails1: React.FC<
               from_mover={false}
             />
           )}
-          <BorderBottomItem
-            title="Date"
-            value={deliveryDetailsData?.package_delivery_date}
-            from_mover={false}
-          />
-          <BorderBottomItem
-            title="Time"
-            value={deliveryDetailsData?.package_delivery_time}
-            from_mover={false}
-          />
+          {deliveryDetailsData?.package_delivery_date && (
+            <BorderBottomItem
+              title="Date"
+              value={deliveryDetailsData?.package_delivery_date}
+              from_mover={false}
+            />
+          )}
+          {deliveryDetailsData?.package_delivery_time && (
+            <BorderBottomItem
+              title="Time"
+              value={deliveryDetailsData?.package_delivery_time}
+              from_mover={false}
+            />
+          )}
           {from_mover && (
             <BorderBottomItem
               title="Price"
-              value={`$ ${deliveryDetailsData?.price || ""}`}
+              value={`${RWF} ${deliveryDetailsData?.price || ""}`}
               from_mover={false}
             />
           )}

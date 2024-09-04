@@ -28,7 +28,7 @@ const UpcommingPackages: React.FC<
   useEffect(() => {
     let unsubscribe = navigation.addListener("focus", async () => {
       setUpcomingData([]);
-      // getUpcommingData(10, 1);
+      getUpcommingData(10, 1);
     });
 
     return () => {

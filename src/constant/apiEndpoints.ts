@@ -54,7 +54,7 @@ export const API = {
   GET_MOVER_REQUESTED: "/request-details",
   GET_DELIVERY_DETAILS: "/delivery-details",
   GET_ORDER_DETAILS: "/mover-delivery-details",
-  REJECT_MOVER_REQUESTE: "/request-approve-reject",
+  REJECT_MOVER_REQUESTE: "/accept-package",
   END_JOB: "/mover-end-job",
   GET_PAST_MOVER_HISTORY: "/past-movers-details",
   GET_MOVER_RATING_HISTORY: "/rating-review-list",

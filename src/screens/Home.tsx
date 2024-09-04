@@ -25,6 +25,7 @@ import {
 import { setUserData } from "../store/settings/settings.slice";
 import { LoadingState, ThemeProps } from "../types/global.types";
 import { MoverHomeNavigationProps } from "../types/navigation";
+import CancelRequestWithReason from "../components/ui/popups/CancelRequestWithReason";
 
 const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   navigation,
@@ -40,10 +41,11 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
 
   const [name, setName] = useState(userData?.username);
   const [requestData, setRequestData] = useState<any[]>([]);
-  const [selectedItem, setSelectedItem] = useState();
+  const [selectedItem, setSelectedItem] = useState<any>();
   const [visible, setVisible] = useState(false);
   const [visibleCodeVerification, setVisibleCodeVerification] = useState(false);
   const [visibleAcceptedPopup, setVisibleAcceptedPopup] = useState(false);
+  const [openCancelRequestPopup, setOpenCancelRequestPopup] = useState(false);
 
   const { data: currentUser, refetch } = useMeQuery({
     staleTime: Infinity,
@@ -151,7 +153,7 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   const onPressStartJob = async () => {
     const result = await dispatch(
       approveRejectMoverRequeste({
-        id: selectedItem?.id,
+        package_details_id: selectedItem?.id,
         status: "startjob",
       })
     );
@@ -189,7 +191,7 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
     setVisible(false);
     const result = await dispatch(
       approveRejectMoverRequeste({
-        id: selectedItem?.id,
+        package_details_id: selectedItem?.id,
         status: "confirmed",
       })
     );
@@ -207,24 +209,10 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   };
 
   const onPressRejectRequest = async () => {
-    const result = await dispatch(
-      approveRejectMoverRequeste({
-        id: selectedItem?.id,
-        status: "cancelled",
-      })
-    );
-    if (approveRejectMoverRequeste.fulfilled.match(result)) {
-      console.log("data approveRejectMoverRequeste --->", result.payload);
-      if (result.payload.status == 1) {
-        getMoverRequestedData();
-
-        togglePopup();
-
-        // setRequestData(result.payload.data);
-      }
-    } else {
-      console.log("errror approveRejectMoverRequeste --->", result.payload);
-    }
+    togglePopup();
+    setTimeout(() => {
+      setOpenCancelRequestPopup(true);
+    }, 500);
   };
 
   const toggleDevliveryCodePopup = () => {
@@ -235,9 +223,32 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   const toggleAcceptedPopup = () => {
     setVisibleAcceptedPopup(!visibleAcceptedPopup);
   };
+  const toggleCencelRequestPopup = () => {
+    setOpenCancelRequestPopup(!openCancelRequestPopup);
+  };
 
   const onPressOk = () => {
     setVisibleAcceptedPopup(false);
+  };
+
+  const onPressSubmitCancelRequest = async (reason: string) => {
+    const result = await dispatch(
+      approveRejectMoverRequeste({
+        package_details_id: selectedItem?.id,
+        status: "cancelled",
+        reason: reason,
+      })
+    );
+    if (approveRejectMoverRequeste.fulfilled.match(result)) {
+      console.log("data approveRejectMoverRequeste --->", result.payload);
+      if (result.payload.status == 1) {
+        getMoverRequestedData();
+        toggleCencelRequestPopup();
+        // setRequestData(result.payload.data);
+      }
+    } else {
+      console.log("errror approveRejectMoverRequeste --->", result.payload);
+    }
   };
 
   return (
@@ -297,6 +308,11 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
         visiblePopup={visibleAcceptedPopup}
         togglePopup={toggleAcceptedPopup}
         onPressOk={onPressOk}
+      />
+      <CancelRequestWithReason
+        visiblePopup={openCancelRequestPopup}
+        togglePopup={toggleCencelRequestPopup}
+        onPressOk={(reason) => onPressSubmitCancelRequest(reason)}
       />
     </View>
   );

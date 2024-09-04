@@ -65,7 +65,7 @@ const Earnings: React.FC<MoverHomeNavigationProps<Route.navEarnings>> = ({
   }, []);
 
   useEffect(() => {
-    // getMyEarningData(10, 1);
+    getMyEarningData(10, 1);
   }, [startDate, endDate]);
 
   useEffect(() => {
@@ -159,7 +159,8 @@ const Earnings: React.FC<MoverHomeNavigationProps<Route.navEarnings>> = ({
       days.push(dayName);
     }
     setWeekDays(days);
-
+    console.log("previousWeekStartDate", previousWeekStartDate);
+    console.log("previousWeekEndDate", previousWeekEndDate);
     setStartDate(previousWeekStartDate);
     setEndDate(previousWeekEndDate);
   };

@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeProps } from "../types/global.types";
 import Scale from "../utils/Scale";
 import PickupDeliveryCont from "./PickupDeliveryCont";
+import { RWF } from "../constant";
 
 interface PickupItemProps {
   item: any;
@@ -59,7 +60,9 @@ const PickupItem: React.FC<PickupItemProps> = ({
     >
       <View style={style.topCont}>
         <Text style={style.txtDate}>{time}</Text>
-        <Text style={style.txtDate}>${item?.price}</Text>
+        <Text style={style.txtDate}>
+          {RWF} {item?.price}
+        </Text>
       </View>
       <PickupDeliveryCont
         pickupAddress={item.pickup_point_address}

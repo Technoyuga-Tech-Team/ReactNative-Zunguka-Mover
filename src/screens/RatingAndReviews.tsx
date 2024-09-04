@@ -35,7 +35,7 @@ const RatingAndReviews: React.FC<
   useEffect(() => {
     let unsubscribe = navigation.addListener("focus", async () => {
       setMoverRatingHistoryData([]);
-      // moverRatingHistory(10, 1);
+      moverRatingHistory(10, 1);
     });
 
     return () => {

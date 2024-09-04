@@ -21,7 +21,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { orderDetails } from "../../../store/MoverBooking/moverBooking.thunk";
 import { DeliveryDetailsData } from "../../../types/delivery.types";
-import { ASPECT_RATIO, GOOGLE_MAP_API_KEY } from "../../../constant";
+import { ASPECT_RATIO, GOOGLE_MAP_API_KEY, RWF } from "../../../constant";
 import { Route } from "../../../constant/navigationConstants";
 import { Images } from "../../../assets/images";
 import CustomHeader from "../CustomHeader";
@@ -191,10 +191,7 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
         index: 2,
         routes: [
           {
-            name: Route.navMoverStack,
-            state: {
-              routes: [{ name: Route.navMoverDashboard }],
-            },
+            name: Route.navDashboard,
           },
           {
             name: Route.navMessaging,
@@ -274,7 +271,7 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
                   style={style.profile}
                   resizeMode="cover"
                 />
-                <Text style={style.txtName}>{selectedItem?.full_name}</Text>
+                <Text style={style.txtName}>{selectedItem?.username}</Text>
               </View>
               <View
                 style={{
@@ -282,7 +279,9 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
                   justifyContent: "center",
                 }}
               >
-                <Text style={style.txtPrice}>${selectedItem?.price}</Text>
+                <Text style={style.txtPrice}>
+                  {RWF} {selectedItem?.price}
+                </Text>
               </View>
             </View>
             {loader ? (
@@ -316,20 +315,23 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
                   value={deliveryDetailsData?.item_size}
                   from_mover={false}
                 />
-                <BorderBottomItem
-                  title="Date"
-                  value={deliveryDetailsData?.package_delivery_date}
-                  from_mover={false}
-                />
-                <BorderBottomItem
-                  title="Time"
-                  value={deliveryDetailsData?.package_delivery_time}
-                  from_mover={false}
-                />
-
+                {deliveryDetailsData?.package_delivery_date && (
+                  <BorderBottomItem
+                    title="Date"
+                    value={deliveryDetailsData?.package_delivery_date}
+                    from_mover={false}
+                  />
+                )}
+                {deliveryDetailsData?.package_delivery_time && (
+                  <BorderBottomItem
+                    title="Time"
+                    value={deliveryDetailsData?.package_delivery_time}
+                    from_mover={false}
+                  />
+                )}
                 <BorderBottomItem
                   title="Price"
-                  value={`$ ${deliveryDetailsData?.price || ""}`}
+                  value={`${RWF} ${deliveryDetailsData?.price || ""}`}
                   from_mover={false}
                 />
 
@@ -477,7 +479,7 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
                       },
                     ]}
                   >
-                    ${selectedItem?.price}
+                    {RWF} {selectedItem?.price}
                   </Text>
                 </TouchableOpacity>
                 {!isConfirmed && (

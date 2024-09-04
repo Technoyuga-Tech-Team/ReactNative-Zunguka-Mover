@@ -28,7 +28,7 @@ const CompletedPackages: React.FC<
   useEffect(() => {
     let unsubscribe = navigation.addListener("focus", async () => {
       setCompeltedData([]);
-      // getCompletedData(10, 1);
+      getCompletedData(10, 1);
     });
 
     return () => {

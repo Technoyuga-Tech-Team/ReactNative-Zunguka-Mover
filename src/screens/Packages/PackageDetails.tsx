@@ -251,7 +251,7 @@ const PackageDetails: React.FC<
     try {
       const result = await dispatch(
         approveRejectMoverRequeste({
-          id: Number(package_details_id),
+          package_details_id: Number(package_details_id),
           status: "startjob",
         })
       );
@@ -274,6 +274,7 @@ const PackageDetails: React.FC<
   const onPressMessage = () => {
     navigation.navigate(Route.navChatroom, {
       receiver_id: buyerSellerId,
+      product_id: "",
     });
   };
 
@@ -420,6 +421,7 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
   scrollCont: {
     flex: 1,
     backgroundColor: theme.colors?.background,
+    paddingTop: props.insets.top,
   },
   headerCont: {
     backgroundColor: theme.colors?.primary,
