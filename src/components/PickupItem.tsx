@@ -16,28 +16,16 @@ interface PickupItemProps {
   onPressShowDetails: () => void;
 }
 
-const getStatusStrings = (status: string, fromRequestPage: boolean) => {
-  if (fromRequestPage) {
-    return status === "pending"
-      ? "Request Pending"
-      : status === "startjob"
-      ? "Ongoing Job"
-      : status === "completed"
-      ? "Wait For The Start Job"
-      : status === "confirmed"
-      ? "Pay To Mover"
-      : "";
-  } else {
-    return status === "pending"
-      ? "Request Pending"
-      : status === "startjob"
-      ? "Ongoing Job"
-      : status === "completed"
-      ? "Start This Job"
-      : status === "confirmed"
-      ? "Waiting For Payment"
-      : "";
-  }
+const getStatusStrings = (status: string) => {
+  return status === "pending"
+    ? "Request Pending"
+    : status === "startjob"
+    ? "Ongoing Job"
+    : status === "completed"
+    ? "Start Job"
+    : status === "confirmed"
+    ? "Start job"
+    : "";
 };
 
 const PickupItem: React.FC<PickupItemProps> = ({
@@ -107,37 +95,8 @@ const PickupItem: React.FC<PickupItemProps> = ({
               },
             ]}
           >
-            {getStatusStrings(item.status, fromRequestPage)}
-            {/* {item.status} */}
+            {getStatusStrings(item.status)}
           </Text>
-          {/* {isfromMover && (
-            <TouchableOpacity
-              style={{ marginLeft: 5 }}
-              onPress={onPressShowDetails}
-              activeOpacity={0.8}
-              hitSlop={HIT_SLOP2}
-            >
-              <InfocircleIcon
-                color={theme?.colors?.greyedColor}
-                height={20}
-                width={20}
-              />
-            </TouchableOpacity>
-          )} */}
-          {/* {fromRequestPage && item.status !== "pending" && (
-            <TouchableOpacity
-              style={{ marginLeft: 5 }}
-              onPress={onPressMessage}
-              activeOpacity={0.8}
-              hitSlop={HIT_SLOP2}
-            >
-              <ChatFillIcon
-                color={theme?.colors?.primary}
-                height={28}
-                width={28}
-              />
-            </TouchableOpacity>
-          )} */}
         </View>
       </View>
     </TouchableOpacity>

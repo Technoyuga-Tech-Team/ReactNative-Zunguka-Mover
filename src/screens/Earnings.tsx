@@ -218,7 +218,7 @@ const Earnings: React.FC<MoverHomeNavigationProps<Route.navEarnings>> = ({
     >
       <StatusBar
         backgroundColor={theme.colors?.primary}
-        barStyle={"light-content"}
+        barStyle={"dark-content"}
       />
       {loading === LoadingState.CREATE && <Loading />}
       <View

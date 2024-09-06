@@ -7,7 +7,10 @@ import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { selectUserData } from "../../store/settings/settings.selectors";
 import { ThemeProps } from "../../types/global.types";
-import { HomeNavigationProps } from "../../types/navigation";
+import {
+  HomeNavigationProps,
+  MainNavigationProps,
+} from "../../types/navigation";
 import { getData } from "../../utils/asyncStorage";
 import { Route } from "../../constant/navigationConstants";
 import { setSaveNotificationCount } from "../../store/settings/settings.slice";
@@ -17,7 +20,7 @@ import CustomHeader from "../../components/ui/CustomHeader";
 import { GetNotificationDataList } from "../../types/notification.types";
 import NotificationListing from "../../components/Notification/NotificationListing";
 
-const Inbox: React.FC<HomeNavigationProps<Route.navInbox>> = ({
+const Inbox: React.FC<MainNavigationProps<Route.navAlert>> = ({
   navigation,
 }) => {
   const insets = useSafeAreaInsets();
@@ -86,8 +89,6 @@ const Inbox: React.FC<HomeNavigationProps<Route.navInbox>> = ({
     }
   };
 
-  const isMover = userData?.type === "mover";
-
   return (
     <View style={style.container}>
       <CustomHeader title="Inbox" isBackVisible={false} />
@@ -110,8 +111,8 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
       Platform.OS === "ios"
         ? HAS_NOTCH
           ? props.insets.bottom
-          : props.insets.bottom + 10
-        : props.insets.bottom + 10,
+          : props.insets.bottom + 60
+        : props.insets.bottom + 60,
     backgroundColor: theme.colors?.background,
     paddingTop: props.insets.top,
   },

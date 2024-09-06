@@ -15,7 +15,10 @@ import Geolocation from "react-native-geolocation-service";
 import MapView, { Marker, Polyline } from "react-native-maps";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
-import { MoverHomeNavigationProps } from "../../types/navigation";
+import {
+  MainNavigationProps,
+  MoverHomeNavigationProps,
+} from "../../types/navigation";
 import { Route } from "../../constant/navigationConstants";
 import { selectMoverBookingLoading } from "../../store/MoverBooking/moverBooking.selectors";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
@@ -28,9 +31,10 @@ import Loading from "../../components/ui/Loading";
 import { LoadingState, ThemeProps } from "../../types/global.types";
 import DeliveryCodeVerificationPopup from "../../components/DeliveryCodeVerificationPopup";
 import Scale from "../../utils/Scale";
+import { socket, socketEvent } from "../../utils/socket";
 
 const PackageDetails: React.FC<
-  MoverHomeNavigationProps<Route.navPackageDetails>
+  MainNavigationProps<Route.navPackageDetails>
 > = ({ navigation, route }) => {
   const insets = useSafeAreaInsets();
   const style = useStyles({ insets });
@@ -40,6 +44,7 @@ const PackageDetails: React.FC<
   const destination_lat_lng = route?.params?.destinationLatLng;
   const pickup_lat_lng = route?.params?.pickupLatLng;
   const buyerSellerId = route?.params?.buyerSellerId;
+  const sellerId = route?.params?.seller_id;
 
   const loading = useSelector(selectMoverBookingLoading);
   const dispatch = useAppDispatch();
@@ -55,6 +60,7 @@ const PackageDetails: React.FC<
   const [canJobStartJob, setCanStartJob] = useState(route?.params?.canStartJob);
   const [canJobEndJob, setCanEndJob] = useState(route?.params?.canEndJob);
 
+  console.log("route?.params?.canEndJob", route?.params?.canEndJob);
   console.log("canJobStartJob", canJobStartJob);
   console.log("canJobEndJob", canJobEndJob);
 
@@ -243,9 +249,15 @@ const PackageDetails: React.FC<
       ); // Implement distance calculation function
       console.log("end distance", distance);
       setShowEndBtn(distance < 0.09); // Adjust the threshold based on your needs (in meters)
-      // return distance < 0.05;
+      if (distance < 0.09 && canJobEndJob) {
+        console.log("- - - - - - - fire socket event - - - - - -");
+        socket.emit(socketEvent.REACHED_DESTINATION, {
+          seller_id: sellerId,
+          item_id: package_details_id,
+        });
+      }
     }
-  }, [currentLatLng, coords]);
+  }, [currentLatLng, coords, showEndBtn, canJobEndJob]);
 
   const onPressStartJob = async () => {
     try {
@@ -267,9 +279,6 @@ const PackageDetails: React.FC<
       console.log("catch err", error);
     }
   };
-
-  console.log("showStartBtn", showStartBtn);
-  console.log("showEndBtn", showEndBtn);
 
   const onPressMessage = () => {
     navigation.navigate(Route.navChatroom, {
@@ -367,41 +376,41 @@ const PackageDetails: React.FC<
       </View>
       <View style={style.box}>
         <DropShadow style={style.shadow}>
-          {/* {showStartBtn && !canJobEndJob && ( */}
-          <TouchableOpacity
-            onPress={onPressStartJob}
-            activeOpacity={0.8}
-            style={[
-              style.btnPickup,
-              {
-                alignItems: "center",
-                justifyContent: "center",
-              },
-            ]}
-          >
-            {loading === LoadingState.CREATE ? (
-              <ActivityIndicator color={theme.colors?.white} />
-            ) : (
-              <Text style={style.txtBtn}>Start Job</Text>
-            )}
-          </TouchableOpacity>
-          {/* )} */}
-          {/* {showEndBtn && ( */}
-          <TouchableOpacity
-            onPress={onPressEndJob}
-            activeOpacity={0.8}
-            style={[
-              style.btnPickup,
-              {
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: theme.colors?.pinkDark,
-              },
-            ]}
-          >
-            <Text style={style.txtBtn}>End Job</Text>
-          </TouchableOpacity>
-          {/* )} */}
+          {showStartBtn && !canJobEndJob && (
+            <TouchableOpacity
+              onPress={onPressStartJob}
+              activeOpacity={0.8}
+              style={[
+                style.btnPickup,
+                {
+                  alignItems: "center",
+                  justifyContent: "center",
+                },
+              ]}
+            >
+              {loading === LoadingState.CREATE ? (
+                <ActivityIndicator color={theme.colors?.white} />
+              ) : (
+                <Text style={style.txtBtn}>Start Job</Text>
+              )}
+            </TouchableOpacity>
+          )}
+          {showEndBtn && canJobEndJob && (
+            <TouchableOpacity
+              onPress={onPressEndJob}
+              activeOpacity={0.8}
+              style={[
+                style.btnPickup,
+                {
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: theme.colors?.pinkDark,
+                },
+              ]}
+            >
+              <Text style={style.txtBtn}>End Job</Text>
+            </TouchableOpacity>
+          )}
         </DropShadow>
       </View>
       <DeliveryCodeVerificationPopup

@@ -46,6 +46,7 @@ export type AppRoutes = {
   TakeSelfie: { fromflow?: boolean };
   PayoutHistory: undefined;
   ReviewAndRating: undefined;
+  Alert: undefined;
   Withdraw: { earning: string };
   PackageDetails: {
     package_details_id: string;
@@ -54,8 +55,13 @@ export type AppRoutes = {
     canStartJob: boolean;
     canEndJob: boolean;
     buyerSellerId: string;
+    seller_id: string;
   };
-  DeliveryDetails1: { package_details_id: string; from?: string };
+  DeliveryDetails1: {
+    package_details_id: string;
+    from?: string;
+    fromHome?: string;
+  };
 };
 
 export type MoverRoute = {
@@ -71,9 +77,14 @@ export type MoverRoute = {
     canStartJob: boolean;
     canEndJob: boolean;
     buyerSellerId: string;
+    seller_id: string;
   };
   DeliveryDetails: undefined;
-  DeliveryDetails1: { package_details_id: string; from?: string };
+  DeliveryDetails1: {
+    package_details_id: string;
+    from?: string;
+    fromHome?: string;
+  };
   Withdraw: { earning: string };
   PayoutHistory: undefined;
   Chatroom: { receiver_id: string; product_id: string };
@@ -180,6 +191,8 @@ export type HomeRoutes = {
   DeliveryCompleteAndRateDriver: undefined;
   RequestToMover: undefined;
   Messaging: undefined;
+  TransactionHistory: undefined;
+  EditProfile: undefined;
 };
 
 export type SellAnItemRoutes = {

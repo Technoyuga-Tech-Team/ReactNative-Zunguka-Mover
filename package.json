@@ -89,6 +89,7 @@
     "@react-native/metro-config": "^0.72.11",
     "@tsconfig/react-native": "^3.0.0",
     "@types/lodash": "^4.17.7",
+    "@types/mapbox__polyline": "^1.0.5",
     "@types/react": "^18.0.24",
     "@types/react-native-calendar-picker": "^8.0.0",
     "@types/react-test-renderer": "^18.0.0",

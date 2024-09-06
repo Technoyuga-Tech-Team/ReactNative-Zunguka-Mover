@@ -207,7 +207,7 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
 
   const profile = selectedItem?.profile_image || Images.PLACEHOLDER_IMAGE;
 
-  const isPaymentDone = selectedItem?.status === "completed";
+  const isReachedDestination = selectedItem?.status === "completed";
   const isConfirmed = selectedItem?.status === "confirmed";
   const isJobStarted = selectedItem?.status === "startjob";
   const isPending = selectedItem?.status === "pending";
@@ -235,9 +235,9 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
       : status === "startjob"
       ? "Ongoing Job"
       : status === "completed"
-      ? "Start This Job"
+      ? "Start Job"
       : status === "confirmed"
-      ? "Waiting For Payment"
+      ? "Ongoing Job"
       : status;
   };
 
@@ -310,11 +310,13 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
                   from_mover={false}
                   numberOfLines={3}
                 />
-                <BorderBottomItem
-                  title="Size"
-                  value={deliveryDetailsData?.item_size}
-                  from_mover={false}
-                />
+                {deliveryDetailsData?.item_size && (
+                  <BorderBottomItem
+                    title="Size"
+                    value={deliveryDetailsData?.item_size}
+                    from_mover={false}
+                  />
+                )}
                 {deliveryDetailsData?.package_delivery_date && (
                   <BorderBottomItem
                     title="Date"
@@ -438,74 +440,52 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
                 marginHorizontal: 100,
               }}
             >
-              <Text style={style.txtdesc}>
-                You will be able to contact customer once you confirm pick up
-              </Text>
+              {!isConfirmed ? (
+                <Text style={style.txtdesc}>
+                  You will be able to contact customer once you confirm pick up
+                </Text>
+              ) : (
+                <Text style={style.txtdesc}>You can chat with your client</Text>
+              )}
             </View>
-            {!isPaymentDone && !isJobStarted ? (
-              <>
+
+            <>
+              {!isConfirmed && (
                 <TouchableOpacity
-                  disabled={isConfirmed}
                   onPress={onPressConfirmPickup}
+                  activeOpacity={0.8}
+                  style={[style.btnPickup]}
+                >
+                  <Text style={[style.txtBtn]}>{"Confirm pick up"}</Text>
+                  <Text style={[style.txtBtn]}>
+                    {RWF} {selectedItem?.price}
+                  </Text>
+                </TouchableOpacity>
+              )}
+              {!isConfirmed && (
+                <TouchableOpacity
+                  onPress={onPressReject}
                   activeOpacity={0.8}
                   style={[
                     style.btnPickup,
                     {
-                      backgroundColor: isConfirmed
-                        ? theme.colors?.disabled
-                        : theme.colors?.primary,
+                      backgroundColor: theme.colors?.pinkDark,
+                      marginBottom: 10,
+                      alignItems: "center",
+                      justifyContent: "center",
                     },
                   ]}
                 >
-                  <Text
-                    style={[
-                      style.txtBtn,
-                      {
-                        color: isConfirmed
-                          ? theme.colors?.textSecondary
-                          : theme.colors?.white,
-                      },
-                    ]}
-                  >
-                    {isConfirmed ? "Waiting for payment" : "Confirm pick up"}
-                  </Text>
-                  <Text
-                    style={[
-                      style.txtBtn,
-                      {
-                        color: isConfirmed
-                          ? theme.colors?.textSecondary
-                          : theme.colors?.white,
-                      },
-                    ]}
-                  >
-                    {RWF} {selectedItem?.price}
-                  </Text>
+                  {loading === LoadingState.CREATE ? (
+                    <ActivityIndicator color={theme.colors?.white} />
+                  ) : (
+                    <Text style={style.txtBtn}>Reject</Text>
+                  )}
                 </TouchableOpacity>
-                {!isConfirmed && (
-                  <TouchableOpacity
-                    onPress={onPressReject}
-                    activeOpacity={0.8}
-                    style={[
-                      style.btnPickup,
-                      {
-                        backgroundColor: theme.colors?.pinkDark,
-                        marginBottom: 10,
-                        alignItems: "center",
-                        justifyContent: "center",
-                      },
-                    ]}
-                  >
-                    {loading === LoadingState.CREATE ? (
-                      <ActivityIndicator color={theme.colors?.white} />
-                    ) : (
-                      <Text style={style.txtBtn}>Reject</Text>
-                    )}
-                  </TouchableOpacity>
-                )}
-              </>
-            ) : (
-              <>
+              )}
+            </>
+
+            {/* <>
                 <TouchableOpacity
                   disabled={isJobStarted}
                   onPress={onPressStartJob}
@@ -552,8 +532,7 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
                 >
                   <Text style={style.txtBtn}>End Job</Text>
                 </TouchableOpacity>
-              </>
-            )}
+              </> */}
           </ScrollView>
         </View>
       </View>

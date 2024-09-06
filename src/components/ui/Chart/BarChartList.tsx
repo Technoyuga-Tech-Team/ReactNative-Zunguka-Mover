@@ -6,7 +6,7 @@ import DropShadow from "react-native-drop-shadow";
 import { makeStyles, useTheme } from "react-native-elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeProps } from "../../../types/global.types";
-import { HIT_SLOP, SCREEN_WIDTH } from "../../../constant";
+import { HIT_SLOP, RWF, SCREEN_WIDTH } from "../../../constant";
 import LeftIcon from "../svg/LeftIcon";
 
 interface BarChartListProps {
@@ -98,7 +98,9 @@ const BarChartList: React.FC<BarChartListProps> = ({
               onPress={onPressBalance}
               hitSlop={HIT_SLOP}
             >
-              <Text style={style.txtPrice}>${balance}</Text>
+              <Text style={style.txtPrice}>
+                {RWF} {balance}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               disabled={isTodayOrAfter()}

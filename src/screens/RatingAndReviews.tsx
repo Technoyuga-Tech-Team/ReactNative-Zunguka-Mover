@@ -14,6 +14,8 @@ import { selectUserData } from "../store/settings/settings.selectors";
 import { LoadingState, ThemeProps } from "../types/global.types";
 import { MainNavigationProps } from "../types/navigation";
 import RatingList from "../components/Rating/RatingList";
+import { useMeQuery } from "../hooks/useMeQuery";
+import { setUserData } from "../store/settings/settings.slice";
 
 const RatingAndReviews: React.FC<
   MainNavigationProps<Route.navReviewAndRating>
@@ -31,6 +33,16 @@ const RatingAndReviews: React.FC<
   const [totalPage, setTotalPage] = useState(0);
 
   const userData = useSelector(selectUserData);
+
+  const { data: currentUser, refetch } = useMeQuery({
+    staleTime: Infinity,
+  });
+
+  useEffect(() => {
+    if (currentUser?.user) {
+      dispatch(setUserData(currentUser?.user));
+    }
+  }, [currentUser]);
 
   useEffect(() => {
     let unsubscribe = navigation.addListener("focus", async () => {
@@ -78,10 +90,14 @@ const RatingAndReviews: React.FC<
   return (
     <View style={style.container}>
       <CustomHeader title="Your reviews" />
-      <StarWithRate
-        rate={Number(userData?.avg_rate).toFixed(1)}
-        totalRateCount={userData?.total_user_rate}
-      />
+      <View style={{ alignSelf: "center", marginVertical: 20 }}>
+        <StarWithRate
+          rate={Number(userData?.avg_rate).toFixed(1)}
+          totalRateCount={userData?.total_user_rate}
+          starColor={theme?.colors?.primary}
+          textColor={theme?.colors?.black}
+        />
+      </View>
 
       {moverRatingHistoryData?.length > 0 ? (
         <View style={style.listCont1}>
@@ -94,7 +110,7 @@ const RatingAndReviews: React.FC<
       ) : (
         <>
           <NoDataFound
-            title={"No data found!"}
+            title={"No reviews found!"}
             isLoading={loading === LoadingState.CREATE}
           />
         </>

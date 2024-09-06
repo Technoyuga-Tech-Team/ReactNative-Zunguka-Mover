@@ -1,29 +1,35 @@
-import { View, Text } from "react-native";
 import React from "react";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Text, View } from "react-native";
 import { makeStyles, useTheme } from "react-native-elements";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeProps } from "../types/global.types";
-import StarOutlineIcon from "./ui/svg/StarOutlineIcon";
 import StarIcon from "./ui/svg/StarIcon";
 
 interface StarWithRateProps {
   totalRateCount: number;
   rate: string;
+  starColor: string | undefined;
+  textColor: string | undefined;
 }
 
 const StarWithRate: React.FC<StarWithRateProps> = ({
   totalRateCount,
   rate,
+  starColor,
+  textColor,
 }) => {
   const insets = useSafeAreaInsets();
   const style = useStyles({ insets });
   const { theme } = useTheme();
   return (
     <View style={style.innerCont}>
-      <StarIcon color={theme.colors?.white} height={18} width={18} />
+      <StarIcon color={starColor} height={18} width={18} />
 
-      <Text style={[style.txtRating, { marginLeft: 10 }]}>
-        {rate} <Text style={[style.txtRating]}>{`(${totalRateCount})`}</Text>
+      <Text style={[style.txtRating, { marginLeft: 10, color: textColor }]}>
+        {rate}{" "}
+        <Text
+          style={[style.txtRating, { color: textColor }]}
+        >{`(${totalRateCount})`}</Text>
       </Text>
     </View>
   );
@@ -40,6 +46,6 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
   txtRating: {
     fontSize: theme.fontSize?.fs17,
     fontFamily: theme.fontFamily?.bold,
-    color: theme.colors?.white,
+    color: theme.colors?.black,
   },
 }));

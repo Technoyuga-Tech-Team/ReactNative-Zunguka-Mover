@@ -31,6 +31,7 @@ const LightThemeColor = {
   blackTrans: "rgba(0,0,0,0.5)",
   greyed2Color: "#C2C2C2",
   greyed: "#545454",
+  green: "#32BF89",
 };
 const DarkThemeColor = {
   primary: "#F3B241",
@@ -62,6 +63,7 @@ const DarkThemeColor = {
   blackTrans: "rgba(0,0,0,0.5)",
   greyed2Color: "#C2C2C2",
   greyed: "#545454",
+  green: "#32BF89",
 };
 
 export const getTheme = (mode: "light" | "dark" = "dark") => {

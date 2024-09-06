@@ -34,6 +34,7 @@ const DeliveryDetails1: React.FC<
 
   const package_details_id = route.params?.package_details_id;
   const from_mover = route.params?.from == "mover";
+  const from_mover_home = route.params?.fromHome == "home";
 
   const loading = useSelector(selectMoverBookingLoading);
   const isPackageDeliverd = useSelector(getIsPackageDelivered);
@@ -196,21 +197,21 @@ const DeliveryDetails1: React.FC<
             title="Receiver"
             value={deliveryDetailsData?.receiver_name}
             from_mover={false}
-            showblur={from_mover ? true : false}
+            showblur={from_mover && !from_mover_home ? true : false}
           />
           <BorderBottomItem
             title="Pickup point"
             value={deliveryDetailsData?.pickup_point_address}
             from_mover={false}
             numberOfLines={3}
-            showblur={from_mover ? true : false}
+            showblur={from_mover && !from_mover_home ? true : false}
           />
           <BorderBottomItem
             title="Delivery point"
             value={deliveryDetailsData?.delivery_point_address}
             from_mover={false}
             numberOfLines={3}
-            showblur={from_mover ? true : false}
+            showblur={from_mover && !from_mover_home ? true : false}
           />
           <BorderBottomItem
             title="Item name"

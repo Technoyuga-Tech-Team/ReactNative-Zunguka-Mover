@@ -20,4 +20,5 @@ export enum socketEvent {
   MESSAGE_TO_ROOM = "messageToRoom",
   MESSAGE = "message",
   READ_MESSAGE = "read message",
+  REACHED_DESTINATION = "reachedDestination",
 }

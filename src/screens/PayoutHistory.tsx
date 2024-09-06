@@ -63,10 +63,6 @@ const PayoutHistory: React.FC<
     };
   }, []);
 
-  const onRefresh = () => {
-    refetch().then();
-  };
-
   const getStatus = (status: string) => {
     return status == "pending"
       ? theme?.colors?.yellowStar
@@ -127,7 +123,6 @@ const PayoutHistory: React.FC<
                             >
                               {item.status}
                             </Text>
-                            {/* {getStatus(item.status)} */}
                           </TouchableOpacity>
                         </View>
                       </View>

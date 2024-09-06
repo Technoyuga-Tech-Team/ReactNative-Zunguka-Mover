@@ -24,6 +24,7 @@ import { ThemeProps } from "../../types/global.types";
 import { HomeNavigationProps } from "../../types/navigation";
 import Scale from "../../utils/Scale";
 import { setData } from "../../utils/asyncStorage";
+import { logout } from "../../store/authentication/authentication.thunks";
 
 const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
   navigation,
@@ -57,6 +58,7 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
   };
   const onPressLogout = async () => {
     setVisible(false);
+    dispatch(logout());
     await setData(secureStoreKeys.JWT_TOKEN, null);
     await setData(USER_DATA, null);
     navigation.dispatch(
@@ -74,7 +76,9 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
     navigation.navigate(Route.navEditProfile);
   };
   const onPressCardDetails = () => {};
-  const onPressTransactionHistroy = () => {};
+  const onPressTransactionHistroy = () => {
+    navigation.navigate(Route.navTransactionHistory);
+  };
 
   const onPressReviewsAndRating = () => {
     navigation.navigate(Route.navReviewAndRating);
@@ -108,11 +112,11 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
           icon={<ProfileIcon color={theme.colors?.primary} />}
           onPress={onPressMyProfile}
         />
-        <ProfileItem
+        {/* <ProfileItem
           name="Card Details"
           icon={<CreditcardIcon color={theme.colors?.primary} />}
           onPress={onPressCardDetails}
-        />
+        /> */}
         <ProfileItem
           name="Reviews and Rating"
           icon={

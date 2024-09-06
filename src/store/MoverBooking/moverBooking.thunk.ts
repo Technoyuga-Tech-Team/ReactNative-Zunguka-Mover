@@ -299,8 +299,12 @@ export const getMoverRatingHistory = createAsyncThunk<
     const { errors, data } = await dispatch(
       fetchAction<TokenPayload1>(
         {
-          url: `${API.GET_MOVER_RATING_HISTORY}/${limit}/${offset}`,
+          url: `${API.GET_MOVER_RATING_HISTORY}`,
           method: "POST",
+          data: {
+            limit,
+            offset,
+          },
         },
         true
       )

@@ -1,5 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Platform, RefreshControl, StatusBar, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  AppState,
+  Platform,
+  RefreshControl,
+  StatusBar,
+  View,
+} from "react-native";
 import { makeStyles, useTheme } from "react-native-elements";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -26,6 +32,7 @@ import { setUserData } from "../store/settings/settings.slice";
 import { LoadingState, ThemeProps } from "../types/global.types";
 import { MoverHomeNavigationProps } from "../types/navigation";
 import CancelRequestWithReason from "../components/ui/popups/CancelRequestWithReason";
+import { socket, socketEvent } from "../utils/socket";
 
 const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   navigation,
@@ -38,6 +45,8 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   const userData = useSelector(selectUserData);
   const loading = useSelector(selectMoverBookingLoading);
   const notificationCount = useSelector(getNotificationCount);
+
+  const appState = useRef(AppState.currentState);
 
   const [name, setName] = useState(userData?.username);
   const [requestData, setRequestData] = useState<any[]>([]);
@@ -65,6 +74,56 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
       dispatch(setUserData(currentUser?.user));
     }
   }, [currentUser]);
+
+  useEffect(() => {
+    if (currentUser?.user) {
+      socket.connect();
+      const user_id = currentUser?.user?.id;
+      socket.on(socketEvent.CONNECT, () => {
+        console.log(" - - Connected to the server - - ");
+        console.log("connected", socket.connected);
+        console.log("Activate", socket.active);
+        console.log("socket.id", socket.id);
+        console.log("user_id - - - -", user_id);
+        socket.emit("conn", user_id);
+      });
+      dispatch(setUserData(currentUser?.user));
+    }
+  }, [currentUser, socket]);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === "active"
+      ) {
+        refetch().then();
+        console.log("App has come to the foreground!");
+        socket.connect();
+        const user_id = userData?.id;
+        socket.on(socketEvent.CONNECT, () => {
+          console.log("Connected to the server");
+          console.log("connected", socket.connected);
+          console.log("Activate", socket.active);
+          console.log("socket.id", socket.id);
+          console.log("user_id - - - -", user_id);
+          socket.emit("conn", userData?.id);
+        });
+      } else {
+        console.log("disconnected - - - userData?.id", userData?.id);
+        socket.emit("disconnected", userData?.id);
+        socket.emit("offline");
+        socket.disconnect();
+      }
+
+      appState.current = nextAppState;
+      console.log("AppState", appState.current);
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, [socket, userData]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -117,8 +176,7 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   };
 
   const onPressItem = (item: any) => {
-    console.log("item", item);
-    if (item.status === "completed" || item.status === "startjob") {
+    if (item.status === "confirmed" || item.status === "startjob") {
       navigation.navigate(Route.navPackageDetails, {
         package_details_id: item?.id,
         pickupLatLng: {
@@ -132,6 +190,7 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
         canStartJob: item.status === "completed",
         canEndJob: item.status === "startjob",
         buyerSellerId: item.userid,
+        seller_id: item.seller_id,
       });
     } else {
       setSelectedItem(item);
@@ -143,6 +202,7 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
     navigation.navigate(Route.navDeliveryDetails1, {
       package_details_id: item.id,
       from: "mover",
+      fromHome: "home",
     });
   };
 
@@ -162,19 +222,6 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
       if (result.payload.status == 1) {
         getMoverRequestedData();
         togglePopup();
-        // setTimeout(() => {
-        //   navigation.navigate(Route.navPackageDetails, {
-        //     package_details_id: selectedItem?.id,
-        //     pickupLatLng: {
-        //       lat: selectedItem?.pickup_point_lat,
-        //       lng: selectedItem?.pickup_point_lng,
-        //     },
-        //     destinationLatLng: {
-        //       lat: selectedItem?.delivery_point_lat,
-        //       lng: selectedItem?.delivery_point_lng,
-        //     },
-        //   });
-        // }, 1000);
       }
     } else {
       console.log("errror Start job --->", result.payload);

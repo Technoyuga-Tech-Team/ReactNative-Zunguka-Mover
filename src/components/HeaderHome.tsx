@@ -63,6 +63,8 @@ const HeaderHome: React.FC<HeaderHomeProps> = ({
           <StarWithRate
             rate={Number(avgRate).toFixed(1)}
             totalRateCount={totalUserRate}
+            starColor={theme?.colors?.white}
+            textColor={theme?.colors?.white}
           />
         </View>
       </View>
