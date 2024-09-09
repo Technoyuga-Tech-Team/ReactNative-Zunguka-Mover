@@ -35,6 +35,7 @@ const PrevNextCont: React.FC<PrevNextContProps> = ({
         width={(SCREEN_WIDTH - 50) / 2}
         variant="secondary"
         type="outline"
+        borderColor={theme?.colors?.primary}
       />
       <CustomButton
         onPress={onPressNext}

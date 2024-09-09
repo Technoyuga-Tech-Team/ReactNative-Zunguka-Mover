@@ -16,7 +16,7 @@ import { useAppDispatch } from "../hooks/useAppDispatch";
 import { PayoutHistoryItem } from "../types/myEarning.types";
 import { useGetPayoutHistory } from "../hooks/useGetPayoutHistory";
 import CustomHeader from "../components/ui/CustomHeader";
-import { HIT_SLOP, SCREEN_HEIGHT } from "../constant";
+import { HIT_SLOP, RWF, SCREEN_HEIGHT } from "../constant";
 import NoDataFound from "../components/ui/NoDataFound";
 import { ThemeProps } from "../types/global.types";
 
@@ -104,7 +104,7 @@ const PayoutHistory: React.FC<
                     </Text>
                     <View style={style.itemInnerCont}>
                       <Text style={style.txtAmount}>
-                        Requested amount - ${item.amount}
+                        Requested amount - {RWF} {item.amount}
                       </Text>
                       <View
                         style={{ flexDirection: "row", alignItems: "center" }}
@@ -180,7 +180,7 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
     justifyContent: "center",
   },
   itemCont: {
-    backgroundColor: theme.colors?.textSecondary,
+    backgroundColor: theme.colors?.border,
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingVertical: 10,

@@ -1639,7 +1639,7 @@ export const ID_TYPES = [
 ];
 
 export const VEHICLE_TYPE_DATA = [
-  { key: "Car", title: "Car" },
-  { key: "Bicycle", title: "Bicycle" },
-  { key: "Bike", title: "Bike" },
+  { key: "Moto", title: "Moto" },
+  { key: "Cab", title: "Cab" },
+  { key: "tricycle_cargo", title: "Tricycle Cargo" },
 ];

@@ -3,7 +3,7 @@ import React from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { makeStyles, useTheme } from "react-native-elements";
 import { ThemeProps } from "../../types/global.types";
-import { HIT_SLOP2 } from "../../constant";
+import { HIT_SLOP2, RWF } from "../../constant";
 import StarOutlineIcon from "../ui/svg/StarOutlineIcon";
 import moment from "moment";
 
@@ -57,7 +57,9 @@ const PackageItem: React.FC<PackageItemProps> = ({
         <Text style={style.txtDate}>
           {date} • {time}
         </Text>
-        <Text style={style.txtPrice}>${item?.price}</Text>
+        <Text style={style.txtPrice}>
+          {RWF} {item?.price}
+        </Text>
       </View>
       {isReviewPending && isFromMover && isCompleted && (
         <TouchableOpacity

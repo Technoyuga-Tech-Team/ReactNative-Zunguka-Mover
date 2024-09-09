@@ -22,7 +22,12 @@ import {
 import { Route } from "../../constant/navigationConstants";
 import { selectMoverBookingLoading } from "../../store/MoverBooking/moverBooking.selectors";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { GOOGLE_MAP_API_KEY, HIT_SLOP, HIT_SLOP2 } from "../../constant";
+import {
+  GOOGLE_MAP_API_KEY,
+  HIT_SLOP,
+  HIT_SLOP2,
+  secureStoreKeys,
+} from "../../constant";
 import { approveRejectMoverRequeste } from "../../store/MoverBooking/moverBooking.thunk";
 import CustomHeader from "../../components/ui/CustomHeader";
 import ChatFillIcon from "../../components/ui/svg/ChatFillIcon";
@@ -32,6 +37,7 @@ import { LoadingState, ThemeProps } from "../../types/global.types";
 import DeliveryCodeVerificationPopup from "../../components/DeliveryCodeVerificationPopup";
 import Scale from "../../utils/Scale";
 import { socket, socketEvent } from "../../utils/socket";
+import { getData } from "../../utils/asyncStorage";
 
 const PackageDetails: React.FC<
   MainNavigationProps<Route.navPackageDetails>
@@ -55,14 +61,24 @@ const PackageDetails: React.FC<
   const [stopFetchingLocation, setStopFetchingLocation] = useState(true);
   const [showStartBtn, setShowStartBtn] = useState(false);
   const [showEndBtn, setShowEndBtn] = useState(false);
+  const [authToken, setAuthToken] = useState("");
   const [currentLatLng, setCurrentLatLng] = useState({ lat: 0, lng: 0 });
 
   const [canJobStartJob, setCanStartJob] = useState(route?.params?.canStartJob);
   const [canJobEndJob, setCanEndJob] = useState(route?.params?.canEndJob);
+  const [isJobStared, setIsJobStarted] = useState(route?.params?.isJobStarted);
 
   console.log("route?.params?.canEndJob", route?.params?.canEndJob);
   console.log("canJobStartJob", canJobStartJob);
   console.log("canJobEndJob", canJobEndJob);
+
+  useEffect(() => {
+    const init = async () => {
+      const token = await getData(secureStoreKeys.JWT_TOKEN);
+      setAuthToken(token);
+    };
+    init();
+  }, []);
 
   const getDirections = async (startLoc: string, destinationLoc: string) => {
     try {
@@ -249,15 +265,16 @@ const PackageDetails: React.FC<
       ); // Implement distance calculation function
       console.log("end distance", distance);
       setShowEndBtn(distance < 0.09); // Adjust the threshold based on your needs (in meters)
-      if (distance < 0.09 && canJobEndJob) {
+      if (distance < 0.09 && canJobEndJob && isJobStared) {
         console.log("- - - - - - - fire socket event - - - - - -");
         socket.emit(socketEvent.REACHED_DESTINATION, {
           seller_id: sellerId,
           item_id: package_details_id,
+          token: authToken,
         });
       }
     }
-  }, [currentLatLng, coords, showEndBtn, canJobEndJob]);
+  }, [currentLatLng, coords, canJobEndJob]);
 
   const onPressStartJob = async () => {
     try {

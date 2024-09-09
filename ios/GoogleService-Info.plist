@@ -2,18 +2,24 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CLIENT_ID</key>
+	<string>784015034349-7ppqnnl6deeavpnu82o7rh97slj1p6en.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.784015034349-7ppqnnl6deeavpnu82o7rh97slj1p6en</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>784015034349-0e7tivjlpbhe0e5d4voa8osqfnrfngv0.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBMimTBQGmtAX36nLQahSHgy6QXNww65J4</string>
+	<string>AIzaSyAgM458O-thBttpIz07Eao3lD2vY8DWDcw</string>
 	<key>GCM_SENDER_ID</key>
-	<string>180847193334</string>
+	<string>784015034349</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.zunguka-mover</string>
 	<key>PROJECT_ID</key>
-	<string>zunguka-mover</string>
+	<string>zunguka-buyer-seller</string>
 	<key>STORAGE_BUCKET</key>
-	<string>zunguka-mover.appspot.com</string>
+	<string>zunguka-buyer-seller.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:180847193334:ios:8bf6ce72cbd0623e5b90d7</string>
+	<string>1:784015034349:ios:833a26a00102549bcbc9e4</string>
 </dict>
 </plist>

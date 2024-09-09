@@ -25,6 +25,7 @@ import { HomeNavigationProps } from "../../types/navigation";
 import Scale from "../../utils/Scale";
 import { setData } from "../../utils/asyncStorage";
 import { logout } from "../../store/authentication/authentication.thunks";
+import DeleteIcon from "../../components/ui/svg/DeleteIcon";
 
 const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
   navigation,
@@ -38,6 +39,11 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
   console.log("userData", userData);
 
   const [visible, setVisible] = useState(false);
+  const [title1, setTitle1] = useState("");
+  const [title2, setTitle2] = useState("");
+  const [title3, setTitle3] = useState("");
+
+  const [popupType, setPopupType] = useState(1);
 
   const [profilePicture, setProfilePicture] = useState<string>(
     userData?.profile_image
@@ -69,7 +75,21 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
     );
   };
 
+  const deleteAccount = () => {};
+
   const onPressLogoutPopup = () => {
+    setPopupType(1);
+    setTitle1("Log Out?");
+    setTitle2("Are you sure you want to log out from Zunguka?");
+    setTitle3("Yes, Log Out");
+    setVisible(true);
+  };
+  const onPressDeleteAccount = () => {
+    setPopupType(0);
+
+    setTitle1("Delete Account?");
+    setTitle2("Are you sure you want to delete this account?");
+    setTitle3("Yes, Delete");
     setVisible(true);
   };
   const onPressMyProfile = () => {
@@ -142,8 +162,47 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
           icon={<DocslistIcon color={theme.colors?.primary} />}
         />
       </KeyboardAwareScrollView>
-      <View style={{ marginHorizontal: 20 }}>
+      <View
+        style={{
+          marginHorizontal: 20,
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         <CustomButton
+          onPress={onPressDeleteAccount}
+          title={"Delete Account"}
+          buttonWidth="half"
+          width={(SCREEN_WIDTH - 50) / 2}
+          variant="secondary"
+          type="outline"
+          borderColor={theme?.colors?.red}
+          titleStyle={style.txtTitleStyle}
+          icon={
+            <DeleteIcon
+              height={18}
+              width={18}
+              color={theme.colors?.red}
+              style={{ marginRight: 5 }}
+            />
+          }
+        />
+        <CustomButton
+          onPress={onPressLogoutPopup}
+          title={"Logout"}
+          buttonWidth="half"
+          width={(SCREEN_WIDTH - 50) / 2}
+          variant="secondary"
+          type="outline"
+          borderColor={theme?.colors?.red}
+          titleStyle={style.txtTitleStyle}
+          icon={
+            <LogoutIcon color={theme.colors?.red} style={{ marginRight: 5 }} />
+          }
+        />
+
+        {/* <CustomButton
           onPress={onPressLogoutPopup}
           title={"Logout"}
           buttonWidth="full"
@@ -154,12 +213,21 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
           containerStyle={style.btnLogout}
           buttonStyle={style.btnLogout1}
           titleStyle={style.txtTitleStyle}
-        />
+        /> */}
       </View>
       <LogoutPopup
+        title1={title1}
+        title2={title2}
+        title3={title3}
         visiblePopup={visible}
         togglePopup={togglePopup}
-        onPressLogout={onPressLogout}
+        onPressLogout={() => {
+          if (popupType == 1) {
+            onPressLogout();
+          } else {
+            deleteAccount();
+          }
+        }}
       />
     </View>
   );

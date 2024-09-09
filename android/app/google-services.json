@@ -1,26 +1,111 @@
 {
   "project_info": {
-    "project_number": "180847193334",
-    "project_id": "zunguka-mover",
-    "storage_bucket": "zunguka-mover.appspot.com"
+    "project_number": "784015034349",
+    "project_id": "zunguka-buyer-seller",
+    "storage_bucket": "zunguka-buyer-seller.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:180847193334:android:b1ca2767494727895b90d7",
+        "mobilesdk_app_id": "1:784015034349:android:0d8c766537acc4d7cbc9e4",
         "android_client_info": {
-          "package_name": "com.zunguka_mover"
+          "package_name": "com.zunguka"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "784015034349-ba2sb2lj7jr8kumr2hsirgkm9451k5bg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zunguka",
+            "certificate_hash": "485d439dbb6e25d245b282ff090a2cbcd758ba34"
+          }
+        },
+        {
+          "client_id": "784015034349-mf7qjrvch1funfpam1ki0cpjfp6si8lt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zunguka",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "784015034349-k2l1hu4gt38f1qdmcefo0rtlc0kl9ih1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyCDf3wXRa14MIm9RhtuNfwB-020HmAZUG4"
+          "current_key": "AIzaSyCZw7rXKl8lCKOGT_t8LCj17HekUQJgiBA"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "784015034349-k2l1hu4gt38f1qdmcefo0rtlc0kl9ih1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "784015034349-gmj7u4fl5b5avm6kthtpre007fi2ndcv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.zunguka"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:784015034349:android:b13d751c935e1c73cbc9e4",
+        "android_client_info": {
+          "package_name": "com.zunguka_mover"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "784015034349-0e7tivjlpbhe0e5d4voa8osqfnrfngv0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zunguka_mover",
+            "certificate_hash": "ae8690aac35adb104e59be16169dc25a6a5e254f"
+          }
+        },
+        {
+          "client_id": "784015034349-a08eberrol079hh035644aod1nt4t8ra.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zunguka_mover",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "784015034349-k2l1hu4gt38f1qdmcefo0rtlc0kl9ih1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZw7rXKl8lCKOGT_t8LCj17HekUQJgiBA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "784015034349-k2l1hu4gt38f1qdmcefo0rtlc0kl9ih1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "784015034349-gmj7u4fl5b5avm6kthtpre007fi2ndcv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.zunguka"
+              }
+            }
+          ]
         }
       }
     }

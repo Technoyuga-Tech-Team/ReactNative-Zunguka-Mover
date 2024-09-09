@@ -144,9 +144,9 @@ const DeliveryDetails1: React.FC<
       : status === "startjob"
       ? "Ongoing Job"
       : status === "completed"
-      ? "Start This Job"
+      ? "Reached at delivery location"
       : status === "confirmed"
-      ? "Waiting For Payment"
+      ? "Start job"
       : status;
   };
 

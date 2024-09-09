@@ -18,7 +18,7 @@ import { setSuccess } from "../store/global/global.slice";
 import CustomHeader from "../components/ui/CustomHeader";
 import CustomButton from "../components/ui/CustomButton";
 import { LoadingState, ThemeProps } from "../types/global.types";
-import { SCREEN_HEIGHT } from "../constant";
+import { RWF, SCREEN_HEIGHT } from "../constant";
 
 const Withdraw: React.FC<MainNavigationProps<Route.navWithdraw>> = ({
   navigation,
@@ -80,7 +80,9 @@ const Withdraw: React.FC<MainNavigationProps<Route.navWithdraw>> = ({
               marginTop: 50,
             }}
           >
-            <Text style={style.txtTotEarning}>${totalEarning}</Text>
+            <Text style={style.txtTotEarning}>
+              {RWF} {totalEarning}
+            </Text>
             <Text style={style.txtBalance}>Available Balance</Text>
           </View>
           <View

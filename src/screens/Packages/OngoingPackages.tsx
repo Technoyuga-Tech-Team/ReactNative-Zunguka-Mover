@@ -56,8 +56,25 @@ const OngoingPackages: React.FC<
     }
   };
 
-  const onPressItem = () => {
-    navigation.navigate(Route.navPackageDetails);
+  const onPressItem = (item: any) => {
+    console.log("item", item);
+    // navigation.navigate(Route.navPackageDetails);
+    navigation.navigate(Route.navPackageDetails, {
+      package_details_id: item?.id,
+      pickupLatLng: {
+        lat: item.pickup_point_lat,
+        lng: item.pickup_point_lng,
+      },
+      destinationLatLng: {
+        lat: item.delivery_point_lat,
+        lng: item.delivery_point_lng,
+      },
+      isJobStarted: item.status === "completed",
+      canStartJob: item.status === "confirmed",
+      canEndJob: item.status === "startjob" || item.status === "completed",
+      buyerSellerId: item.userid,
+      seller_id: item.seller_id,
+    });
   };
 
   const onEndReached = () => {

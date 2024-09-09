@@ -53,6 +53,7 @@ export type AppRoutes = {
     pickupLatLng: { lat: number; lng: number };
     destinationLatLng: { lat: number; lng: number };
     canStartJob: boolean;
+    isJobStarted: boolean;
     canEndJob: boolean;
     buyerSellerId: string;
     seller_id: string;
@@ -75,6 +76,7 @@ export type MoverRoute = {
     pickupLatLng: { lat: number; lng: number };
     destinationLatLng: { lat: number; lng: number };
     canStartJob: boolean;
+    isJobStarted: boolean;
     canEndJob: boolean;
     buyerSellerId: string;
     seller_id: string;
@@ -176,7 +178,16 @@ export type HomeRoutes = {
   HomeMover: undefined;
   Earnings: undefined;
   ReviewAndRating: undefined;
-  PackageDetails: undefined;
+  PackageDetails: {
+    package_details_id: string;
+    pickupLatLng: { lat: number; lng: number };
+    destinationLatLng: { lat: number; lng: number };
+    canStartJob: boolean;
+    isJobStarted: boolean;
+    canEndJob: boolean;
+    buyerSellerId: string;
+    seller_id: string;
+  };
   DeliveryDetails: undefined;
   DeliveryDetails1: { package_details_id: string; from?: string };
   Withdraw: { earning: string };

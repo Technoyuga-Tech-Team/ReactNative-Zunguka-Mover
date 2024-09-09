@@ -57,7 +57,7 @@ const UpcommingPackages: React.FC<
   };
 
   const onPressItem = () => {
-    navigation.navigate(Route.navPackageDetails);
+    // navigation.navigate(Route.navPackageDetails);
   };
 
   const onEndReached = () => {

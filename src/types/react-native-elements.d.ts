@@ -37,6 +37,7 @@ declare module "react-native-elements/dist/config/colors" {
     greyed2Color: string;
     greyed: string;
     green: string;
+    textInBgColor: string;
   }
 }
 

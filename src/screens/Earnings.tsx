@@ -17,7 +17,7 @@ import { selectMyEarningLoading } from "../store/MyEarning/myEarning.selector";
 import { getMyEarnings } from "../store/MyEarning/myEarning.thunk";
 import { LoadingState, ThemeProps } from "../types/global.types";
 import Loading from "../components/ui/Loading";
-import { HIT_SLOP2, SCREEN_HEIGHT, SCREEN_WIDTH } from "../constant";
+import { HIT_SLOP2, RWF, SCREEN_HEIGHT, SCREEN_WIDTH } from "../constant";
 import PayoutHistory from "../components/ui/svg/PayoutHistory";
 import CustomButton from "../components/ui/CustomButton";
 import BarChartList from "../components/ui/Chart/BarChartList";
@@ -227,7 +227,7 @@ const Earnings: React.FC<MoverHomeNavigationProps<Route.navEarnings>> = ({
           alignItems: "center",
           justifyContent: "space-between",
           paddingHorizontal: 20,
-          marginTop: 20,
+          marginTop: 50,
         }}
       >
         <PayoutHistory
@@ -248,7 +248,7 @@ const Earnings: React.FC<MoverHomeNavigationProps<Route.navEarnings>> = ({
         <View style={style.firstInnerCont}>
           <View>
             <Text style={style.txtEarning}>
-              ${parseFloat(`${totalPageBalance}`).toFixed(2)}
+              {RWF} {parseFloat(`${totalPageBalance}`).toFixed(2)}
             </Text>
             <Text style={style.txtBalance}>Balance</Text>
           </View>

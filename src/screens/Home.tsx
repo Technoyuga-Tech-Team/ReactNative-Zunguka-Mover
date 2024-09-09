@@ -176,7 +176,12 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   };
 
   const onPressItem = (item: any) => {
-    if (item.status === "confirmed" || item.status === "startjob") {
+    console.log("status - - ", item.status);
+    if (
+      item.status === "confirmed" ||
+      item.status === "startjob" ||
+      item.status === "completed"
+    ) {
       navigation.navigate(Route.navPackageDetails, {
         package_details_id: item?.id,
         pickupLatLng: {
@@ -187,8 +192,9 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
           lat: item.delivery_point_lat,
           lng: item.delivery_point_lng,
         },
-        canStartJob: item.status === "completed",
-        canEndJob: item.status === "startjob",
+        isJobStarted: item.status === "startjob",
+        canStartJob: item.status === "confirmed",
+        canEndJob: item.status === "startjob" || item.status === "completed",
         buyerSellerId: item.userid,
         seller_id: item.seller_id,
       });

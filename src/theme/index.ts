@@ -32,6 +32,7 @@ const LightThemeColor = {
   greyed2Color: "#C2C2C2",
   greyed: "#545454",
   green: "#32BF89",
+  textInBgColor: "#FFFFFF1A",
 };
 const DarkThemeColor = {
   primary: "#F3B241",
@@ -64,6 +65,7 @@ const DarkThemeColor = {
   greyed2Color: "#C2C2C2",
   greyed: "#545454",
   green: "#32BF89",
+  textInBgColor: "#FFFFFF1A",
 };
 
 export const getTheme = (mode: "light" | "dark" = "dark") => {

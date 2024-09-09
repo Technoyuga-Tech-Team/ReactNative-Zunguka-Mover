@@ -1,25 +1,25 @@
 import React from "react";
-import {
-  Modal,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
+import { Modal, Text, TouchableOpacity, View } from "react-native";
 import { makeStyles, useTheme } from "react-native-elements";
+import { SCREEN_WIDTH } from "../../../constant";
 import CustomButton from "../CustomButton";
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../constant";
 
 interface LogoutPopupProps {
   visiblePopup: boolean;
   togglePopup: () => void;
   onPressLogout: () => void;
+  title1: string;
+  title2: string;
+  title3: string;
 }
 
 const LogoutPopup: React.FC<LogoutPopupProps> = ({
   visiblePopup,
   togglePopup,
   onPressLogout,
+  title1,
+  title2,
+  title3,
 }) => {
   const style = useStyle();
   const { theme } = useTheme();
@@ -40,14 +40,12 @@ const LogoutPopup: React.FC<LogoutPopupProps> = ({
       ></TouchableOpacity>
       <View style={style.container1}>
         <View style={style.innerCont}>
-          <Text style={style.txtLoginToZunguka}>Log Out?</Text>
-          <Text style={style.txtLoginToZunguka1}>
-            Are you sure you want to log out from Zunguka?
-          </Text>
+          <Text style={style.txtLoginToZunguka}>{title1}</Text>
+          <Text style={style.txtLoginToZunguka1}>{title2}</Text>
           <View style={style.buttonCont}>
             <CustomButton
               onPress={onPressLogout}
-              title={"Yes, Log Out"}
+              title={title3}
               buttonWidth="half"
               width={SCREEN_WIDTH - 100}
               variant="primary"

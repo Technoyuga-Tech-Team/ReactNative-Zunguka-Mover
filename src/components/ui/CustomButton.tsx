@@ -20,6 +20,7 @@ interface CustomButtonProps extends RNEButtonProps {
   width?: number;
   marginTop?: number;
   backgroundColor?: string;
+  borderColor?: string;
 }
 
 const CustomButton: React.FC<CustomButtonProps> = (props) => {
@@ -36,6 +37,7 @@ const CustomButton: React.FC<CustomButtonProps> = (props) => {
     width,
     marginTop,
     backgroundColor,
+    borderColor,
     ...otherProps
   } = props;
   const styles = useStyles(props);
@@ -69,14 +71,22 @@ const CustomButton: React.FC<CustomButtonProps> = (props) => {
               variant === "primary" && type !== "outline"
                 ? backgroundColor
                 : theme?.colors?.transparent,
+            borderColor:
+              variant === "secondary" && type == "outline"
+                ? borderColor || theme?.colors?.primary
+                : theme?.colors?.transparent,
+            borderWidth: variant === "secondary" && type == "outline" ? 1 : 0,
           },
         ]}
         titleStyle={[
           variant === "primary" ? styles.primaryTitle : styles.secondaryTitle,
           titleStyle,
           type === "outline" &&
-            variant === "secondary" &&
-            styles.txtSecondaryOutline,
+            variant === "secondary" && {
+              color: borderColor || theme?.colors?.primary,
+              fontFamily: theme.fontFamily?.medium,
+              fontSize: theme.fontSize?.fs16,
+            },
         ]}
         icon={icon}
         // eslint-disable-next-line react/jsx-props-no-spreading
