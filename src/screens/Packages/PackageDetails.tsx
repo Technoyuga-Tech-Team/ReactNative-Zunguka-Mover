@@ -51,6 +51,7 @@ const PackageDetails: React.FC<
   const pickup_lat_lng = route?.params?.pickupLatLng;
   const buyerSellerId = route?.params?.buyerSellerId;
   const sellerId = route?.params?.seller_id;
+  const product_id = route?.params?.product_id;
 
   const loading = useSelector(selectMoverBookingLoading);
   const dispatch = useAppDispatch();
@@ -288,6 +289,7 @@ const PackageDetails: React.FC<
         if (result.payload.status == 1) {
           console.log("data Start job --->", result.payload);
           setCanEndJob(true);
+          setIsJobStarted(true);
         }
       } else {
         console.log("errror Start job --->", result.payload);
@@ -300,7 +302,7 @@ const PackageDetails: React.FC<
   const onPressMessage = () => {
     navigation.navigate(Route.navChatroom, {
       receiver_id: buyerSellerId,
-      product_id: "",
+      product_id: product_id,
     });
   };
 

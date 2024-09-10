@@ -26,6 +26,7 @@ import Scale from "../../utils/Scale";
 import { setData } from "../../utils/asyncStorage";
 import { logout } from "../../store/authentication/authentication.thunks";
 import DeleteIcon from "../../components/ui/svg/DeleteIcon";
+import ChatIcon from "../../components/ui/svg/ChatIcon";
 
 const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
   navigation,
@@ -95,7 +96,9 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
   const onPressMyProfile = () => {
     navigation.navigate(Route.navEditProfile);
   };
-  const onPressCardDetails = () => {};
+  const onPressMessages = () => {
+    navigation.navigate(Route.navMessaging);
+  };
   const onPressTransactionHistroy = () => {
     navigation.navigate(Route.navTransactionHistory);
   };
@@ -131,6 +134,11 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
           name="My Profile"
           icon={<ProfileIcon color={theme.colors?.primary} />}
           onPress={onPressMyProfile}
+        />
+        <ProfileItem
+          name="Masseges"
+          icon={<ChatIcon color={theme.colors?.primary} />}
+          onPress={onPressMessages}
         />
         {/* <ProfileItem
           name="Card Details"
@@ -168,6 +176,7 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
+          paddingTop: 10,
         }}
       >
         <CustomButton
@@ -240,7 +249,7 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
     flex: 1,
     backgroundColor: theme.colors?.background,
     paddingTop: props.insets.top,
-    paddingBottom: 100,
+    paddingBottom: props.insets.bottom + 80,
   },
   scrollCont: {
     flexGrow: 1,

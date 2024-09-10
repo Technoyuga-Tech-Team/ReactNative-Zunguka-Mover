@@ -52,6 +52,7 @@ export type AppRoutes = {
     package_details_id: string;
     pickupLatLng: { lat: number; lng: number };
     destinationLatLng: { lat: number; lng: number };
+    product_id?: string;
     canStartJob: boolean;
     isJobStarted: boolean;
     canEndJob: boolean;
@@ -76,6 +77,7 @@ export type MoverRoute = {
     pickupLatLng: { lat: number; lng: number };
     destinationLatLng: { lat: number; lng: number };
     canStartJob: boolean;
+    product_id?: string;
     isJobStarted: boolean;
     canEndJob: boolean;
     buyerSellerId: string;
@@ -182,6 +184,7 @@ export type HomeRoutes = {
     package_details_id: string;
     pickupLatLng: { lat: number; lng: number };
     destinationLatLng: { lat: number; lng: number };
+    product_id?: string;
     canStartJob: boolean;
     isJobStarted: boolean;
     canEndJob: boolean;

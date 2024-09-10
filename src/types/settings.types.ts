@@ -8,4 +8,5 @@ export interface SettingsStateProps {
   notificationCount: number;
   isNewPackageDelivered: number;
   moverInfo: UserData;
+  moverRequestData: any[];
 }

@@ -26,6 +26,7 @@ import {
 } from "../store/MoverBooking/moverBooking.thunk";
 import {
   getNotificationCount,
+  selectMoverRequestData,
   selectUserData,
 } from "../store/settings/settings.selectors";
 import { setUserData } from "../store/settings/settings.slice";
@@ -42,6 +43,7 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   const { theme } = useTheme();
   const dispatch = useAppDispatch();
 
+  const moverRequestData = useSelector(selectMoverRequestData);
   const userData = useSelector(selectUserData);
   const loading = useSelector(selectMoverBookingLoading);
   const notificationCount = useSelector(getNotificationCount);
@@ -92,6 +94,12 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   }, [currentUser, socket]);
 
   useEffect(() => {
+    if (moverRequestData?.length > 0) {
+      setRequestData(moverRequestData);
+    }
+  }, [moverRequestData]);
+
+  useEffect(() => {
     const subscription = AppState.addEventListener("change", (nextAppState) => {
       if (
         appState.current.match(/inactive|background/) &&
@@ -125,16 +133,16 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
     };
   }, [socket, userData]);
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      StatusBar.setBarStyle("dark-content");
-      Platform.OS === "android" && StatusBar.setTranslucent(true);
-      Platform.OS === "android" && StatusBar.setBackgroundColor("transparent");
-    });
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener("focus", () => {
+  //     StatusBar.setBarStyle("dark-content");
+  //     Platform.OS === "android" && StatusBar.setTranslucent(true);
+  //     Platform.OS === "android" && StatusBar.setBackgroundColor("transparent");
+  //   });
+  //   return () => {
+  //     unsubscribe();
+  //   };
+  // }, []);
 
   useEffect(() => {
     let unsubscribe = navigation.addListener("focus", async () => {
@@ -176,7 +184,6 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   };
 
   const onPressItem = (item: any) => {
-    console.log("status - - ", item.status);
     if (
       item.status === "confirmed" ||
       item.status === "startjob" ||
@@ -192,6 +199,7 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
           lat: item.delivery_point_lat,
           lng: item.delivery_point_lng,
         },
+        product_id: item.product_id,
         isJobStarted: item.status === "startjob",
         canStartJob: item.status === "confirmed",
         canEndJob: item.status === "startjob" || item.status === "completed",
@@ -306,6 +314,11 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
 
   return (
     <View style={style.container}>
+      <StatusBar
+        translucent
+        backgroundColor={theme.colors?.primary}
+        barStyle={"dark-content"}
+      />
       <HeaderHome
         name={name}
         onPressNotification={onPressNotification}

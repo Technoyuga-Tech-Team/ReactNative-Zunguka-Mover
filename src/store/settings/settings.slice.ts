@@ -146,6 +146,7 @@ const initialState: SettingsStateProps = {
   address: "",
   notificationCount: 0,
   isNewPackageDelivered: 0,
+  moverRequestData: [],
 };
 
 const settings = createSlice({
@@ -176,6 +177,9 @@ const settings = createSlice({
     setMoverInfo: (state, action: PayloadAction<UserData>) => {
       state.moverInfo = action.payload;
     },
+    setMoverRequestList: (state, action: PayloadAction<any[]>) => {
+      state.moverRequestData = action.payload;
+    },
   },
 });
 
@@ -187,6 +191,7 @@ export const {
   setSaveNotificationCount,
   setIsNewPackageDeliverd,
   setMoverInfo,
+  setMoverRequestList,
 } = settings.actions;
 
 export default settings.reducer;

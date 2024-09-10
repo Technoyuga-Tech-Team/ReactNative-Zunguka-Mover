@@ -36,3 +36,8 @@ export const selectMoverInfo = createSelector(
   [selectSettings],
   (settings) => settings.moverInfo
 );
+
+export const selectMoverRequestData = createSelector(
+  [selectSettings],
+  (settings) => settings.moverRequestData
+);

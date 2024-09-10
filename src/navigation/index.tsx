@@ -19,12 +19,18 @@ import Snackbar from "react-native-snackbar";
 import { clearErrors, clearSuccess } from "../store/global/global.slice";
 import {
   setErrorFromSocial,
+  setMoverRequestList,
   setSaveNotificationCount,
 } from "../store/settings/settings.slice";
-import notifee, { AuthorizationStatus } from "@notifee/react-native";
+import notifee, {
+  AuthorizationStatus,
+  Notification,
+} from "@notifee/react-native";
 import messaging, {
   FirebaseMessagingTypes,
 } from "@react-native-firebase/messaging";
+import { Route } from "../constant/navigationConstants";
+import { moverRequestedDetails } from "../store/MoverBooking/moverBooking.thunk";
 
 const linking: LinkingOptions<{}> = {
   prefixes: [`http://${BASE_PORT}/`, `zunguka://`],
@@ -144,23 +150,31 @@ const MainNavigator = () => {
   };
 
   const handleClickedNotitfaction = (
-    notification: FirebaseMessagingTypes.RemoteMessage
+    notification: FirebaseMessagingTypes.RemoteMessage | Notification
   ): void => {
-    // if (notification && notification.data && notification.data.type) {
-    //   switch (notification.data.type) {
-    //     case "Product":
-    //       // set default type wise
-    //       break;
-    //     case "Category":
-    //       // set default type wise
-    //       break;
-    //     case "Brand":
-    //       // set default type wise
-    //       break;
-    //     default:
-    //     // set default notification
-    //   }
-    // }
+    if (notification && notification.data && notification.data.type) {
+      switch (notification.data.type) {
+        case "new_message":
+          const user = notification.data.user as string;
+          let data = JSON.parse(user);
+          let product_id = notification?.data?.chat_ref_id;
+          // @ts-ignore
+          navigationRef.navigate(Route.navChatroom, {
+            receiver_id: data?.id,
+            product_id: product_id,
+          });
+          break;
+        case "Category":
+          // set default type wise
+          break;
+        case "Brand":
+          // set default type wise
+          break;
+        default:
+          null;
+        // set default notification
+      }
+    }
   };
 
   notifee.onBackgroundEvent(async (localMessage) => {
@@ -168,11 +182,28 @@ const MainNavigator = () => {
       "notifee setBackgroundMessageHandler localMessage",
       JSON.stringify(localMessage)
     );
+    handleClickedNotitfaction(localMessage.detail.notification);
   });
 
   const onNotifeeMessageReceived = async (message: any) => {
     console.log("message - - - ", message);
     dispatch(setSaveNotificationCount(notificationCount + 1));
+    if (message?.data?.type === "nearby_request") {
+      const result = await dispatch(
+        moverRequestedDetails({
+          status: "all",
+        })
+      );
+      if (moverRequestedDetails.fulfilled.match(result)) {
+        console.log("data moverRequestedDetails --->", result.payload);
+        if (result.payload.status == 1) {
+          dispatch(setMoverRequestList(result.payload.data));
+          // setRequestData(result.payload.data);
+        }
+      } else {
+        console.log("errror moverRequestedDetails --->", result.payload);
+      }
+    }
 
     const channelId = await notifee.createChannel({
       id: "default",
@@ -185,6 +216,7 @@ const MainNavigator = () => {
       data: message.data,
       android: {
         channelId: channelId,
+        sound: "default",
         pressAction: {
           id: "default",
         },
