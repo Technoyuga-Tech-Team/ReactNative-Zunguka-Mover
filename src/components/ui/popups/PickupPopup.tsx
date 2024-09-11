@@ -61,6 +61,7 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
   const mapRef = useRef<MapView>(null);
   const dispatch = useAppDispatch();
 
+  const [distance, setDistance] = useState<string>("");
   const [coords, setCoords] = useState<LatLng[]>([]);
   const [loader, setLoader] = useState<boolean>(false);
   const [deliveryDetailsData, setDeliveryDetailsData] =
@@ -72,9 +73,49 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
   const delivery_point_lat = parseFloat(selectedItem?.delivery_point_lat) || 0;
   const delivery_point_lng = parseFloat(selectedItem?.delivery_point_lng) || 0;
 
+  const calculateDistance = (
+    currentLatitude: number,
+    currentLongitude: number,
+    destinationLatitude: number,
+    destinationLongitude: number
+  ) => {
+    var R = 6371; // km
+    var dLat = toRad(destinationLatitude - currentLatitude);
+    var dLon = toRad(destinationLongitude - currentLongitude);
+    var lat1 = toRad(currentLatitude);
+    var lat2 = toRad(destinationLatitude);
+
+    var a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c;
+    return d;
+  };
+
+  function toRad(Value: number) {
+    return (Value * Math.PI) / 180;
+  }
+
   useEffect(() => {
     getPackageDetails();
   }, [selectedItem]);
+
+  useEffect(() => {
+    let distance = calculateDistance(
+      pickup_point_lat,
+      pickup_point_lng,
+      delivery_point_lat,
+      delivery_point_lng
+    );
+    setDistance(`${distance.toFixed(2)}`);
+    console.log("distance - - - ", distance);
+  }, [
+    pickup_point_lat,
+    pickup_point_lng,
+    delivery_point_lat,
+    delivery_point_lng,
+  ]);
 
   const getPackageDetails = async () => {
     setLoader(true);
@@ -328,6 +369,13 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
                   <BorderBottomItem
                     title="Time"
                     value={deliveryDetailsData?.package_delivery_time}
+                    from_mover={false}
+                  />
+                )}
+                {distance !== "" && (
+                  <BorderBottomItem
+                    title="distance"
+                    value={`${distance} KM`}
                     from_mover={false}
                   />
                 )}

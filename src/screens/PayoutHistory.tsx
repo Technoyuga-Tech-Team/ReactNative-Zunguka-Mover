@@ -67,7 +67,7 @@ const PayoutHistory: React.FC<
     return status == "pending"
       ? theme?.colors?.yellowStar
       : status == "completed"
-      ? theme?.colors?.primary
+      ? theme?.colors?.green
       : theme?.colors?.pinkDark;
   };
 
@@ -192,17 +192,17 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
     justifyContent: "space-between",
   },
   txtDate: {
-    fontSize: theme.fontSize?.fs14,
+    fontSize: theme.fontSize?.fs12,
     fontFamily: theme.fontFamily?.regular,
     color: theme.colors?.black,
   },
   txtAmount: {
-    fontSize: theme.fontSize?.fs16,
+    fontSize: theme.fontSize?.fs13,
     fontFamily: theme.fontFamily?.regular,
     color: theme.colors?.black,
   },
   txtStatus: {
-    fontSize: theme.fontSize?.fs14,
+    fontSize: theme.fontSize?.fs13,
     fontFamily: theme.fontFamily?.regular,
     color: theme.colors?.secondaryText,
     textTransform: "capitalize",

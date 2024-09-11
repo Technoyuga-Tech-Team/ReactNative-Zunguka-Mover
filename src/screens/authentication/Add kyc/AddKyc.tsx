@@ -54,6 +54,11 @@ const AddKyc: React.FC<AuthNavigationProps<Route.navAddKyc>> = ({
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    // @ts-ignore
+    setCountry({ key: "RW", title: "Rwanda" });
+  }, []);
+
+  useEffect(() => {
     if (selectedImageForDelete !== "") {
       const filterArr = image.filter((ele) => {
         return ele.name !== selectedImageForDelete;

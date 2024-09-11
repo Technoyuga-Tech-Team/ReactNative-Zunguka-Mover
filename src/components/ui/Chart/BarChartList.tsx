@@ -129,7 +129,7 @@ const BarChartList: React.FC<BarChartListProps> = ({
               backgroundGradientTo: theme.colors?.white,
               decimalPlaces: 0,
               color: () => theme.colors?.primary,
-              labelColor: () => "#5E8274",
+              labelColor: () => theme.colors?.primary,
               barPercentage: 0.7,
               propsForLabels: {
                 fontSize: theme.fontSize?.fs10,
