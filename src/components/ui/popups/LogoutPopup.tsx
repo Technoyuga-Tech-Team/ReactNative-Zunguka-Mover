@@ -11,6 +11,7 @@ interface LogoutPopupProps {
   title1: string;
   title2: string;
   title3: string;
+  loading?: boolean;
 }
 
 const LogoutPopup: React.FC<LogoutPopupProps> = ({
@@ -20,6 +21,7 @@ const LogoutPopup: React.FC<LogoutPopupProps> = ({
   title1,
   title2,
   title3,
+  loading,
 }) => {
   const style = useStyle();
   const { theme } = useTheme();
@@ -45,6 +47,8 @@ const LogoutPopup: React.FC<LogoutPopupProps> = ({
           <View style={style.buttonCont}>
             <CustomButton
               onPress={onPressLogout}
+              disabled={loading}
+              loading={loading}
               title={title3}
               buttonWidth="half"
               width={SCREEN_WIDTH - 100}

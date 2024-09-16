@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
+  Alert,
   AppState,
+  PermissionsAndroid,
   Platform,
   RefreshControl,
   StatusBar,
@@ -34,6 +36,10 @@ import { LoadingState, ThemeProps } from "../types/global.types";
 import { MoverHomeNavigationProps } from "../types/navigation";
 import CancelRequestWithReason from "../components/ui/popups/CancelRequestWithReason";
 import { socket, socketEvent } from "../utils/socket";
+import notifee, {
+  AuthorizationStatus,
+  Notification,
+} from "@notifee/react-native";
 
 const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   navigation,
@@ -61,6 +67,37 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   const { data: currentUser, refetch } = useMeQuery({
     staleTime: Infinity,
   });
+
+  useEffect(() => {
+    async function checkNotificationPermission() {
+      const settings = await notifee.getNotificationSettings();
+      if (settings.authorizationStatus == AuthorizationStatus.AUTHORIZED) {
+        console.log("Notification permissions has been authorized");
+      } else if (settings.authorizationStatus == AuthorizationStatus.DENIED) {
+        console.log("Notification permissions has been denied");
+        requestUserPermission();
+      }
+    }
+
+    checkNotificationPermission().then();
+  }, []);
+
+  const requestUserPermission = async () => {
+    if (Platform.OS === "ios") {
+      const settings = await notifee.requestPermission();
+
+      if (settings.authorizationStatus >= AuthorizationStatus.AUTHORIZED) {
+        console.log("Permission settings:", settings);
+      } else {
+        console.log("User declined permissions");
+        await notifee.requestPermission();
+      }
+    } else {
+      PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+      );
+    }
+  };
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -354,21 +391,50 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
           />
         )}
       </KeyboardAwareScrollView>
-      <PickupPopup
-        visiblePopup={visible}
-        togglePopup={togglePopup}
-        selectedItem={selectedItem}
-        loading={loading}
-        onPressConfirmPickup={onPressConfirmPickup}
-        onPressReject={onPressRejectRequest}
-        onPressStartJob={onPressStartJob}
-        onPressEndJob={onPressEndJob}
-      />
+      {visible && (
+        <PickupPopup
+          visiblePopup={visible}
+          togglePopup={togglePopup}
+          selectedItem={selectedItem}
+          loading={loading}
+          onPressConfirmPickup={() => {
+            Alert.alert(
+              "Confirm Pickup",
+              "Are you sure you want to confirm this job?",
+              [
+                {
+                  text: "Cancel",
+                  onPress: () => console.log("Cancel Pressed"),
+                },
+                {
+                  text: "Yes",
+                  onPress: () => onPressConfirmPickup(),
+                },
+              ]
+            );
+          }}
+          onPressReject={onPressRejectRequest}
+          // onPressStartJob={() => {
+          //   Alert.alert("Accept job", "Are you sure you want to Confirm job?", [
+          //     {
+          //       text: "Cancel",
+          //       onPress: () => console.log("Cancel Pressed"),
+          //     },
+          //     {
+          //       text: "Yes",
+          //       onPress: () => onPressStartJob(),
+          //     },
+          //   ]);
+          // }}
+          // onPressEndJob={onPressEndJob}
+        />
+      )}
       <DeliveryCodeVerificationPopup
         visiblePopup={visibleCodeVerification}
         togglePopup={toggleDevliveryCodePopup}
         package_details_id={selectedItem?.id}
         isLoading={loading === LoadingState.CREATE}
+        jobType={""}
       />
       <PickupAcceptedPopup
         visiblePopup={visibleAcceptedPopup}

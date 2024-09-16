@@ -1,3 +1,4 @@
+import moment from "moment";
 import { Share } from "react-native";
 import * as Yup from "yup";
 
@@ -168,6 +169,40 @@ const hasPhone = (text: string) => {
   }
 };
 
+const calculateDistanceWithTime = (
+  origin: { latitude: number; longitude: number },
+  destination: { latitude: number; longitude: number }
+) => {
+  // Convert latitude and longitude to radians
+  const lat1Rad = (origin.latitude * Math.PI) / 180;
+  const lon1Rad = (origin.longitude * Math.PI) / 180;
+  const lat2Rad = (destination.latitude * Math.PI) / 180;
+  const lon2Rad = (destination.longitude * Math.PI) / 180;
+
+  // Calculate Haversine formula
+  const dLat = lat2Rad - lat1Rad;
+  const dLon = lon2Rad - lon1Rad;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1Rad) *
+      Math.cos(lat2Rad) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  // Earth's radius in meters
+  const earthRadius = 6371000;
+
+  // Calculate distance in meters
+  const distanceMeters = c * earthRadius;
+  // Convert to desired time unit (e.g., hours, minutes) based on speed (assume a constant speed)
+  const speed = 50; // Example: 50 km/h
+  const timeInSeconds = distanceMeters / (speed * 1000); // Convert km/h to m/s
+  const milliseconds = timeInSeconds * 1000;
+  const minutes = moment.duration(milliseconds, "milliseconds").asMinutes();
+
+  return minutes; // Or convert to hours, etc., as needed
+};
+
 export {
   CreditDebitCardNumber,
   createArrayUseNumber,
@@ -180,4 +215,5 @@ export {
   getRandomFileName,
   hasEmail,
   hasPhone,
+  calculateDistanceWithTime,
 };

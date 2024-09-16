@@ -31,6 +31,7 @@ import PrevNextCont from "../../../components/PrevNextCont";
 import ImagePickerPopup from "../../../components/ui/ImagePickerPopup";
 import Scale from "../../../utils/Scale";
 import { UserRoleType } from "../../../types/user.types";
+import { notifyMessage } from "../../../utils/notifyMessage";
 
 const SetupProfile4: React.FC<AuthNavigationProps<Route.navSetupProfile4>> = ({
   navigation,
@@ -93,7 +94,11 @@ const SetupProfile4: React.FC<AuthNavigationProps<Route.navSetupProfile4>> = ({
   };
 
   const onPressUploadImages = () => {
-    setVisible(true);
+    if (image.length < 1) {
+      setVisible(true);
+    } else {
+      notifyMessage("Photos should not be greater then one");
+    }
   };
 
   const onPressFromCamera = async () => {
@@ -113,8 +118,12 @@ const SetupProfile4: React.FC<AuthNavigationProps<Route.navSetupProfile4>> = ({
   const openPickerCameraImage = async () => {
     try {
       const imageObject = await getImageFromCamera();
-      setSelectedImage([...selectedImage, imageObject.uri]);
-      setImage([...image, imageObject]);
+      if (image.length < 1) {
+        setSelectedImage([...selectedImage, imageObject.uri]);
+        setImage([...image, imageObject]);
+      } else {
+        notifyMessage("Photos should not be greater then one");
+      }
     } catch (error) {
       // Handle errors here if needed (e.g., display a user-friendly message)
       console.error("Error using getImageFromCamera:", error);
@@ -126,11 +135,15 @@ const SetupProfile4: React.FC<AuthNavigationProps<Route.navSetupProfile4>> = ({
     setTimeout(async () => {
       try {
         const imageObject = await getImageFromGallary({ multiple: true });
-        setSelectedImage([
-          ...selectedImage,
-          ...imageObject.map((image: { uri: any }) => image.uri),
-        ]);
-        setImage([...image, ...imageObject]);
+        if (imageObject?.length < 1) {
+          setSelectedImage([
+            ...selectedImage,
+            ...imageObject.map((image: { uri: any }) => image.uri),
+          ]);
+          setImage([...image, ...imageObject]);
+        } else {
+          notifyMessage("Photos should not be greater then one");
+        }
       } catch (error) {
         // Handle errors here if needed (e.g., display a user-friendly message)
         console.error("Error using getImageFromGallary:", error);

@@ -20,13 +20,16 @@ import { SCREEN_WIDTH, USER_DATA, secureStoreKeys } from "../../constant";
 import { Route } from "../../constant/navigationConstants";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { selectUserData } from "../../store/settings/settings.selectors";
-import { ThemeProps } from "../../types/global.types";
+import { LoadingState, ThemeProps } from "../../types/global.types";
 import { HomeNavigationProps } from "../../types/navigation";
 import Scale from "../../utils/Scale";
 import { setData } from "../../utils/asyncStorage";
 import { logout } from "../../store/authentication/authentication.thunks";
 import DeleteIcon from "../../components/ui/svg/DeleteIcon";
 import ChatIcon from "../../components/ui/svg/ChatIcon";
+import { deleteAccount } from "../../store/userprofile/userprofile.thunk";
+import { setUserData } from "../../store/settings/settings.slice";
+import { selectUserProfileLoading } from "../../store/userprofile/userprofile.selectors";
 
 const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
   navigation,
@@ -36,6 +39,7 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
   const { theme } = useTheme();
   const dispatch = useAppDispatch();
   const userData = useSelector(selectUserData);
+  const userLoading = useSelector(selectUserProfileLoading);
 
   console.log("userData", userData);
 
@@ -76,7 +80,31 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
     );
   };
 
-  const deleteAccount = () => {};
+  const deleteYourAccount = async () => {
+    try {
+      const result = await dispatch(deleteAccount({}));
+      if (deleteAccount.fulfilled.match(result)) {
+        if (result.payload?.status === 1) {
+          console.log("response deleteAccount - - - ", result.payload);
+          setVisible(false);
+          await setData(secureStoreKeys.JWT_TOKEN, null);
+          await setData(USER_DATA, null);
+          // @ts-ignore
+          dispatch(setUserData({}));
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{ name: Route.navAuthentication }],
+            })
+          );
+        }
+      } else {
+        console.log("errror deleteAccount --->", result.payload);
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
   const onPressLogoutPopup = () => {
     setPopupType(1);
@@ -229,12 +257,13 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
         title2={title2}
         title3={title3}
         visiblePopup={visible}
+        loading={userLoading === LoadingState.CREATE}
         togglePopup={togglePopup}
         onPressLogout={() => {
           if (popupType == 1) {
             onPressLogout();
           } else {
-            deleteAccount();
+            deleteYourAccount();
           }
         }}
       />

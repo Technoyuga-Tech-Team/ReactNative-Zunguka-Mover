@@ -7,11 +7,15 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAppDispatch } from "../hooks/useAppDispatch";
 import { OTPFormProps } from "../types/authentication.types";
 import { OTPScreenSchema } from "../constant/formValidations";
-import { verifyOTPAndEndJob } from "../store/MoverBooking/moverBooking.thunk";
+import {
+  approveRejectMoverRequeste,
+  verifyOTPAndEndJob,
+} from "../store/MoverBooking/moverBooking.thunk";
 import SmoothOtpInput from "./SmoothOtpInput";
 import Scale from "../utils/Scale";
 import CustomButton from "./ui/CustomButton";
 import { ThemeProps } from "../types/global.types";
+import { notifyMessage } from "../utils/notifyMessage";
 
 interface DeliveryCodeVerificationPopupProps {
   visiblePopup: boolean;
@@ -19,11 +23,19 @@ interface DeliveryCodeVerificationPopupProps {
   goBack?: () => void;
   package_details_id: string;
   isLoading?: boolean;
+  jobType: string;
 }
 
 const DeliveryCodeVerificationPopup: React.FC<
   DeliveryCodeVerificationPopupProps
-> = ({ visiblePopup, togglePopup, package_details_id, isLoading, goBack }) => {
+> = ({
+  visiblePopup,
+  togglePopup,
+  package_details_id,
+  isLoading,
+  goBack,
+  jobType,
+}) => {
   const insets = useSafeAreaInsets();
   const style = useStyle({ insets });
   const { theme } = useTheme();
@@ -41,20 +53,44 @@ const DeliveryCodeVerificationPopup: React.FC<
     validationSchema: OTPScreenSchema,
     initialValues: { otp: "" },
     onSubmit: async ({ otp }) => {
-      const result = await dispatch(
-        verifyOTPAndEndJob({
-          package_details_id,
-          otp,
-          status: "endjob",
-        })
-      );
-      if (verifyOTPAndEndJob.fulfilled.match(result)) {
-        if (result.payload.status == 1) {
-          togglePopup();
-          goBack && goBack();
+      console.log("package_details_id", package_details_id);
+      if (jobType == "start") {
+        try {
+          const result = await dispatch(
+            approveRejectMoverRequeste({
+              package_details_id: Number(package_details_id),
+              status: "startjob",
+              pickup_otp: otp,
+            })
+          );
+          if (approveRejectMoverRequeste.fulfilled.match(result)) {
+            if (result.payload.status == 1) {
+              console.log("data Start job --->", result.payload);
+              notifyMessage("Job started!");
+              togglePopup();
+            }
+          } else {
+            console.log("errror Start job --->", result.payload);
+          }
+        } catch (error) {
+          console.log("catch err", error);
         }
       } else {
-        console.log("errror verifyOTPAndEndJob --->", result.payload);
+        const result = await dispatch(
+          verifyOTPAndEndJob({
+            package_details_id,
+            otp,
+            status: "endjob",
+          })
+        );
+        if (verifyOTPAndEndJob.fulfilled.match(result)) {
+          if (result.payload.status == 1) {
+            togglePopup();
+            goBack && goBack();
+          }
+        } else {
+          console.log("errror verifyOTPAndEndJob --->", result.payload);
+        }
       }
     },
   });
@@ -120,7 +156,7 @@ const DeliveryCodeVerificationPopup: React.FC<
               onPress={() => {
                 handleSubmit();
               }}
-              title={"Confirm Delivery"}
+              title={jobType == "start" ? "Start Delivery" : "Confirm Delivery"}
               buttonWidth="full"
               variant="primary"
               type="solid"

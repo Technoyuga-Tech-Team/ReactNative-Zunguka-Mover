@@ -2,6 +2,7 @@ export const API = {
   REGISTER: "/register",
   LOGIN: "/login",
   LOGOUT: "/logout",
+  DELETE_ACCOUNT: "/delete-account",
   OAUTH_LOGIN: "/social_login_reg",
   OAUTH_REGISTER: "/register",
   FORGOT_PASSWORD: "/send-otp",

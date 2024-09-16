@@ -262,11 +262,11 @@ const DeliveryDetails1: React.FC<
               showblur={from_mover && !from_mover_home ? true : false}
             />
           )}
-          <BorderBottomItem
+          {/* <BorderBottomItem
             title="Item name"
             value={deliveryDetailsData?.item_name}
             from_mover={false}
-          />
+          /> */}
           {deliveryDetailsData?.item_size && (
             <BorderBottomItem
               title="Size"

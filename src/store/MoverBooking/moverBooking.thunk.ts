@@ -124,12 +124,13 @@ export const approveRejectMoverRequeste = createAsyncThunk<
     package_details_id: number;
     status: "confirmed" | "cancelled" | "startjob" | "endjob";
     reason?: string;
+    pickup_otp?: string;
   },
   { state: RootReduxState; rejectValue: FetchResponseError }
 >(
   "moverBooking/approveRejectMoverRequeste",
   async (
-    { package_details_id, status, reason },
+    { package_details_id, status, reason, pickup_otp },
     { dispatch, rejectWithValue }
   ) => {
     const { errors, data } = await dispatch(
@@ -142,6 +143,9 @@ export const approveRejectMoverRequeste = createAsyncThunk<
             status,
             ...(reason && {
               reason,
+            }),
+            ...(pickup_otp && {
+              pickup_otp,
             }),
           },
         },

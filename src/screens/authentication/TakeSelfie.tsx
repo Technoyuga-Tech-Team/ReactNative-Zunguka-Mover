@@ -489,8 +489,8 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
     marginHorizontal: 20,
   },
   profileImage: {
-    height: Scale(180),
-    width: Scale(180),
-    borderRadius: Scale(180 / 2),
+    height: Scale(300),
+    width: Scale(300),
+    borderRadius: 20,
   },
 }));

@@ -31,6 +31,7 @@ import PrevNextCont from "../../../components/PrevNextCont";
 import ImagePickerPopup from "../../../components/ui/ImagePickerPopup";
 import Scale from "../../../utils/Scale";
 import { UserRoleType } from "../../../types/user.types";
+import { notifyMessage } from "../../../utils/notifyMessage";
 
 const SetupProfile3: React.FC<AuthNavigationProps<Route.navSetupProfile3>> = ({
   navigation,
@@ -96,7 +97,11 @@ const SetupProfile3: React.FC<AuthNavigationProps<Route.navSetupProfile3>> = ({
     navigation.navigate(Route.navSetupProfile4);
   };
   const onPressUploadImages = () => {
-    setVisible(true);
+    if (image.length < 2) {
+      setVisible(true);
+    } else {
+      notifyMessage("Photos should not be greater then two");
+    }
   };
 
   const onPressFromCamera = async () => {
@@ -116,8 +121,12 @@ const SetupProfile3: React.FC<AuthNavigationProps<Route.navSetupProfile3>> = ({
   const openPickerCameraImage = async () => {
     try {
       const imageObject = await getImageFromCamera();
-      setSelectedImage([...selectedImage, imageObject.uri]);
-      setImage([...image, imageObject]);
+      if (image.length < 2) {
+        setSelectedImage([...selectedImage, imageObject.uri]);
+        setImage([...image, imageObject]);
+      } else {
+        notifyMessage("Photos should not be greater then two");
+      }
     } catch (error) {
       // Handle errors here if needed (e.g., display a user-friendly message)
       console.error("Error using getImageFromCamera:", error);
@@ -129,11 +138,15 @@ const SetupProfile3: React.FC<AuthNavigationProps<Route.navSetupProfile3>> = ({
     setTimeout(async () => {
       try {
         const imageObject = await getImageFromGallary({ multiple: true });
-        setSelectedImage([
-          ...selectedImage,
-          ...imageObject?.map((image: { uri: any }) => image.uri),
-        ]);
-        setImage([...image, ...imageObject]);
+        if (imageObject?.length < 2) {
+          setSelectedImage([
+            ...selectedImage,
+            ...imageObject?.map((image: { uri: any }) => image.uri),
+          ]);
+          setImage([...image, ...imageObject]);
+        } else {
+          notifyMessage("Photos should not be greater then two");
+        }
       } catch (error) {
         // Handle errors here if needed (e.g., display a user-friendly message)
         console.error("Error using getImageFromGallary:", error);
@@ -214,7 +227,7 @@ const SetupProfile3: React.FC<AuthNavigationProps<Route.navSetupProfile3>> = ({
         <CustomTxtInput
           textInputTitle="License Number"
           placeholder="Enter your license number"
-          keyboardType={"number-pad"}
+          keyboardType={"default"}
           onChangeText={handleChange("license")}
           onBlur={handleBlur("license")}
           value={values.license}

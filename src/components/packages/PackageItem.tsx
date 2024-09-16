@@ -29,7 +29,7 @@ const PackageItem: React.FC<PackageItemProps> = ({
 
   const date = moment.utc(item.createdAt).format("DD-MM-YYYY");
   const time = moment.utc(item.createdAt).format("HH:mm A");
-
+  console.log("item", item);
   return (
     <TouchableOpacity
       onPress={onPress}

@@ -38,6 +38,7 @@ import DeliveryCodeVerificationPopup from "../../components/DeliveryCodeVerifica
 import Scale from "../../utils/Scale";
 import { socket, socketEvent } from "../../utils/socket";
 import { getData } from "../../utils/asyncStorage";
+import { calculateDistanceWithTime } from "../../utils";
 
 const PackageDetails: React.FC<
   MainNavigationProps<Route.navPackageDetails>
@@ -63,6 +64,7 @@ const PackageDetails: React.FC<
   const [showStartBtn, setShowStartBtn] = useState(false);
   const [showEndBtn, setShowEndBtn] = useState(false);
   const [authToken, setAuthToken] = useState("");
+  const [jobType, setJobType] = useState("");
   const [currentLatLng, setCurrentLatLng] = useState({ lat: 0, lng: 0 });
 
   const [canJobStartJob, setCanStartJob] = useState(route?.params?.canStartJob);
@@ -142,23 +144,6 @@ const PackageDetails: React.FC<
     };
   }, []);
 
-  // const isAtDestination = (
-  //   currentLatitude: number,
-  //   currentLongitude: number,
-  //   destinationLatitude: number,
-  //   destinationLongitude: number
-  // ) => {
-  //   const distanceThreshold = 0.01; // Adjust this value based on your desired accuracy (in meters)
-  //   const distance = calculateDistance(
-  //     currentLatitude,
-  //     currentLongitude,
-  //     destinationLatitude,
-  //     destinationLongitude
-  //   );
-  //   console.log("distance", distance);
-  //   return distance <= distanceThreshold;
-  // };
-
   const calculateDistance = (
     currentLatitude: number,
     currentLongitude: number,
@@ -186,34 +171,28 @@ const PackageDetails: React.FC<
   useEffect(() => {
     if (locationEnabled) {
       const watchId = Geolocation.watchPosition(
-        (position) => {
+        async (position) => {
           const currentLatitude = position.coords.latitude;
           const currentLongitude = position.coords.longitude;
+          console.log("currentLatitude", currentLatitude);
+          console.log("currentLongitude", currentLongitude);
+          console.log("pickup_lat_lng.lat", pickup_lat_lng.lat);
+          console.log("pickup_lat_lng.lng", pickup_lat_lng.lng);
           setCurrentLatLng({ lat: currentLatitude, lng: currentLongitude });
-          // if (
-          //   isAtDestination(
-          //     currentLatitude,
-          //     currentLongitude,
-          //     destination_lat_lng?.lat,
-          //     destination_lat_lng?.lng
-          //   )
-          // ) {
-          //   setStopFetchingLocation(true);
-          //   Geolocation.clearWatch(watchId); // Stop watching location
-          // }
 
-          // getDirections(
-          //   `${currentLatitude},${currentLongitude}`,
-          //   `${destination_lat_lng?.lat},${destination_lat_lng?.lng}`
+          // let startLoc = `${currentLatitude},${currentLongitude}`;
+          // let destinationLoc = `${pickup_lat_lng?.lat},${pickup_lat_lng?.lng}`;
+          // fetch(
+          //   `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=${GOOGLE_MAP_API_KEY}`
           // )
-          //   .then((coords: any) => {
-          //     setCoords(coords);
-          //     setLoader(false);
+          //   .then((response) => response.json())
+          //   .then((data) => {
+          //     if (data.routes && data.routes.length > 0) {
+          //       const route = data.routes[0];
+          //       const eta = route.legs[0].duration.text;
+          //     }
           //   })
-          //   .catch((err) => {
-          //     setLoader(false);
-          //     console.log("Something went wrong", err);
-          //   });
+          //   .catch((error) => console.error("Error:", error));
         },
         (error) => console.log("error", error),
         { enableHighAccuracy: true, interval: 2000 } // Update at least every 5 seconds
@@ -228,6 +207,7 @@ const PackageDetails: React.FC<
   };
 
   const onPressEndJob = () => {
+    setJobType("end");
     setVisibleCodeVerification(true);
   };
   const onPressJob = () => {
@@ -278,25 +258,27 @@ const PackageDetails: React.FC<
   }, [currentLatLng, coords, canJobEndJob]);
 
   const onPressStartJob = async () => {
-    try {
-      const result = await dispatch(
-        approveRejectMoverRequeste({
-          package_details_id: Number(package_details_id),
-          status: "startjob",
-        })
-      );
-      if (approveRejectMoverRequeste.fulfilled.match(result)) {
-        if (result.payload.status == 1) {
-          console.log("data Start job --->", result.payload);
-          setCanEndJob(true);
-          setIsJobStarted(true);
-        }
-      } else {
-        console.log("errror Start job --->", result.payload);
-      }
-    } catch (error) {
-      console.log("catch err", error);
-    }
+    setJobType("start");
+    setVisibleCodeVerification(true);
+    // try {
+    //   const result = await dispatch(
+    //     approveRejectMoverRequeste({
+    //       package_details_id: Number(package_details_id),
+    //       status: "startjob",
+    //     })
+    //   );
+    //   if (approveRejectMoverRequeste.fulfilled.match(result)) {
+    //     if (result.payload.status == 1) {
+    //       console.log("data Start job --->", result.payload);
+    //       setCanEndJob(true);
+    //       setIsJobStarted(true);
+    //     }
+    //   } else {
+    //     console.log("errror Start job --->", result.payload);
+    //   }
+    // } catch (error) {
+    //   console.log("catch err", error);
+    // }
   };
 
   const onPressMessage = () => {
@@ -437,6 +419,7 @@ const PackageDetails: React.FC<
         togglePopup={toggleDevliveryCodePopup}
         package_details_id={package_details_id}
         goBack={goBack}
+        jobType={jobType}
         isLoading={loading === LoadingState.CREATE}
       />
     </View>

@@ -288,7 +288,7 @@ const Login: React.FC<AuthNavigationProps<Route.navLogin>> = ({
             variant="primary"
             type="solid"
             disabled={!isValid || loading === LoadingState.CREATE}
-            loading={loading === LoadingState.CREATE}
+            // loading={loading === LoadingState.CREATE}
           />
         </View>
         <Text onPress={onPressForgotPassword} style={style.txtForgotPassword}>

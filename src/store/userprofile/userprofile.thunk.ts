@@ -131,3 +131,25 @@ export const updateNotificationProfile = createAsyncThunk<
     return data;
   }
 );
+
+export const deleteAccount = createAsyncThunk<
+  any,
+  {},
+  { state: RootReduxState; rejectValue: FetchResponseError }
+>("user/deleteAccount", async ({}, { dispatch, rejectWithValue }) => {
+  const { errors, data } = await dispatch(
+    fetchAction<TokenPayload1>(
+      {
+        url: API.DELETE_ACCOUNT,
+        method: "DELETE",
+      },
+      true
+    )
+  );
+
+  if (errors) {
+    return rejectWithValue(errors);
+  }
+
+  return data;
+});

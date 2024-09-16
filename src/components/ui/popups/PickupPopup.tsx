@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Modal,
+  PermissionsAndroid,
+  Platform,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -29,18 +31,18 @@ import BorderBottomItem from "../../DeliveryDetails/BorderBottomItem";
 import ProductLocation from "../svg/ProductLocation";
 import CustomButton from "../CustomButton";
 import ChatIcon from "../svg/ChatIcon";
+import Geolocation from "react-native-geolocation-service";
 
 interface PickupPopupProps {
   visiblePopup: boolean;
   togglePopup: () => void;
   onPressConfirmPickup: () => void;
   onPressReject: () => void;
-  onPressStartJob: () => void;
-  onPressEndJob: () => void;
   selectedItem: any;
   loading: LoadingState;
 }
 
+let interval: string | number | NodeJS.Timeout | undefined;
 const PickupPopup: React.FC<PickupPopupProps> = ({
   visiblePopup,
   togglePopup,
@@ -48,8 +50,6 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
   onPressReject,
   selectedItem,
   loading,
-  onPressStartJob,
-  onPressEndJob,
 }) => {
   const insets = useSafeAreaInsets();
 
@@ -66,6 +66,8 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
   const [loader, setLoader] = useState<boolean>(false);
   const [deliveryDetailsData, setDeliveryDetailsData] =
     useState<DeliveryDetailsData>({});
+  const [locationEnabled, setLocationEnabled] = useState(false);
+  const [distanceForPickup, setDistanceForPickup] = useState("");
 
   const pickup_point_lat = parseFloat(selectedItem?.pickup_point_lat) || 0;
   const pickup_point_lng = parseFloat(selectedItem?.pickup_point_lng) || 0;
@@ -116,6 +118,114 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
     delivery_point_lat,
     delivery_point_lng,
   ]);
+
+  useEffect(() => {
+    const requestLocationPermission = async () => {
+      if (Platform.OS === "ios") {
+        await Geolocation.requestAuthorization("whenInUse");
+        setLocationEnabled(true);
+      } else {
+        try {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            {
+              title: "Location Access Required",
+              message: "This App needs to Access your location",
+              buttonPositive: "ok",
+            }
+          );
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            //To Check, If Permission is granted
+            setLocationEnabled(true);
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    };
+    requestLocationPermission();
+    return () => {
+      // Geolocation.clearWatch();
+    };
+  }, []);
+
+  useEffect(() => {
+    interval = setInterval(() => {
+      if (locationEnabled) {
+        Geolocation.getCurrentPosition(
+          (position) => {
+            const currentLatitude = position.coords.latitude;
+            const currentLongitude = position.coords.longitude;
+            let startLoc = `${currentLatitude},${currentLongitude}`;
+            let destinationLoc = `${pickup_point_lat},${pickup_point_lng}`;
+
+            if (
+              currentLatitude !== 0 &&
+              currentLongitude !== 0 &&
+              pickup_point_lat !== 0 &&
+              pickup_point_lng !== 0
+            ) {
+              console.log("startLoc", startLoc);
+              console.log("destinationLoc", destinationLoc);
+              fetch(
+                `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=${GOOGLE_MAP_API_KEY}`
+              )
+                .then((response) => response.json())
+                .then((data) => {
+                  if (data.routes && data.routes.length > 0) {
+                    const route = data.routes[0];
+                    const eta = route.legs[0].duration.text;
+                    console.log("eta - - - - -", eta);
+
+                    eta && setDistanceForPickup(eta);
+                  }
+                })
+                .catch((error) => console.error("Error:", error));
+            }
+          },
+          (error) => console.log("error", error)
+          // Update at least every 2 seconds
+        );
+      }
+    }, 5000); // Update every second
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [locationEnabled, pickup_point_lat, pickup_point_lng]);
+
+  // useEffect(() => {
+  //   if (locationEnabled) {
+
+  //     const watchId = Geolocation.watchPosition(
+  //       (position) => {
+  //         const currentLatitude = position.coords.latitude;
+  //         const currentLongitude = position.coords.longitude;
+  //         let startLoc = `${currentLatitude},${currentLongitude}`;
+  //         let destinationLoc = `${pickup_point_lat},${pickup_point_lng}`;
+  //         console.log("startLoc", startLoc);
+  //         console.log("destinationLoc", destinationLoc);
+  //         fetch(
+  //           `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=${GOOGLE_MAP_API_KEY}`
+  //         )
+  //           .then((response) => response.json())
+  //           .then((data) => {
+  //             if (data.routes && data.routes.length > 0) {
+  //               const route = data.routes[0];
+  //               const eta = route.legs[0].duration.text;
+  //               console.log("eta - - - - -", eta);
+
+  //               eta && setDistanceForPickup(eta);
+  //             }
+  //           })
+  //           .catch((error) => console.error("Error:", error));
+  //       },
+  //       (error) => console.log("error", error),
+  //       { enableHighAccuracy: true, interval: 2000 } // Update at least every 2 seconds
+  //     );
+  //     return () => Geolocation.clearWatch(watchId);
+  //   }
+  // }, [locationEnabled, pickup_point_lat, pickup_point_lng]);
 
   const getPackageDetails = async () => {
     setLoader(true);
@@ -296,7 +406,10 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
           <CustomHeader
             title="Pickup now"
             isOutsideBack={true}
-            onPressBackBtn={togglePopup}
+            onPressBackBtn={() => {
+              clearInterval(interval);
+              togglePopup();
+            }}
           />
           {/* <View style={style.topCont}>
             <Text style={style.txtPickupNow}>Pickup now</Text>
@@ -334,11 +447,11 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
                   value={deliveryDetailsData?.receiver_name}
                   from_mover={false}
                 />
-                <BorderBottomItem
+                {/* <BorderBottomItem
                   title="Item name"
                   value={deliveryDetailsData?.item_name}
                   from_mover={false}
-                />
+                /> */}
                 <BorderBottomItem
                   title="Pickup point"
                   value={deliveryDetailsData?.pickup_point_address}
@@ -374,8 +487,15 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
                 )}
                 {distance !== "" && (
                   <BorderBottomItem
-                    title="distance"
+                    title="Distance"
                     value={`${distance} KM`}
+                    from_mover={false}
+                  />
+                )}
+                {distanceForPickup !== "" && (
+                  <BorderBottomItem
+                    title="Distance for pickup"
+                    value={distanceForPickup}
                     from_mover={false}
                   />
                 )}

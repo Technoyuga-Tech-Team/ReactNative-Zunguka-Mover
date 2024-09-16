@@ -1,36 +1,33 @@
+import notifee, { EventType, Notification } from "@notifee/react-native";
+import messaging, {
+  FirebaseMessagingTypes,
+} from "@react-native-firebase/messaging";
 import {
   LinkingOptions,
   NavigationContainer,
   useNavigationContainerRef,
 } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { Linking, PermissionsAndroid, Platform } from "react-native";
-import { BASE_PORT } from "../constant";
-import MainStack from "./MainStack";
-import { useAppDispatch } from "../hooks/useAppDispatch";
+import { Linking } from "react-native";
+import { useTheme } from "react-native-elements";
+import Snackbar from "react-native-snackbar";
 import { useSelector } from "react-redux";
+import { BASE_PORT } from "../constant";
+import { Route } from "../constant/navigationConstants";
+import { useAppDispatch } from "../hooks/useAppDispatch";
 import {
   selectGlobalErrors,
   selectGlobalSuccess,
 } from "../store/global/global.selectors";
-import { selectSocialError } from "../store/settings/settings.selectors";
-import { useTheme } from "react-native-elements";
-import Snackbar from "react-native-snackbar";
 import { clearErrors, clearSuccess } from "../store/global/global.slice";
+import { moverRequestedDetails } from "../store/MoverBooking/moverBooking.thunk";
+import { selectSocialError } from "../store/settings/settings.selectors";
 import {
   setErrorFromSocial,
   setMoverRequestList,
   setSaveNotificationCount,
 } from "../store/settings/settings.slice";
-import notifee, {
-  AuthorizationStatus,
-  Notification,
-} from "@notifee/react-native";
-import messaging, {
-  FirebaseMessagingTypes,
-} from "@react-native-firebase/messaging";
-import { Route } from "../constant/navigationConstants";
-import { moverRequestedDetails } from "../store/MoverBooking/moverBooking.thunk";
+import MainStack from "./MainStack";
 
 const linking: LinkingOptions<{}> = {
   prefixes: [`http://${BASE_PORT}/`, `zunguka://`],
@@ -117,37 +114,6 @@ const MainNavigator = () => {
     theme.colors?.black,
     theme.colors?.grey5,
   ]);
-
-  useEffect(() => {
-    async function checkNotificationPermission() {
-      const settings = await notifee.getNotificationSettings();
-      if (settings.authorizationStatus == AuthorizationStatus.AUTHORIZED) {
-        console.log("Notification permissions has been authorized");
-      } else if (settings.authorizationStatus == AuthorizationStatus.DENIED) {
-        console.log("Notification permissions has been denied");
-        requestUserPermission();
-      }
-    }
-
-    checkNotificationPermission().then();
-  }, []);
-
-  const requestUserPermission = async () => {
-    if (Platform.OS === "ios") {
-      const settings = await notifee.requestPermission();
-
-      if (settings.authorizationStatus >= AuthorizationStatus.AUTHORIZED) {
-        console.log("Permission settings:", settings);
-      } else {
-        console.log("User declined permissions");
-        await notifee.requestPermission();
-      }
-    } else {
-      PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
-      );
-    }
-  };
 
   const handleClickedNotitfaction = (
     notification: FirebaseMessagingTypes.RemoteMessage | Notification
@@ -250,6 +216,11 @@ const MainNavigator = () => {
 
   // @todo - handle in-app notifications
   useEffect(() => {
+    notifee.onForegroundEvent(({ type, detail }) => {
+      if (type === EventType.PRESS) {
+        handleClickedNotitfaction(detail?.notification);
+      }
+    });
     messaging().onMessage(onNotifeeMessageReceived);
     messaging().setBackgroundMessageHandler(async (message) => {
       console.log("in background message", message);
