@@ -16,7 +16,7 @@ const RatingItemCont: React.FC<RatingItemContProps> = ({ item }) => {
   const insets = useSafeAreaInsets();
   const style = useStyles({ insets });
   const { theme } = useTheme();
-  const time = moment(item?.createdAt).startOf("hour").fromNow();
+  const time = moment(item?.createdAt).fromNow();
   return (
     <View style={style.container}>
       <AppImage
@@ -40,6 +40,7 @@ const RatingItemCont: React.FC<RatingItemContProps> = ({ item }) => {
           <Text style={style.txtDate}>{time}</Text>
         </View>
         <RatingBox rating={item?.rate} onlyStar={true} />
+        <Text style={style.txtComment}>Item - {item?.item_name}</Text>
         <Text style={style.txtComment}>{item?.comment}</Text>
       </View>
     </View>

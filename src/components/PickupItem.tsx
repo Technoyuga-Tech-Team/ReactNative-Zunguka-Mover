@@ -38,7 +38,7 @@ const PickupItem: React.FC<PickupItemProps> = ({
   const insets = useSafeAreaInsets();
   const style = useStyles({ insets });
   const { theme } = useTheme();
-  const time = moment(item?.createdAt).startOf("hour").fromNow();
+  const time = moment(item?.createdAt).fromNow();
 
   return (
     <TouchableOpacity

@@ -16,6 +16,7 @@ interface PackageListProps {
   refreshControl?: React.ReactElement<RefreshControlProps>;
   isFromMover?: boolean;
   ListHeaderComponent?: React.JSX.Element;
+  fromEarning?: boolean;
 }
 
 const PackageList: React.FC<PackageListProps> = ({
@@ -28,6 +29,7 @@ const PackageList: React.FC<PackageListProps> = ({
   refreshControl,
   isFromMover = true,
   ListHeaderComponent,
+  fromEarning,
 }) => {
   const insets = useSafeAreaInsets();
   const style = useStyles({ insets });
@@ -38,6 +40,7 @@ const PackageList: React.FC<PackageListProps> = ({
       <PackageItem
         item={item}
         isCompleted={isCompleted}
+        fromEarning={fromEarning}
         onPress={() => onPress(item)}
         isFromMover={isFromMover}
         onPressRating={() => onPressRating(item)}

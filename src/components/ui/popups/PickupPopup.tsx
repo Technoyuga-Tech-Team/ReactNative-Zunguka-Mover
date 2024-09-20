@@ -64,6 +64,7 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
   const [distance, setDistance] = useState<string>("");
   const [coords, setCoords] = useState<LatLng[]>([]);
   const [loader, setLoader] = useState<boolean>(false);
+  const [distanceLoader, setDistanceLoader] = useState<boolean>(false);
   const [deliveryDetailsData, setDeliveryDetailsData] =
     useState<DeliveryDetailsData>({});
   const [locationEnabled, setLocationEnabled] = useState(false);
@@ -150,6 +151,7 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
   }, []);
 
   useEffect(() => {
+    setDistanceLoader(true);
     interval = setInterval(() => {
       if (locationEnabled) {
         Geolocation.getCurrentPosition(
@@ -178,9 +180,13 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
                     console.log("eta - - - - -", eta);
 
                     eta && setDistanceForPickup(eta);
+                    setDistanceLoader(false);
                   }
                 })
-                .catch((error) => console.error("Error:", error));
+                .catch((error) => {
+                  setDistanceLoader(false);
+                  console.error("Error:", error);
+                });
             }
           },
           (error) => console.log("error", error)
@@ -492,12 +498,16 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
                     from_mover={false}
                   />
                 )}
-                {distanceForPickup !== "" && (
-                  <BorderBottomItem
-                    title="Distance for pickup"
-                    value={distanceForPickup}
-                    from_mover={false}
-                  />
+                {distanceLoader ? (
+                  <ActivityIndicator color={theme?.colors?.primary} />
+                ) : (
+                  distanceForPickup !== "" && (
+                    <BorderBottomItem
+                      title="Distance for pickup location"
+                      value={distanceForPickup}
+                      from_mover={false}
+                    />
+                  )
                 )}
                 <BorderBottomItem
                   title="Price"

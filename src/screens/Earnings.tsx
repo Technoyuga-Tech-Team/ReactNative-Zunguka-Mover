@@ -101,9 +101,11 @@ const Earnings: React.FC<MoverHomeNavigationProps<Route.navEarnings>> = ({
     );
     if (getMyEarnings.fulfilled.match(result)) {
       if (result.payload.status == 1) {
-        result.payload?.data?.data?.length > 0
-          ? setMyEarningData([...myEarningData, ...result.payload?.data?.data])
-          : setMyEarningData([]);
+        console.log("result.payload?.data?.data", result.payload?.data?.data);
+        setMyEarningData(result.payload?.data?.data);
+        // result.payload?.data?.data?.length > 0
+        //   ? setMyEarningData([...myEarningData, ...result.payload?.data?.data])
+        //   : setMyEarningData([]);
         setTotalBalance(result.payload.data?.balance);
         setFilterBalance(result.payload.data?.filter_balance);
         setGraphData(result.payload.data?.graphData);
@@ -248,9 +250,9 @@ const Earnings: React.FC<MoverHomeNavigationProps<Route.navEarnings>> = ({
         <View style={style.firstInnerCont}>
           <View>
             <Text style={style.txtEarning}>
-              {RWF} {parseFloat(`${totalPageBalance}`).toFixed(2)}
+              {parseFloat(`${totalPageBalance}`).toFixed(2)}
             </Text>
-            <Text style={style.txtBalance}>Balance</Text>
+            <Text style={style.txtBalance}>{RWF} Balance</Text>
           </View>
           <CustomButton
             disabled={totalPageBalance == 0}
@@ -286,9 +288,10 @@ const Earnings: React.FC<MoverHomeNavigationProps<Route.navEarnings>> = ({
             data={myEarningData}
             isCompleted={true}
             isFromMover={true}
+            fromEarning={true}
             onPress={() => {}}
             onPressRating={() => {}}
-            onEndReached={onEndReached}
+            // onEndReached={onEndReached}
             isLoading={false}
           />
         </View>

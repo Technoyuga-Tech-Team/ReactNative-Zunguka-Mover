@@ -20,7 +20,7 @@ const ChatBlock: React.FC<ChatBlockProps> = ({ item, onPress }) => {
   const insets = useSafeAreaInsets();
   const style = useStyles({ insets });
   const profile = item?.profile_image || Images.PLACEHOLDER_IMAGE;
-  const time = moment(item?.updated_at).startOf("hour").fromNow();
+  const time = moment(item?.updated_at).fromNow();
   const userData = useSelector(selectUserData);
   return (
     <TouchableOpacity

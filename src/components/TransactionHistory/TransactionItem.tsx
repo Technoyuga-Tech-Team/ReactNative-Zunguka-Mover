@@ -24,7 +24,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ item, onPress }) => {
 
   let isCredited = item.transaction_type === "sell";
   const date = moment(item.created_at).format("MMM Do YY");
-  const time = moment(item?.created_at).startOf("hour").fromNow();
+  const time = moment(item?.created_at).fromNow();
   return (
     <TouchableOpacity
       onPress={onPress}

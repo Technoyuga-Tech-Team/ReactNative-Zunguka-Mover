@@ -20,6 +20,7 @@ import { notifyMessage } from "../utils/notifyMessage";
 interface DeliveryCodeVerificationPopupProps {
   visiblePopup: boolean;
   togglePopup: () => void;
+  onStartJob: () => void;
   goBack?: () => void;
   package_details_id: string;
   isLoading?: boolean;
@@ -31,6 +32,7 @@ const DeliveryCodeVerificationPopup: React.FC<
 > = ({
   visiblePopup,
   togglePopup,
+  onStartJob,
   package_details_id,
   isLoading,
   goBack,
@@ -48,6 +50,7 @@ const DeliveryCodeVerificationPopup: React.FC<
     values,
     errors,
     isValid,
+    setFieldValue,
     handleSubmit,
   } = useFormik<OTPFormProps>({
     validationSchema: OTPScreenSchema,
@@ -67,7 +70,9 @@ const DeliveryCodeVerificationPopup: React.FC<
             if (result.payload.status == 1) {
               console.log("data Start job --->", result.payload);
               notifyMessage("Job started!");
+              onStartJob();
               togglePopup();
+              setFieldValue("otp", "");
             }
           } else {
             console.log("errror Start job --->", result.payload);
@@ -125,7 +130,11 @@ const DeliveryCodeVerificationPopup: React.FC<
             contentContainerStyle={{ flexGrow: 1 }}
           >
             <View style={{ paddingHorizontal: 20, flex: 1 }}>
-              <Text style={style.txtTitle}>Delivery Code Verification</Text>
+              <Text style={style.txtTitle}>
+                {jobType == "start"
+                  ? "Pickup Code Verification"
+                  : "Delivery Code Verification"}
+              </Text>
               <Text style={style.txtDesc}>
                 Please ask the customer for the 6-digit delivery code and enter
                 it below to verify the delivery.

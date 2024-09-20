@@ -435,6 +435,9 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
         package_details_id={selectedItem?.id}
         isLoading={loading === LoadingState.CREATE}
         jobType={""}
+        onStartJob={function (): void {
+          throw new Error("Function not implemented.");
+        }}
       />
       <PickupAcceptedPopup
         visiblePopup={visibleAcceptedPopup}

@@ -280,6 +280,11 @@ const PackageDetails: React.FC<
     //   console.log("catch err", error);
     // }
   };
+  const onStartJob = () => {
+    setShowStartBtn(false);
+    setCanEndJob(true);
+    setIsJobStarted(true);
+  };
 
   const onPressMessage = () => {
     navigation.navigate(Route.navChatroom, {
@@ -417,6 +422,7 @@ const PackageDetails: React.FC<
       <DeliveryCodeVerificationPopup
         visiblePopup={visibleCodeVerification}
         togglePopup={toggleDevliveryCodePopup}
+        onStartJob={onStartJob}
         package_details_id={package_details_id}
         goBack={goBack}
         jobType={jobType}

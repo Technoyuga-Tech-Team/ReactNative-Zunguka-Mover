@@ -13,6 +13,7 @@ interface PackageItemProps {
   onPress: () => void;
   onPressRating: () => void;
   isFromMover?: boolean;
+  fromEarning?: boolean;
 }
 
 const PackageItem: React.FC<PackageItemProps> = ({
@@ -21,6 +22,7 @@ const PackageItem: React.FC<PackageItemProps> = ({
   onPress,
   onPressRating,
   isFromMover,
+  fromEarning,
 }) => {
   const insets = useSafeAreaInsets();
   const style = useStyles({ insets });
@@ -29,7 +31,8 @@ const PackageItem: React.FC<PackageItemProps> = ({
 
   const date = moment.utc(item.createdAt).format("DD-MM-YYYY");
   const time = moment.utc(item.createdAt).format("HH:mm A");
-  console.log("item", item);
+
+  const orderNumber = fromEarning ? item?.order_id : item.order;
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -50,7 +53,7 @@ const PackageItem: React.FC<PackageItemProps> = ({
             },
           ]}
         >
-          order {item?.order}
+          order {orderNumber}
         </Text>
       </View>
       <View style={style.innerCont}>
