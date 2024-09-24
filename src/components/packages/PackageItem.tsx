@@ -61,7 +61,7 @@ const PackageItem: React.FC<PackageItemProps> = ({
           {date} • {time}
         </Text>
         <Text style={style.txtPrice}>
-          {RWF} {item?.price}
+          {RWF} {Number(item?.price).toFixed(2)}
         </Text>
       </View>
       {isReviewPending && isFromMover && isCompleted && (

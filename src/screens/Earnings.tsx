@@ -90,6 +90,8 @@ const Earnings: React.FC<MoverHomeNavigationProps<Route.navEarnings>> = ({
   const getMyEarningData = async (limit: number, offset: number) => {
     const start = moment(startDate).format("YYYY-MM-DD");
     const end = moment(endDate).format("YYYY-MM-DD");
+    console.log("start", start);
+    console.log("end", end);
     const result = await dispatch(
       getMyEarnings({
         status: "endjob",

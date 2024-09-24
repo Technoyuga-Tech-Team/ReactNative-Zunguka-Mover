@@ -247,6 +247,7 @@ const SetupProfile3: React.FC<AuthNavigationProps<Route.navSetupProfile3>> = ({
           <RenderSelectedImage
             data={image}
             onPressCloseIcon={onPressCloseIcon}
+            zoomViewDisable={false}
           />
         )}
       </KeyboardAvoidingView>

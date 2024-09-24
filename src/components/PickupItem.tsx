@@ -49,7 +49,7 @@ const PickupItem: React.FC<PickupItemProps> = ({
       <View style={style.topCont}>
         <Text style={style.txtDate}>{time}</Text>
         <Text style={style.txtDate}>
-          {RWF} {item?.price}
+          {RWF} {Number(item?.price).toFixed(2)}
         </Text>
       </View>
       <PickupDeliveryCont

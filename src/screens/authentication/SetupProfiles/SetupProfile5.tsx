@@ -15,7 +15,11 @@ import { LoadingState, ThemeProps } from "../../../types/global.types";
 import { AuthNavigationProps } from "../../../types/navigation";
 import { useSelector } from "react-redux";
 import CustomDropdown from "../../../components/Dropdown/CustomDropdown";
-import { USA_STATE, USA_STATES_CITY } from "../../../constant";
+import {
+  DISTRICT_AND_SECTORS,
+  USA_STATE,
+  USA_STATES_CITY,
+} from "../../../constant";
 import { UserRoleType } from "../../../types/user.types";
 
 const SetupProfile5: React.FC<AuthNavigationProps<Route.navSetupProfile5>> = ({
@@ -29,21 +33,37 @@ const SetupProfile5: React.FC<AuthNavigationProps<Route.navSetupProfile5>> = ({
 
   const loading = useSelector(selectUserProfileLoading);
 
-  const [selectedCity, setSelectedCity] = useState("");
-  const [selectedState, setSelectedState] = useState("");
-  const [stateError, setStateError] = useState("");
-  const [cityError, setCityError] = useState("");
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [selectedSector, setSelectedSector] = useState("");
 
-  const [citiesData, setCitiesData] = useState(USA_STATES_CITY["New_York"]);
+  const [district, setDistrict] = useState("");
+  const [districtError, setDistrictError] = useState("");
+
+  const [sector, setSector] = useState("");
+  const [sectorError, setSectorError] = useState("");
+
+  const [sectorData, setSectorData] = useState<
+    { title: string; key: string }[]
+  >([]);
+
+  useEffect(() => {
+    if (district) {
+      DISTRICT_AND_SECTORS.map((ele) => {
+        if (ele.key == district) {
+          setSectorData(ele.sectors);
+        }
+      });
+    }
+  }, [district]);
 
   useEffect(() => {
     let unsubscribe = navigation.addListener("focus", async () => {
       refetch().then((currentUser) => {
         if (currentUser?.data?.user) {
           currentUser?.data?.user?.state &&
-            setSelectedState(currentUser?.data?.user?.state);
+            setSelectedDistrict(currentUser?.data?.user?.state);
           currentUser?.data?.user?.city &&
-            setSelectedCity(currentUser?.data?.user?.city);
+            setSelectedSector(currentUser?.data?.user?.city);
         }
       });
     });
@@ -58,15 +78,15 @@ const SetupProfile5: React.FC<AuthNavigationProps<Route.navSetupProfile5>> = ({
   };
   const onPressNext = async () => {
     if (
-      selectedState &&
-      selectedState !== "" &&
-      selectedCity &&
-      selectedCity !== ""
+      selectedDistrict &&
+      selectedDistrict !== "" &&
+      selectedSector &&
+      selectedSector !== ""
     ) {
       const formData = new FormData();
 
-      formData.append("state", selectedState);
-      formData.append("sector", selectedCity);
+      formData.append("state", selectedDistrict);
+      formData.append("sector", selectedSector);
       formData.append("step", 5);
       formData.append("type", UserRoleType.MOVER);
 
@@ -85,27 +105,27 @@ const SetupProfile5: React.FC<AuthNavigationProps<Route.navSetupProfile5>> = ({
         console.log("errror userSetupProfile --->", result.payload);
       }
     } else {
-      if (selectedState == "" && selectedCity == "") {
-        setStateError("Please select the state.");
-        setCityError("Please select the city.");
-      } else if (selectedState == "") {
-        setStateError("Please select the state.");
-      } else if (selectedCity == "") {
-        setCityError("Please select the city.");
+      if (selectedDistrict == "" && selectedSector == "") {
+        setDistrictError("Please select the district.");
+        setSectorError("Please select the sector.");
+      } else if (selectedDistrict == "") {
+        setDistrictError("Please select the district.");
+      } else if (selectedSector == "") {
+        setSectorError("Please select the sector.");
       }
     }
   };
 
   const onSelectState = (val: { title: string; key: string; id: string }) => {
-    setSelectedState(val.title);
-    setStateError("");
-    let getCity = USA_STATES_CITY[val.title];
-    setCitiesData(getCity);
+    setDistrictError("");
+    setDistrict(val.key);
+    setSelectedDistrict(val.key);
   };
 
   const onSelectCity = (val: { title: string; key: string; id: string }) => {
-    setSelectedCity(val.title);
-    setCityError("");
+    setSectorError("");
+    setSector(val.key);
+    setSelectedSector(val.key);
   };
   return (
     <KeyboardAwareScrollView
@@ -116,20 +136,20 @@ const SetupProfile5: React.FC<AuthNavigationProps<Route.navSetupProfile5>> = ({
       <SetupProfileHeader title={"Location You Can Drive"} percent={7} />
       <View style={style.innerCont}>
         <CustomDropdown
-          dropDownData={USA_STATE}
+          dropDownData={DISTRICT_AND_SECTORS}
           placeHolder={"State"}
-          value={selectedState}
+          value={district}
           topMargin={10}
           onSelect={onSelectState}
-          error={stateError}
+          error={districtError}
         />
         <CustomDropdown
-          dropDownData={citiesData}
+          dropDownData={sectorData}
           placeHolder={"City"}
-          value={selectedCity}
+          value={sector}
           topMargin={10}
           onSelect={onSelectCity}
-          error={cityError}
+          error={sectorError}
         />
       </View>
       <PrevNextCont onPressNext={onPressNext} onPressPrev={onPressPrev} />

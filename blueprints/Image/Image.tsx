@@ -4,6 +4,7 @@ import {
   LayoutRectangle,
   StyleProp,
   StyleSheet,
+  TouchableOpacity,
   View,
   ViewStyle,
 } from "react-native";
@@ -17,6 +18,7 @@ import FastImage, {
 
 import { useTheme } from "react-native-elements";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import ImageZoomViewer from "../../src/components/ui/popups/ImageZoomViewer";
 
 export type FastImageProps = Omit<FastImageProp, "source">;
 
@@ -32,6 +34,7 @@ export interface ImageProps extends FastImageProps {
   indicatorSize?: number;
   source?: string | Source | number;
   loaderColor?: string;
+  zoomViewDisable?: boolean;
 }
 
 export const Image = React.memo((props: ImageProps) => {
@@ -47,12 +50,18 @@ export const Image = React.memo((props: ImageProps) => {
     style,
     uploading,
     width,
+    zoomViewDisable = true,
     ...rest
   } = props;
   const { theme } = useTheme();
 
   const [loading, setLoading] = useState(false);
   const [layout, setLayout] = useState<LayoutRectangle | null>(null);
+
+  const [visible, setVisible] = useState(false);
+  const onPressImg = () => {
+    setVisible(true);
+  };
 
   useEffect(() => {
     if (typeof uploading !== "undefined" && uploading !== loading) {
@@ -111,26 +120,39 @@ export const Image = React.memo((props: ImageProps) => {
   }
 
   return (
-    <View style={[styles.container, containerStyle]} onLayout={onLayout}>
-      <FastImage
-        style={imageStyle}
-        source={imageSource}
-        resizeMode={resizeMode || FastImage.resizeMode.contain}
-        onLoadStart={() => {
-          !loading && setLoading(true);
-        }}
-        onError={() => {
-          loading && setLoading(false);
-        }}
-        onLoadEnd={() => {
-          loading && setLoading(false);
-        }}
-        {...rest}
+    <>
+      <TouchableOpacity
+        activeOpacity={0.6}
+        disabled={zoomViewDisable}
+        onPress={onPressImg}
       >
-        {children}
-      </FastImage>
-      {indicator}
-    </View>
+        <View style={[styles.container, containerStyle]} onLayout={onLayout}>
+          <FastImage
+            style={imageStyle}
+            source={imageSource}
+            resizeMode={resizeMode || FastImage.resizeMode.contain}
+            onLoadStart={() => {
+              !loading && setLoading(true);
+            }}
+            onError={() => {
+              loading && setLoading(false);
+            }}
+            onLoadEnd={() => {
+              loading && setLoading(false);
+            }}
+            {...rest}
+          >
+            {children}
+          </FastImage>
+          {indicator}
+        </View>
+      </TouchableOpacity>
+      <ImageZoomViewer
+        visiblePopup={visible}
+        image={imageSource}
+        togglePopup={() => setVisible(!visible)}
+      />
+    </>
   );
 });
 

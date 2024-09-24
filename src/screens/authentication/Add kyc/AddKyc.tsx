@@ -261,6 +261,7 @@ const AddKyc: React.FC<AuthNavigationProps<Route.navAddKyc>> = ({
               data={image}
               largSize={true}
               onPressCloseIcon={onPressCloseIcon}
+              zoomViewDisable={false}
             />
           ) : (
             <UploadPhotosBorder

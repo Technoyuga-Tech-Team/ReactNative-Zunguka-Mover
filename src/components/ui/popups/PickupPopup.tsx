@@ -440,7 +440,7 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
                 }}
               >
                 <Text style={style.txtPrice}>
-                  {RWF} {selectedItem?.price}
+                  {RWF} {Number(selectedItem?.price).toFixed(2)}
                 </Text>
               </View>
             </View>
@@ -511,7 +511,9 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
                 )}
                 <BorderBottomItem
                   title="Price"
-                  value={`${RWF} ${deliveryDetailsData?.price || ""}`}
+                  value={`${RWF} ${
+                    Number(deliveryDetailsData?.price).toFixed(2) || ""
+                  }`}
                   from_mover={false}
                 />
 
@@ -636,7 +638,7 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
                 >
                   <Text style={[style.txtBtn]}>{"Confirm pick up"}</Text>
                   <Text style={[style.txtBtn]}>
-                    {RWF} {selectedItem?.price}
+                    {RWF} {Number(selectedItem?.price).toFixed(2)}
                   </Text>
                 </TouchableOpacity>
               )}
