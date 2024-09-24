@@ -27,7 +27,6 @@ const RatingBox = ({
   const [hoverRating, setHoverRating] = useState<number>(0);
 
   const handlePress = (newRating: number) => {
-    console.log("newRating", newRating);
     setHoverRating(newRating);
     onRatingChange && onRatingChange(newRating);
   };

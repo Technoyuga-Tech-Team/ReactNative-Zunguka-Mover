@@ -108,10 +108,6 @@ const TakeSelfie: React.FC<MainNavigationProps<Route.navTakeSelfie>> = ({
   useEffect(() => {
     if (userData) {
       setProfilePicture(userData?.selfie_image);
-      console.log(
-        "userData?.is_kyc_verified_by_admin",
-        userData?.is_kyc_verified_by_admin
-      );
       setIsVerifiedByAdmin(userData?.is_kyc_verified_by_admin);
       setSelfieUploded(userData?.is_selfie_uploaded);
     }
@@ -158,7 +154,6 @@ const TakeSelfie: React.FC<MainNavigationProps<Route.navTakeSelfie>> = ({
       const options = { quality: 0.8 };
       const data = await cameraRef.current.takePictureAsync(options);
       if (data) {
-        console.log("data", data);
         setProfilePicture(data.uri);
 
         const imageObject = {
@@ -247,9 +242,6 @@ const TakeSelfie: React.FC<MainNavigationProps<Route.navTakeSelfie>> = ({
       console.log("catch error - - - ", error);
     }
   };
-
-  console.log("selfieUploaded", selfieUploaded);
-  console.log("accountStatus", accountStatus);
 
   const onPressBackBtn = () => {
     if (navigation?.canGoBack()) {

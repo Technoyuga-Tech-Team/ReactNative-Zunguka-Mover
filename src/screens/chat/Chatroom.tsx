@@ -169,10 +169,7 @@ const Chatroom: React.FC<MainNavigationProps<Route.navChatroom>> = ({
   }, [searchIndex]);
 
   useEffect(() => {
-    console.log("called");
     getChatMessages(20, 1);
-    // setPage(1);
-    // refetch().then();
   }, [receiver_id]);
 
   const togglePopup = () => {

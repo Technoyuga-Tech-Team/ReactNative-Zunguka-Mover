@@ -261,29 +261,29 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
     setVisible(!visible);
   };
 
-  const onPressStartJob = async () => {
-    const result = await dispatch(
-      approveRejectMoverRequeste({
-        package_details_id: selectedItem?.id,
-        status: "startjob",
-      })
-    );
-    if (approveRejectMoverRequeste.fulfilled.match(result)) {
-      console.log("data Start job --->", result.payload);
-      if (result.payload.status == 1) {
-        getMoverRequestedData();
-        togglePopup();
-      }
-    } else {
-      console.log("errror Start job --->", result.payload);
-    }
-  };
-  const onPressEndJob = () => {
-    setVisible(false);
-    setTimeout(() => {
-      setVisibleCodeVerification(true);
-    }, 500);
-  };
+  // const onPressStartJob = async () => {
+  //   const result = await dispatch(
+  //     approveRejectMoverRequeste({
+  //       package_details_id: selectedItem?.id,
+  //       status: "startjob",
+  //     })
+  //   );
+  //   if (approveRejectMoverRequeste.fulfilled.match(result)) {
+  //     console.log("data Start job --->", result.payload);
+  //     if (result.payload.status == 1) {
+  //       getMoverRequestedData();
+  //       togglePopup();
+  //     }
+  //   } else {
+  //     console.log("errror Start job --->", result.payload);
+  //   }
+  // };
+  // const onPressEndJob = () => {
+  //   setVisible(false);
+  //   setTimeout(() => {
+  //     setVisibleCodeVerification(true);
+  //   }, 500);
+  // };
 
   const onPressConfirmPickup = async () => {
     setVisible(false);
@@ -414,19 +414,6 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
             );
           }}
           onPressReject={onPressRejectRequest}
-          // onPressStartJob={() => {
-          //   Alert.alert("Accept job", "Are you sure you want to Confirm job?", [
-          //     {
-          //       text: "Cancel",
-          //       onPress: () => console.log("Cancel Pressed"),
-          //     },
-          //     {
-          //       text: "Yes",
-          //       onPress: () => onPressStartJob(),
-          //     },
-          //   ]);
-          // }}
-          // onPressEndJob={onPressEndJob}
         />
       )}
       <DeliveryCodeVerificationPopup

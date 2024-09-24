@@ -24,6 +24,7 @@ import PackageDetails from "../screens/Packages/PackageDetails";
 import Chatroom from "../screens/chat/Chatroom";
 import TransactionHistory from "../screens/profile/TransactionHistory";
 import Messaging from "../screens/chat/Messaging";
+import AdminVerification from "../screens/authentication/AdminVerification";
 
 const Stack = createNativeStackNavigator<AppRoutes>();
 
@@ -74,6 +75,10 @@ const MainStack = () => {
           component={TransactionHistory}
         />
         <Stack.Screen name={Route.navMessaging} component={Messaging} />
+        <Stack.Screen
+          name={Route.navAdminVerification}
+          component={AdminVerification}
+        />
       </Stack.Navigator>
     </GestureHandlerRootView>
   );

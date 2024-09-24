@@ -115,7 +115,7 @@ const Onboard: React.FC<MainNavigationProps<Route.navOnboard>> = ({
             ],
             { useNativeDriver: false }
           )}
-          renderItem={({ item, index }) => <SliderItem item={item} />}
+          renderItem={({ item }) => <SliderItem item={item} />}
         />
         <View style={{ alignItems: "center", marginBottom: 50 }}>
           <Paginator

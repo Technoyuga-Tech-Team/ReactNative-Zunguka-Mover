@@ -66,9 +66,6 @@ export const userRegistration = createAsyncThunk<
       return rejectWithValue(errors);
     }
 
-    console.log("data", data);
-    console.log("authorization", authorization);
-
     if (authorization) {
       dispatch(setUserData(data?.user));
       setData(USER_DATA, data?.user);
@@ -189,9 +186,6 @@ export const userOTPCode = createAsyncThunk<
       )
     );
 
-    console.log("data", data);
-    console.log("errors", errors);
-
     if (errors) {
       return rejectWithValue(errors);
     }
@@ -289,9 +283,6 @@ export const userResendOTP = createAsyncThunk<
       )
     );
 
-    console.log("errors", errors);
-    console.log("data", data);
-
     if (errors) {
       return rejectWithValue(errors);
     }
@@ -367,7 +358,6 @@ export const oAuthLogin = createAsyncThunk<
       return rejectWithValue(errors);
     }
 
-    console.log("USER data - - - - ", data?.user);
     if (data?.user) {
       dispatch(setUserData(data?.user));
       setData(USER_DATA, data?.user);
@@ -430,7 +420,6 @@ export const userVerifyId = createAsyncThunk<
     if (errors) {
       return rejectWithValue(errors);
     }
-    console.log("data --   -- - - - - - - - ", data);
     if (data?.data) {
       dispatch(setUserData(data?.data));
       setData(USER_DATA, data?.data);

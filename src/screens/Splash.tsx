@@ -34,15 +34,10 @@ const Splash: React.FC<SplashScreenProps> = () => {
       if (token) {
         const user_data = await getData(USER_DATA);
         dispatch(setUserData(user_data));
-        console.log("user_data", user_data);
         let steps = user_data.step;
         console.log("steps", steps);
         let isStepCompleted = user_data.is_profile_completed;
-        console.log("isStepCompleted", isStepCompleted);
-
         let isVerify_by_Admin = user_data.is_kyc_verified_by_admin;
-        console.log("isVerify_by_Admin", isVerify_by_Admin);
-
         setTimeout(() => {
           if (isStepCompleted == 1 && isVerify_by_Admin == 1) {
             setUpNavigation();
@@ -120,31 +115,6 @@ const Splash: React.FC<SplashScreenProps> = () => {
       );
     }
   };
-
-  //   const setUpNavigation = async () => {
-  //     const {data: currentUser} = await fetch({
-  //       url: API.ME,
-  //       method: 'GET',
-  //     });
-
-  //     if (currentUser && currentUser?.status === 1) {
-  //       // setNavigation(currentUser.user, navigation);
-  //     } else {
-  //       navigation.dispatch(
-  //         CommonActions.reset({
-  //           index: 0,
-  //           routes: [
-  //             {
-  //               name: Route.navAuthentication,
-  //               state: {
-  //                 routes: [{name: Route.navLogin}],
-  //               },
-  //             },
-  //           ],
-  //         }),
-  //       );
-  //     }
-  //   };
 
   return (
     <View style={styles.container}>

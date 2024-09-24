@@ -9,6 +9,7 @@ export enum Route {
   navSignup = "Signup",
   navAddKyc = "AddKyc",
   navTakeSelfie = "TakeSelfie",
+  navAdminVerification = "AdminVerification",
   navInbox = "Inbox",
   navForgotPassword = "ForgotPassword",
   navResetPassword = "ResetPassword",

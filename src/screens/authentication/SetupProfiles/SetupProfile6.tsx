@@ -17,6 +17,7 @@ import CustomDropdown from "../../../components/Dropdown/CustomDropdown";
 import { VEHICLE_TYPE_DATA } from "../../../constant";
 import PrevNextCont from "../../../components/PrevNextCont";
 import { UserRoleType } from "../../../types/user.types";
+import { CommonActions } from "@react-navigation/native";
 
 const SetupProfile6: React.FC<AuthNavigationProps<Route.navSetupProfile6>> = ({
   navigation,
@@ -66,7 +67,16 @@ const SetupProfile6: React.FC<AuthNavigationProps<Route.navSetupProfile6>> = ({
       if (userSetupProfile.fulfilled.match(result)) {
         if (result.payload?.data) {
           if (result.payload?.data?.mover_setup_step == 6) {
-            navigation.navigate(Route.navSetupProfile7);
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [
+                  {
+                    name: Route.navDashboard,
+                  },
+                ],
+              })
+            );
           }
         }
       } else {

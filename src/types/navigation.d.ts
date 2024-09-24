@@ -47,6 +47,7 @@ export type AppRoutes = {
   PayoutHistory: undefined;
   ReviewAndRating: undefined;
   Alert: undefined;
+  AdminVerification: undefined;
   Withdraw: { earning: string };
   PackageDetails: {
     package_details_id: string;
@@ -207,6 +208,7 @@ export type HomeRoutes = {
   Messaging: undefined;
   TransactionHistory: undefined;
   EditProfile: undefined;
+  AdminVerification: undefined;
 };
 
 export type SellAnItemRoutes = {

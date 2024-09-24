@@ -137,7 +137,7 @@ const SetupProfile5: React.FC<AuthNavigationProps<Route.navSetupProfile5>> = ({
       <View style={style.innerCont}>
         <CustomDropdown
           dropDownData={DISTRICT_AND_SECTORS}
-          placeHolder={"State"}
+          placeHolder={"District"}
           value={district}
           topMargin={10}
           onSelect={onSelectState}
@@ -145,7 +145,7 @@ const SetupProfile5: React.FC<AuthNavigationProps<Route.navSetupProfile5>> = ({
         />
         <CustomDropdown
           dropDownData={sectorData}
-          placeHolder={"City"}
+          placeHolder={"Sector"}
           value={sector}
           topMargin={10}
           onSelect={onSelectCity}

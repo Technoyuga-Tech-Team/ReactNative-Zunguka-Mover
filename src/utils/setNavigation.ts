@@ -141,29 +141,6 @@ export const setNavigation = async (
               ],
             })
           )
-        : currentUser?.mover_setup_step == 6
-        ? navigation.dispatch(
-            CommonActions.reset({
-              index: 0,
-              routes: [
-                {
-                  name: Route.navAuthentication,
-                  state: {
-                    routes: [
-                      { name: Route.navLogin },
-                      { name: Route.navSetupProfile1 },
-                      { name: Route.navSetupProfile2 },
-                      { name: Route.navSetupProfile3 },
-                      { name: Route.navSetupProfile4 },
-                      { name: Route.navSetupProfile5 },
-                      { name: Route.navSetupProfile6 },
-                      { name: Route.navSetupProfile7 },
-                    ],
-                  },
-                },
-              ],
-            })
-          )
         : navigation.dispatch(
             CommonActions.reset({
               index: 0,

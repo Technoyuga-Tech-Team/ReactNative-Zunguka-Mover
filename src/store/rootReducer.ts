@@ -6,6 +6,7 @@ import authentication from "../store/authentication/authentication.slice";
 import userProfile from "../store/userprofile/userprofile.slice";
 import moverBooking from "../store/MoverBooking/moverBooking.slice";
 import myEarning from "../store/MyEarning/myEarning.slice";
+import packageStatus from "../store/PackageStatus/packageStatus.slice";
 
 const rootReducer = combineReducers<RootReduxState>({
   global,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers<RootReduxState>({
   userProfile,
   moverBooking,
   myEarning,
+  packageStatus,
 });
 
 export default rootReducer;

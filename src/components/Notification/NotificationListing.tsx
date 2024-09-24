@@ -56,6 +56,7 @@ export default NotificationListing;
 const useStyles = makeStyles((theme) => ({
   container: {
     flexGrow: 1,
+    paddingBottom: 50,
   },
   noDataCont: { flex: 1, alignItems: "center", justifyContent: "center" },
   txtNoData: {

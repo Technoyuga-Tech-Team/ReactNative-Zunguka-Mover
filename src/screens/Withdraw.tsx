@@ -1,24 +1,20 @@
 import React, { useState } from "react";
 import { Keyboard, StatusBar, Text, TextInput, View } from "react-native";
 import { makeStyles, useTheme } from "react-native-elements";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { RFValue } from "react-native-responsive-fontsize";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import {
-  HomeNavigationProps,
-  MainNavigationProps,
-  MoverHomeNavigationProps,
-} from "../types/navigation";
+import CustomButton from "../components/ui/CustomButton";
+import CustomHeader from "../components/ui/CustomHeader";
+import { RWF, SCREEN_HEIGHT } from "../constant";
 import { Route } from "../constant/navigationConstants";
 import { useAppDispatch } from "../hooks/useAppDispatch";
 import { selectMyEarningLoading } from "../store/MyEarning/myEarning.selector";
 import { sendPayoutRequest } from "../store/MyEarning/myEarning.thunk";
 import { setSuccess } from "../store/global/global.slice";
-import CustomHeader from "../components/ui/CustomHeader";
-import CustomButton from "../components/ui/CustomButton";
 import { LoadingState, ThemeProps } from "../types/global.types";
-import { RWF, SCREEN_HEIGHT } from "../constant";
+import { MainNavigationProps } from "../types/navigation";
 
 const Withdraw: React.FC<MainNavigationProps<Route.navWithdraw>> = ({
   navigation,

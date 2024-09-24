@@ -158,10 +158,8 @@ const hasEmail = (text: string) => {
 const hasPhone = (text: string) => {
   const rgx = /\d{10}/;
   const phoneMatch = text.match(rgx);
-  console.log("phoneMatch", phoneMatch);
   if (phoneMatch) {
     return Yup.string().test("phone", "", (value) => {
-      console.log("value", value);
       return rgx.test(value);
     });
   } else {

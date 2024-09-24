@@ -4,21 +4,18 @@ import { Platform, View } from "react-native";
 import { makeStyles, useTheme } from "react-native-elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
-import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { selectUserData } from "../../store/settings/settings.selectors";
-import { ThemeProps } from "../../types/global.types";
-import {
-  HomeNavigationProps,
-  MainNavigationProps,
-} from "../../types/navigation";
-import { getData } from "../../utils/asyncStorage";
-import { Route } from "../../constant/navigationConstants";
-import { setSaveNotificationCount } from "../../store/settings/settings.slice";
+import NotificationListing from "../../components/Notification/NotificationListing";
+import CustomHeader from "../../components/ui/CustomHeader";
 import { BASE_URL, HAS_NOTCH, secureStoreKeys } from "../../constant";
 import { API } from "../../constant/apiEndpoints";
-import CustomHeader from "../../components/ui/CustomHeader";
+import { Route } from "../../constant/navigationConstants";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { selectUserData } from "../../store/settings/settings.selectors";
+import { setSaveNotificationCount } from "../../store/settings/settings.slice";
+import { ThemeProps } from "../../types/global.types";
+import { MainNavigationProps } from "../../types/navigation";
 import { GetNotificationDataList } from "../../types/notification.types";
-import NotificationListing from "../../components/Notification/NotificationListing";
+import { getData } from "../../utils/asyncStorage";
 
 const Inbox: React.FC<MainNavigationProps<Route.navAlert>> = ({
   navigation,

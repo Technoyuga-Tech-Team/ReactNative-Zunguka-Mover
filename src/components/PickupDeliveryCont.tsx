@@ -38,7 +38,7 @@ const PickupDeliveryCont: React.FC<PickupDeliveryContProps> = ({
       </View>
       <View style={style.iconAddrCont}>
         <View style={style.iconCont}>
-          <LocationIcon color={theme.colors?.primary} height={22} width={22} />
+          <LocationIcon color={"#67C2C9"} height={22} width={22} />
         </View>
         <Text numberOfLines={2} style={style.txtAddresses}>
           {deliveryAddress}

@@ -37,7 +37,7 @@ const Authentication = () => {
       <Stack.Screen name={Route.navSetupProfile4} component={SetupProfile4} />
       <Stack.Screen name={Route.navSetupProfile5} component={SetupProfile5} />
       <Stack.Screen name={Route.navSetupProfile6} component={SetupProfile6} />
-      <Stack.Screen name={Route.navSetupProfile7} component={SetupProfile7} />
+      {/* <Stack.Screen name={Route.navSetupProfile7} component={SetupProfile7} /> */}
     </Stack.Navigator>
   );
 };

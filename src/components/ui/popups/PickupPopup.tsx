@@ -112,7 +112,6 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
       delivery_point_lng
     );
     setDistance(`${distance.toFixed(2)}`);
-    console.log("distance - - - ", distance);
   }, [
     pickup_point_lat,
     pickup_point_lng,
@@ -177,8 +176,6 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
                   if (data.routes && data.routes.length > 0) {
                     const route = data.routes[0];
                     const eta = route.legs[0].duration.text;
-                    console.log("eta - - - - -", eta);
-
                     eta && setDistanceForPickup(eta);
                     setDistanceLoader(false);
                   }
@@ -199,39 +196,6 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
       clearInterval(interval);
     };
   }, [locationEnabled, pickup_point_lat, pickup_point_lng]);
-
-  // useEffect(() => {
-  //   if (locationEnabled) {
-
-  //     const watchId = Geolocation.watchPosition(
-  //       (position) => {
-  //         const currentLatitude = position.coords.latitude;
-  //         const currentLongitude = position.coords.longitude;
-  //         let startLoc = `${currentLatitude},${currentLongitude}`;
-  //         let destinationLoc = `${pickup_point_lat},${pickup_point_lng}`;
-  //         console.log("startLoc", startLoc);
-  //         console.log("destinationLoc", destinationLoc);
-  //         fetch(
-  //           `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=${GOOGLE_MAP_API_KEY}`
-  //         )
-  //           .then((response) => response.json())
-  //           .then((data) => {
-  //             if (data.routes && data.routes.length > 0) {
-  //               const route = data.routes[0];
-  //               const eta = route.legs[0].duration.text;
-  //               console.log("eta - - - - -", eta);
-
-  //               eta && setDistanceForPickup(eta);
-  //             }
-  //           })
-  //           .catch((error) => console.error("Error:", error));
-  //       },
-  //       (error) => console.log("error", error),
-  //       { enableHighAccuracy: true, interval: 2000 } // Update at least every 2 seconds
-  //     );
-  //     return () => Geolocation.clearWatch(watchId);
-  //   }
-  // }, [locationEnabled, pickup_point_lat, pickup_point_lng]);
 
   const getPackageDetails = async () => {
     setLoader(true);

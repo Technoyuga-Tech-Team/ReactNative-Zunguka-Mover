@@ -88,8 +88,6 @@ const RatingAndReviews: React.FC<
     }
   };
 
-  console.log("moverRatingHistoryData", moverRatingHistoryData);
-
   return (
     <View style={style.container}>
       <CustomHeader title="Your reviews" />

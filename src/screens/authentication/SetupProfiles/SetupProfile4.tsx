@@ -135,7 +135,8 @@ const SetupProfile4: React.FC<AuthNavigationProps<Route.navSetupProfile4>> = ({
     setTimeout(async () => {
       try {
         const imageObject = await getImageFromGallary({ multiple: true });
-        if (imageObject?.length < 1) {
+        console.log("imageObject- -", imageObject?.length);
+        if (imageObject?.length <= 1) {
           setSelectedImage([
             ...selectedImage,
             ...imageObject.map((image: { uri: any }) => image.uri),

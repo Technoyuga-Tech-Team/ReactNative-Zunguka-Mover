@@ -239,7 +239,7 @@ const SetupProfile1: React.FC<AuthNavigationProps<Route.navSetupProfile1>> = ({
             titleStyle={style.txtTitleStyle}
           />
         </View>
-        <View style={style.imagePickerCont}>
+        {/* <View style={style.imagePickerCont}>
           <Text style={style.txtChoose}>or choose one:</Text>
           <FlatList
             data={Profiles}
@@ -248,7 +248,7 @@ const SetupProfile1: React.FC<AuthNavigationProps<Route.navSetupProfile1>> = ({
             horizontal
             showsHorizontalScrollIndicator={false}
           />
-        </View>
+        </View> */}
       </View>
       <PrevNextCont
         onPressNext={onPressNext}
