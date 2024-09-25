@@ -178,6 +178,8 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
                     const eta = route.legs[0].duration.text;
                     eta && setDistanceForPickup(eta);
                     setDistanceLoader(false);
+                  } else {
+                    setDistanceLoader(false);
                   }
                 })
                 .catch((error) => {
@@ -186,11 +188,14 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
                 });
             }
           },
-          (error) => console.log("error", error)
+          (error) => {
+            setDistanceLoader(false);
+            console.log("error", error);
+          }
           // Update at least every 2 seconds
         );
       }
-    }, 5000); // Update every second
+    }, 10000); // Update every second
 
     return () => {
       clearInterval(interval);
@@ -586,13 +591,12 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
             >
               {!isConfirmed ? (
                 <Text style={style.txtdesc}>
-                  You will be able to contact customer once you confirm pick up
+                  You will be able to contact customer once you Accept this job
                 </Text>
               ) : (
                 <Text style={style.txtdesc}>You can chat with your client</Text>
               )}
             </View>
-
             <>
               {!isConfirmed && (
                 <TouchableOpacity
@@ -600,7 +604,7 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
                   activeOpacity={0.8}
                   style={[style.btnPickup]}
                 >
-                  <Text style={[style.txtBtn]}>{"Confirm pick up"}</Text>
+                  <Text style={[style.txtBtn]}>{"Accept this job"}</Text>
                   <Text style={[style.txtBtn]}>
                     {RWF} {Number(selectedItem?.price).toFixed(2)}
                   </Text>

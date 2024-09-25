@@ -18,6 +18,8 @@ import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { setUserData } from "../../store/settings/settings.slice";
 import { selectUserData } from "../../store/settings/settings.selectors";
 import { CommonActions } from "@react-navigation/native";
+import { setErrors } from "../../store/global/global.slice";
+import Loading from "../../components/ui/Loading";
 
 const AdminVerification: React.FC<
   HomeNavigationProps<Route.navAdminVerification>
@@ -31,11 +33,18 @@ const AdminVerification: React.FC<
   const loading = useSelector(selectAuthenticationLoading);
 
   const [isVerifiedByAdmin, setIsVerifiedByAdmin] = useState<number>(0);
+  const [loader, setLoader] = useState(true);
 
   const { data: currentUser, refetch: refetchUser } = useMeQuery({
     staleTime: Infinity,
     refetchInterval: 5000,
   });
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoader(false);
+    }, 1000);
+  }, []);
 
   useEffect(() => {
     if (currentUser?.user) {
@@ -53,7 +62,7 @@ const AdminVerification: React.FC<
 
   useEffect(() => {
     if (userData) {
-      setIsVerifiedByAdmin(userData?.is_kyc_verified_by_admin);
+      setIsVerifiedByAdmin(userData?.all_documentation_approved_by_admin);
     }
   }, [userData]);
 
@@ -65,23 +74,66 @@ const AdminVerification: React.FC<
           routes: [{ name: Route.navDashboard }],
         })
       );
+    } else if (isVerifiedByAdmin == 0) {
+      dispatch(
+        setErrors({
+          message: "Account verification is pending.",
+          status: 0,
+          statusCode: null,
+        })
+      );
+    } else {
+      dispatch(
+        setErrors({
+          message: "Account verification is rejected.",
+          status: 0,
+          statusCode: null,
+        })
+      );
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [
+            {
+              name: Route.navAuthentication,
+              state: {
+                routes: [{ name: Route.navLogin }],
+              },
+            },
+          ],
+        })
+      );
     }
   };
+
+  const img =
+    isVerifiedByAdmin == 0
+      ? Images.LOADER
+      : isVerifiedByAdmin == 1
+      ? Images.CHEARS
+      : Images.OOPS;
 
   // Images.CHEARS
   return (
     <View style={style.container}>
       <CustomHeader title="Admin Verification" />
+      {loader && <Loading backgroundColor={theme?.colors?.white} />}
+
       <View style={style.innerCont}>
-        <AppImage
-          source={Images.LOADER}
-          style={style.img}
-          resizeMode="contain"
-        />
-        <Text style={style.txtTitle}>Profile under review</Text>
+        <AppImage source={img} style={style.img} resizeMode="contain" />
+        <Text style={style.txtTitle}>
+          {isVerifiedByAdmin == 0
+            ? "Profile under review"
+            : isVerifiedByAdmin == 1
+            ? "Profile verification Successfully"
+            : "Profile is rejecetd"}
+        </Text>
         <Text style={style.txtFace}>
-          Your profile is under review, please wait for 24 hours admin will
-          verify
+          {isVerifiedByAdmin == 0
+            ? "Your profile is under review, please wait for 24 hours admin will verify"
+            : isVerifiedByAdmin == 1
+            ? "Your profile is verified, you are good to go"
+            : "Your profile is rejected by Admin"}
         </Text>
       </View>
       <CustomButton
@@ -118,6 +170,7 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
     fontSize: Scale(30),
     fontFamily: theme?.fontFamily?.bold,
     color: theme?.colors?.black,
+    textAlign: "center",
   },
   img: { height: 70, width: 70, marginBottom: 20 },
   innerCont: {

@@ -73,6 +73,7 @@ export type UserData = {
   is_selfie_uploaded: number;
   is_mover_setup_profile_done: number;
   mover_setup_step: number;
+  all_documentation_approved_by_admin: number;
 };
 
 export interface getUserData {

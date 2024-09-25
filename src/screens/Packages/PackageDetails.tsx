@@ -91,7 +91,8 @@ const PackageDetails: React.FC<
         `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=${KEY}`
       );
       let respJson = await resp.json();
-      let points = decode(respJson.routes[0].overview_polyline.points);
+      console.log("respJson", JSON.stringify(respJson));
+      let points = decode(respJson?.routes[0]?.overview_polyline?.points);
       let coords = points.map((point: any[], index: any) => {
         return {
           latitude: point[0],
@@ -100,6 +101,7 @@ const PackageDetails: React.FC<
       });
       return coords;
     } catch (error) {
+      console.log("error = = = ", error);
       return error;
     }
   };
@@ -111,7 +113,7 @@ const PackageDetails: React.FC<
       `${destination_lat_lng?.lat},${destination_lat_lng?.lng}`
     )
       .then((coords: any) => setCoords(coords))
-      .catch((err) => console.log("Something went wrong"));
+      .catch((err) => console.log("Something went wrong", err));
   }, []);
 
   useEffect(() => {

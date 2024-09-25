@@ -399,8 +399,8 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
           loading={loading}
           onPressConfirmPickup={() => {
             Alert.alert(
-              "Confirm Pickup",
-              "Are you sure you want to confirm this job?",
+              "Accept this job",
+              "Are you sure you want to Accept this job?",
               [
                 {
                   text: "Cancel",
