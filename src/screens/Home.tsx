@@ -28,10 +28,15 @@ import {
 } from "../store/MoverBooking/moverBooking.thunk";
 import {
   getNotificationCount,
+  getUnreadCount,
   selectMoverRequestData,
   selectUserData,
 } from "../store/settings/settings.selectors";
-import { setUserData } from "../store/settings/settings.slice";
+import {
+  setTotalUnreadAlertCount,
+  setTotalUnreadNotificationCount,
+  setUserData,
+} from "../store/settings/settings.slice";
 import { LoadingState, ThemeProps } from "../types/global.types";
 import { MoverHomeNavigationProps } from "../types/navigation";
 import CancelRequestWithReason from "../components/ui/popups/CancelRequestWithReason";
@@ -40,6 +45,7 @@ import notifee, {
   AuthorizationStatus,
   Notification,
 } from "@notifee/react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   navigation,
@@ -53,6 +59,7 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   const userData = useSelector(selectUserData);
   const loading = useSelector(selectMoverBookingLoading);
   const notificationCount = useSelector(getNotificationCount);
+  const unread_notification_Count = useSelector(getUnreadCount);
 
   const appState = useRef(AppState.currentState);
 
@@ -63,6 +70,12 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   const [visibleCodeVerification, setVisibleCodeVerification] = useState(false);
   const [visibleAcceptedPopup, setVisibleAcceptedPopup] = useState(false);
   const [openCancelRequestPopup, setOpenCancelRequestPopup] = useState(false);
+  const [unreadNotificationCount, setUnreadNotificationCount] =
+    React.useState(0);
+
+  useEffect(() => {
+    setUnreadNotificationCount(unread_notification_Count);
+  }, [unread_notification_Count]);
 
   const { data: currentUser, refetch } = useMeQuery({
     staleTime: Infinity,
@@ -111,6 +124,14 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   useEffect(() => {
     if (currentUser?.user) {
       dispatch(setUserData(currentUser?.user));
+      console.log(
+        "currentUser?.user?.unread_notifications",
+        currentUser?.user?.unread_notifications
+      );
+      dispatch(
+        setTotalUnreadNotificationCount(currentUser?.user?.unread_notifications)
+      );
+      dispatch(setTotalUnreadAlertCount(currentUser?.user?.unread_alerts));
     }
   }, [currentUser]);
 
@@ -159,6 +180,11 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
         socket.emit("disconnected", userData?.id);
         socket.emit("offline");
         socket.disconnect();
+        const setNotificationHandled = async () => {
+          console.log("Called  notificationHandled to FALSE");
+          await AsyncStorage.setItem("notificationHandled", "false");
+        };
+        setNotificationHandled();
       }
 
       appState.current = nextAppState;
@@ -361,7 +387,7 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
         onPressNotification={onPressNotification}
         avgRate={userData?.avg_rate}
         totalUserRate={userData?.total_user_rate}
-        notificationCount={notificationCount}
+        notificationCount={unreadNotificationCount}
       />
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}

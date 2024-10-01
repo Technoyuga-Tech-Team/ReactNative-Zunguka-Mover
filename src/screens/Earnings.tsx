@@ -55,8 +55,8 @@ const Earnings: React.FC<MoverHomeNavigationProps<Route.navEarnings>> = ({
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       setMyEarningData([]);
-      setStartDate(new Date());
-      setEndDate(new Date());
+      // setStartDate(new Date());
+      // setEndDate(new Date());
       onPressPrev(6);
     });
     return () => {

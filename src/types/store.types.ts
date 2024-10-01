@@ -6,6 +6,7 @@ import { UserProfileState } from "./user.types";
 import { MoverBookingState } from "./moverBooking.types";
 import { MyEarningState } from "./myEarning.types";
 import { PackageStatusState } from "./packageStatus.types";
+import { NotificationStatusState } from "./notification.types";
 
 export interface RootReduxState {
   global: GlobalState;
@@ -15,6 +16,7 @@ export interface RootReduxState {
   moverBooking: MoverBookingState;
   myEarning: MyEarningState;
   packageStatus: PackageStatusState;
+  notification: NotificationStatusState;
 }
 
 export type AppDispatch = ThunkDispatch<

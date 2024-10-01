@@ -26,8 +26,12 @@ import {
   setErrorFromSocial,
   setMoverRequestList,
   setSaveNotificationCount,
+  setTotalUnreadAlertCount,
+  setTotalUnreadNotificationCount,
 } from "../store/settings/settings.slice";
 import MainStack from "./MainStack";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import store from "../store/store";
 
 const linking: LinkingOptions<{}> = {
   prefixes: [`http://${BASE_PORT}/`, `zunguka://`],
@@ -115,9 +119,18 @@ const MainNavigator = () => {
     theme.colors?.grey5,
   ]);
 
-  const handleClickedNotitfaction = (
+  const handleClickedNotitfaction = async (
     notification: FirebaseMessagingTypes.RemoteMessage | Notification
-  ): void => {
+  ) => {
+    await AsyncStorage.setItem("notificationHandled", "true");
+    if (notification?.data?.is_notification == "1") {
+      let unread_noti_count = notification?.data?.unread_notifications;
+      dispatch(setTotalUnreadNotificationCount(Number(unread_noti_count)));
+    }
+    if (notification?.data?.is_alert == "1") {
+      let unread_alerts = notification?.data?.unread_alerts;
+      dispatch(setTotalUnreadAlertCount(Number(unread_alerts)));
+    }
     setTimeout(() => {
       if (notification && notification.data && notification.data.type) {
         switch (notification.data.type) {
@@ -155,7 +168,19 @@ const MainNavigator = () => {
 
   const onNotifeeMessageReceived = async (message: any) => {
     console.log("message - - - ", message);
-    dispatch(setSaveNotificationCount(notificationCount + 1));
+    if (message.data.is_notification == "1") {
+      let unread_noti_count = store.getState().settings.unread_count;
+      console.log("unread_noti_count - - - -", unread_noti_count);
+      dispatch(
+        setTotalUnreadNotificationCount(message.data.unread_notifications)
+      );
+    }
+    if (message.data.is_alert == "1") {
+      let unread_alerts = store.getState().settings.unread_alert_count;
+      console.log("unread_alerts - - - -", unread_alerts);
+      dispatch(setTotalUnreadAlertCount(message.data.unread_alerts));
+    }
+
     if (message?.data?.type === "nearby_request") {
       const result = await dispatch(
         moverRequestedDetails({
@@ -192,19 +217,32 @@ const MainNavigator = () => {
     });
   };
 
-  messaging()
-    .getInitialNotification()
-    .then((remoteMessage) => {
-      if (remoteMessage) {
-        console.log(
-          "Notification clicked when the app is in the background or terminated:",
-          remoteMessage
-        );
-        handleClickedNotitfaction(remoteMessage);
-        // Handle the notification click here
-        // You can navigate to a specific screen or perform other actions
-      }
-    });
+  useEffect(() => {
+    const checkInitialNotification = async () => {
+      const isnotificationHandled = await AsyncStorage.getItem(
+        "notificationHandled"
+      );
+      let notificationHandled = JSON.parse(isnotificationHandled);
+      console.log("notificationHandled - - ", notificationHandled);
+      messaging()
+        .getInitialNotification()
+        .then(async (remoteMessage) => {
+          if (remoteMessage) {
+            console.log(
+              "Notification clicked when the app is in the background or terminated:",
+              remoteMessage
+            );
+            if (remoteMessage && !notificationHandled) {
+              handleClickedNotitfaction(remoteMessage);
+            }
+
+            // Handle the notification click here
+            // You can navigate to a specific screen or perform other actions
+          }
+        });
+    };
+    checkInitialNotification();
+  }, []);
 
   messaging().onNotificationOpenedApp((remoteMessage) => {
     console.log(

@@ -132,19 +132,10 @@ const Login: React.FC<AuthNavigationProps<Route.navLogin>> = ({
           let isStepCompleted = result.payload?.user?.is_profile_completed;
           let isVerify_by_Admin =
             result.payload?.user?.is_kyc_verified_by_admin;
-          if (isStepCompleted == 1 && isVerify_by_Admin == 1) {
-            setNavigation(result.payload?.user, navigationRoute);
-          } else {
-            if (steps == 0) {
-              // navigation.navigate(Route.navAddKyc);
-              navigation.dispatch(
-                CommonActions.reset({
-                  index: 0,
-                  routes: [{ name: Route.navAddKyc }],
-                })
-              );
-            } else if (steps == 2 || steps == 3) {
-              // navigation.navigate(Route.navTakeSelfie, { fromflow: false });
+          if (isStepCompleted == 1) {
+            if (isVerify_by_Admin == 1) {
+              setNavigation(result.payload?.user, navigationRoute);
+            } else {
               navigation.dispatch(
                 CommonActions.reset({
                   index: 0,
@@ -154,14 +145,20 @@ const Login: React.FC<AuthNavigationProps<Route.navLogin>> = ({
                 })
               );
             }
+          } else {
+            if (steps == 0) {
+              // navigation.navigate(Route.navAddKyc);
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{ name: Route.navAddKyc }],
+                })
+              );
+            } else if (steps == 2) {
+              // navigation.navigate(Route.navTakeSelfie, { fromflow: false });
+              setNavigation(result.payload?.user, navigationRoute);
+            }
           }
-          // if (steps !== 2) {
-          //   if (steps == 0) {
-          //     navigation.navigate(Route.navAddKyc);
-          //   }
-          // } else {
-          //   setNavigation(result.payload?.user, navigationRoute);
-          // }
         }
       } else {
         console.log("errror userLogin --->", result.payload);

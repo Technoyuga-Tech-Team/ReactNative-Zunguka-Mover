@@ -37,10 +37,25 @@ const Splash: React.FC<SplashScreenProps> = () => {
         let steps = user_data.step;
         console.log("steps", steps);
         let isStepCompleted = user_data.is_profile_completed;
+        console.log("isStepCompleted", isStepCompleted);
+
         let isVerify_by_Admin = user_data.is_kyc_verified_by_admin;
+        console.log("isVerify_by_Admin", isVerify_by_Admin);
+
         setTimeout(() => {
-          if (isStepCompleted == 1 && isVerify_by_Admin == 1) {
-            setUpNavigation();
+          if (isStepCompleted == 1) {
+            if (isVerify_by_Admin == 1) {
+              setUpNavigation();
+            } else {
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [
+                    { name: Route.navTakeSelfie, params: { fromflow: false } },
+                  ],
+                })
+              );
+            }
           } else {
             if (steps == 0) {
               // @ts-ignore
@@ -51,17 +66,8 @@ const Splash: React.FC<SplashScreenProps> = () => {
                   routes: [{ name: Route.navAddKyc }],
                 })
               );
-            } else if (steps == 2 || steps == 3) {
-              // @ts-ignore
-              // navigation.navigate(Route.navTakeSelfie, { fromflow: false });
-              navigation.dispatch(
-                CommonActions.reset({
-                  index: 0,
-                  routes: [
-                    { name: Route.navTakeSelfie, params: { fromflow: false } },
-                  ],
-                })
-              );
+            } else if (steps == 2) {
+              setUpNavigation();
             }
           }
           // setUpNavigation();

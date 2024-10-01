@@ -56,7 +56,13 @@ const HeaderHome: React.FC<HeaderHomeProps> = ({
             onPress={onPressNotification}
           >
             <BellIcon color={theme?.colors?.primaryVibrant} />
-            {notificationCount > 0 && <View style={style.redDot} />}
+            {notificationCount > 0 && (
+              <View style={style.redDot}>
+                <Text style={style.txtNotificationCount}>
+                  {notificationCount}
+                </Text>
+              </View>
+            )}
           </TouchableOpacity>
         </View>
         <View>
@@ -134,14 +140,19 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
     marginHorizontal: 10,
   },
   redDot: {
-    height: Scale(12),
-    width: Scale(12),
-    borderRadius: Scale(12 / 2),
+    height: Scale(18),
+    width: Scale(18),
+    borderRadius: Scale(18 / 2),
     backgroundColor: theme.colors?.pinkDark,
-    borderWidth: 1.5,
-    borderColor: theme.colors?.white,
     position: "absolute",
-    right: 4,
-    top: 2.5,
+    right: -5,
+    top: -5,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  txtNotificationCount: {
+    fontSize: theme.fontSize?.fs10,
+    fontFamily: theme.fontFamily?.bold,
+    color: theme.colors?.white,
   },
 }));

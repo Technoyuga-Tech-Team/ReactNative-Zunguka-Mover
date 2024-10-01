@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 import { makeStyles, useTheme } from "react-native-elements";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { AuthNavigationProps } from "../../../types/navigation";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
+import CustomDropdown from "../../../components/Dropdown/CustomDropdown";
+import PrevNextCont from "../../../components/PrevNextCont";
+import SetupProfileHeader from "../../../components/SetupProfileHeader";
+import Loading from "../../../components/ui/Loading";
+import { RWF, VEHICLE_TYPE_DATA } from "../../../constant";
 import { Route } from "../../../constant/navigationConstants";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { useMeQuery } from "../../../hooks/useMeQuery";
-import { useSelector } from "react-redux";
 import { selectUserProfileLoading } from "../../../store/userprofile/userprofile.selectors";
 import { userSetupProfile } from "../../../store/userprofile/userprofile.thunk";
 import { LoadingState, ThemeProps } from "../../../types/global.types";
-import Loading from "../../../components/ui/Loading";
-import SetupProfileHeader from "../../../components/SetupProfileHeader";
-import CustomDropdown from "../../../components/Dropdown/CustomDropdown";
-import { VEHICLE_TYPE_DATA } from "../../../constant";
-import PrevNextCont from "../../../components/PrevNextCont";
+import { AuthNavigationProps } from "../../../types/navigation";
 import { UserRoleType } from "../../../types/user.types";
 import { CommonActions } from "@react-navigation/native";
 
@@ -71,12 +71,23 @@ const SetupProfile6: React.FC<AuthNavigationProps<Route.navSetupProfile6>> = ({
               CommonActions.reset({
                 index: 0,
                 routes: [
-                  {
-                    name: Route.navDashboard,
-                  },
+                  { name: Route.navTakeSelfie, params: { fromflow: true } },
                 ],
               })
             );
+
+            // navigation.navigate(Route.navAdminVerification);
+
+            // navigation.dispatch(
+            //   CommonActions.reset({
+            //     index: 0,
+            //     routes: [
+            //       {
+            //         name: Route.navDashboard,
+            //       },
+            //     ],
+            //   })
+            // );
           }
         }
       } else {
@@ -108,6 +119,14 @@ const SetupProfile6: React.FC<AuthNavigationProps<Route.navSetupProfile6>> = ({
           }}
           error={vehicleError}
         />
+        {selectedVehicle !== "" && (
+          <View style={{ marginTop: 20 }}>
+            <Text style={style.txtPrice}>
+              Vehical price -{" "}
+              {selectedVehicle == "Moto" ? `${RWF} 500` : `${RWF} 1500`}
+            </Text>
+          </View>
+        )}
       </View>
       <PrevNextCont onPressNext={onPressNext} onPressPrev={onPressPrev} />
     </KeyboardAwareScrollView>
@@ -126,5 +145,10 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
     flex: 1,
     paddingTop: 50,
     paddingHorizontal: 20,
+  },
+  txtPrice: {
+    fontSize: theme.fontSize?.fs17,
+    fontFamily: theme.fontFamily?.bold,
+    color: theme?.colors?.black,
   },
 }));

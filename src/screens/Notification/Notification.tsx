@@ -8,11 +8,15 @@ import { BASE_URL, secureStoreKeys } from "../../constant";
 import { API } from "../../constant/apiEndpoints";
 import { Route } from "../../constant/navigationConstants";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { setSaveNotificationCount } from "../../store/settings/settings.slice";
+import {
+  setSaveNotificationCount,
+  setTotalUnreadNotificationCount,
+} from "../../store/settings/settings.slice";
 import { ThemeProps } from "../../types/global.types";
 import { HomeNavigationProps } from "../../types/navigation";
 import { GetNotificationDataList } from "../../types/notification.types";
 import { getData } from "../../utils/asyncStorage";
+import { readUnreadNotification } from "../../store/Notification/notification.thunk";
 
 const Notification: React.FC<HomeNavigationProps<Route.navNotification>> = ({
   navigation,
@@ -30,6 +34,12 @@ const Notification: React.FC<HomeNavigationProps<Route.navNotification>> = ({
   const [notifications, setNotifications] = useState<GetNotificationDataList[]>(
     []
   );
+
+  const [unreadNotification, setUnreadNotificationCount] = useState(0);
+
+  useEffect(() => {
+    dispatch(setTotalUnreadNotificationCount(unreadNotification));
+  }, [unreadNotification]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -82,6 +92,37 @@ const Notification: React.FC<HomeNavigationProps<Route.navNotification>> = ({
     }
   };
 
+  const onPressItem = async (item: GetNotificationDataList) => {
+    if (item.is_read == 0) {
+      let data = [...notifications];
+      data.map((ele) => {
+        if (ele.id == item.id) {
+          return (ele.is_read = 1);
+        }
+      });
+      setNotifications(data);
+      const result = await dispatch(
+        readUnreadNotification({ notification_id: `${item.id}` })
+      );
+      if (readUnreadNotification.fulfilled.match(result)) {
+        if (result.payload.status == 1) {
+          setUnreadNotificationCount(unreadNotification - 1);
+        }
+      } else {
+        console.log("errror getMyEarningData --->", result.payload);
+      }
+    }
+
+    console.log("item - - -", item);
+    if (item.type == "new_message") {
+      // navigate to Search screen
+      navigation.navigate(Route.navChatroom, {
+        product_id: null,
+        receiver_id: item?.reference_id,
+      });
+    }
+  };
+
   return (
     <View style={style.container}>
       <CustomHeader title="Notification" />
@@ -90,6 +131,7 @@ const Notification: React.FC<HomeNavigationProps<Route.navNotification>> = ({
         notificationLoading={loading}
         onEndReached={onEndReached}
         loadMoreLoading={loadMoreLoading}
+        onPressItem={onPressItem}
       />
     </View>
   );

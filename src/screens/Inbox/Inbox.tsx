@@ -11,11 +11,15 @@ import { API } from "../../constant/apiEndpoints";
 import { Route } from "../../constant/navigationConstants";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { selectUserData } from "../../store/settings/settings.selectors";
-import { setSaveNotificationCount } from "../../store/settings/settings.slice";
+import {
+  setSaveNotificationCount,
+  setTotalUnreadAlertCount,
+} from "../../store/settings/settings.slice";
 import { ThemeProps } from "../../types/global.types";
 import { MainNavigationProps } from "../../types/navigation";
 import { GetNotificationDataList } from "../../types/notification.types";
 import { getData } from "../../utils/asyncStorage";
+import { readUnreadAlert } from "../../store/Notification/notification.thunk";
 
 const Inbox: React.FC<MainNavigationProps<Route.navAlert>> = ({
   navigation,
@@ -33,6 +37,11 @@ const Inbox: React.FC<MainNavigationProps<Route.navAlert>> = ({
   const [notifications, setNotifications] = useState<GetNotificationDataList[]>(
     []
   );
+  const [unreadAlertCount, setUnreadAlertCount] = useState(0);
+
+  useEffect(() => {
+    dispatch(setTotalUnreadAlertCount(unreadAlertCount));
+  }, [unreadAlertCount]);
 
   useEffect(() => {
     notifee.cancelDisplayedNotifications();
@@ -50,7 +59,7 @@ const Inbox: React.FC<MainNavigationProps<Route.navAlert>> = ({
     try {
       setLoading(true);
       const response = await fetch(
-        `${BASE_URL}${API.GET_NOTIFICATION}/${limit}/${page}`,
+        `${BASE_URL}${API.GET_ALERT}/${limit}/${page}`,
         {
           method: "GET",
           headers: {
@@ -66,6 +75,7 @@ const Inbox: React.FC<MainNavigationProps<Route.navAlert>> = ({
         setLoading(false);
         setNotifications([...notifications, ...data?.data?.data]);
         setTotalPage(data?.data?.totalPages);
+        setUnreadAlertCount(data?.data?.unread_alerts);
         setPage(page + 1);
         setLoadMoreLoading(false);
       } else {
@@ -86,6 +96,46 @@ const Inbox: React.FC<MainNavigationProps<Route.navAlert>> = ({
     }
   };
 
+  const onPressItem = async (item: GetNotificationDataList) => {
+    if (item.is_read == 0) {
+      let data = [...notifications];
+      data.map((ele) => {
+        if (ele.id == item.id) {
+          return (ele.is_read = 1);
+        }
+      });
+      setNotifications(data);
+      const result = await dispatch(
+        readUnreadAlert({ alert_id: `${item.id}` })
+      );
+      if (readUnreadAlert.fulfilled.match(result)) {
+        if (result.payload.status == 1) {
+          setUnreadAlertCount(unreadAlertCount - 1);
+        }
+      } else {
+        console.log("errror getMyEarningData --->", result.payload);
+      }
+    }
+
+    console.log("item - - -", item);
+    if (item.type == "nearby_request") {
+      // navigate to request mover page
+      navigation.goBack();
+    } else if (item.type == "sold_item") {
+      // navigate to Closed item
+      // @ts-ignore
+      navigation.navigate(Route.navMyStorefront, {
+        screen: Route.navClosedItems,
+      });
+    } else if (item.type == "new_item" || item.type == "saved_item") {
+      // navigate to product details
+      navigation.navigate(Route.navProductDetails, { itemId: item?.item_id });
+    } else if (item.type == "new_message") {
+      // navigate to Search screen
+      // navigation.navigate(Route.navChatroom,{product_id:"",receiver_id:""})
+    }
+  };
+
   return (
     <View style={style.container}>
       <CustomHeader title="Inbox" isBackVisible={false} />
@@ -94,6 +144,7 @@ const Inbox: React.FC<MainNavigationProps<Route.navAlert>> = ({
         notificationLoading={loading}
         onEndReached={onEndReached}
         loadMoreLoading={loadMoreLoading}
+        onPressItem={onPressItem}
       />
     </View>
   );

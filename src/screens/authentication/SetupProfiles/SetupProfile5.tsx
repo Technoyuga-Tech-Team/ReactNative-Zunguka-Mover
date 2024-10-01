@@ -60,6 +60,7 @@ const SetupProfile5: React.FC<AuthNavigationProps<Route.navSetupProfile5>> = ({
     let unsubscribe = navigation.addListener("focus", async () => {
       refetch().then((currentUser) => {
         if (currentUser?.data?.user) {
+          console.log("currentUser?.data?.user", currentUser?.data?.user);
           currentUser?.data?.user?.state &&
             setSelectedDistrict(currentUser?.data?.user?.state);
           currentUser?.data?.user?.city &&

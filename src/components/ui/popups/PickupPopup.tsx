@@ -151,55 +151,49 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
 
   useEffect(() => {
     setDistanceLoader(true);
-    interval = setInterval(() => {
-      if (locationEnabled) {
-        Geolocation.getCurrentPosition(
-          (position) => {
-            const currentLatitude = position.coords.latitude;
-            const currentLongitude = position.coords.longitude;
-            let startLoc = `${currentLatitude},${currentLongitude}`;
-            let destinationLoc = `${pickup_point_lat},${pickup_point_lng}`;
+    if (locationEnabled) {
+      Geolocation.getCurrentPosition(
+        (position) => {
+          const currentLatitude = position.coords.latitude;
+          const currentLongitude = position.coords.longitude;
+          let startLoc = `${currentLatitude},${currentLongitude}`;
+          let destinationLoc = `${pickup_point_lat},${pickup_point_lng}`;
 
-            if (
-              currentLatitude !== 0 &&
-              currentLongitude !== 0 &&
-              pickup_point_lat !== 0 &&
-              pickup_point_lng !== 0
-            ) {
-              console.log("startLoc", startLoc);
-              console.log("destinationLoc", destinationLoc);
-              fetch(
-                `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=${GOOGLE_MAP_API_KEY}`
-              )
-                .then((response) => response.json())
-                .then((data) => {
-                  if (data.routes && data.routes.length > 0) {
-                    const route = data.routes[0];
-                    const eta = route.legs[0].duration.text;
-                    eta && setDistanceForPickup(eta);
-                    setDistanceLoader(false);
-                  } else {
-                    setDistanceLoader(false);
-                  }
-                })
-                .catch((error) => {
+          if (
+            currentLatitude !== 0 &&
+            currentLongitude !== 0 &&
+            pickup_point_lat !== 0 &&
+            pickup_point_lng !== 0
+          ) {
+            console.log("startLoc", startLoc);
+            console.log("destinationLoc", destinationLoc);
+            fetch(
+              `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=${GOOGLE_MAP_API_KEY}`
+            )
+              .then((response) => response.json())
+              .then((data) => {
+                if (data.routes && data.routes.length > 0) {
+                  const route = data.routes[0];
+                  const eta = route.legs[0].duration.text;
+                  eta && setDistanceForPickup(eta);
                   setDistanceLoader(false);
-                  console.error("Error:", error);
-                });
-            }
-          },
-          (error) => {
-            setDistanceLoader(false);
-            console.log("error", error);
+                } else {
+                  setDistanceLoader(false);
+                }
+              })
+              .catch((error) => {
+                setDistanceLoader(false);
+                console.error("Error:", error);
+              });
           }
-          // Update at least every 2 seconds
-        );
-      }
-    }, 10000); // Update every second
-
-    return () => {
-      clearInterval(interval);
-    };
+        },
+        (error) => {
+          setDistanceLoader(false);
+          console.log("error", error);
+        }
+        // Update at least every 2 seconds
+      );
+    }
   }, [locationEnabled, pickup_point_lat, pickup_point_lng]);
 
   const getPackageDetails = async () => {

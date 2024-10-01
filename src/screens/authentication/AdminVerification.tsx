@@ -20,6 +20,8 @@ import { selectUserData } from "../../store/settings/settings.selectors";
 import { CommonActions } from "@react-navigation/native";
 import { setErrors } from "../../store/global/global.slice";
 import Loading from "../../components/ui/Loading";
+import { setData } from "../../utils/asyncStorage";
+import { USER_DATA } from "../../constant";
 
 const AdminVerification: React.FC<
   HomeNavigationProps<Route.navAdminVerification>
@@ -48,6 +50,7 @@ const AdminVerification: React.FC<
 
   useEffect(() => {
     if (currentUser?.user) {
+      setData(USER_DATA, currentUser?.user);
       dispatch(setUserData(currentUser?.user));
     }
   }, [currentUser]);

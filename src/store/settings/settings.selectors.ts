@@ -41,3 +41,13 @@ export const selectMoverRequestData = createSelector(
   [selectSettings],
   (settings) => settings.moverRequestData
 );
+
+export const getUnreadCount = createSelector(
+  [selectSettings],
+  (settings) => settings.unread_count
+);
+
+export const getUnreadAlertCount = createSelector(
+  [selectSettings],
+  (settings) => settings.unread_alert_count
+);

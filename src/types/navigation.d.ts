@@ -143,6 +143,7 @@ export type AuthenticationRoutes = {
   AddKyc: undefined;
   ResetPassword: { phone?: string; email?: string };
   ChangePassword: undefined;
+  AdminVerification: undefined;
   TakeSelfie: { fromflow?: boolean };
 };
 

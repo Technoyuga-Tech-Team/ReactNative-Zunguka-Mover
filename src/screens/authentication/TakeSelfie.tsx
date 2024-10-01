@@ -334,7 +334,8 @@ const TakeSelfie: React.FC<MainNavigationProps<Route.navTakeSelfie>> = ({
                   Profile under review
                 </Text>
                 <Text style={style.txtFace}>
-                  Your profile is under review, Admin will verify soon
+                  Your profile is under review, please wait for 24 hours admin
+                  will verify
                 </Text>
               </View>
             </>

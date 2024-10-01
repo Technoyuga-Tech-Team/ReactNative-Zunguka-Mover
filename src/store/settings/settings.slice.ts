@@ -72,6 +72,9 @@ const initialState: SettingsStateProps = {
     state: "",
     is_mover_setup_profile_done: 0,
     mover_setup_step: 0,
+    all_documentation_approved_by_admin: 0,
+    unread_notifications: 0,
+    unread_alerts: 0,
   },
   moverInfo: {
     acc_verified: 0,
@@ -141,12 +144,17 @@ const initialState: SettingsStateProps = {
     is_selfie_uploaded: 0,
     is_mover_setup_profile_done: 0,
     mover_setup_step: 0,
+    all_documentation_approved_by_admin: 0,
+    unread_notifications: 0,
+    unread_alerts: 0,
   },
   errorFromSocial: false,
   address: "",
   notificationCount: 0,
   isNewPackageDelivered: 0,
   moverRequestData: [],
+  unread_count: 0,
+  unread_alert_count: 0,
 };
 
 const settings = createSlice({
@@ -180,6 +188,12 @@ const settings = createSlice({
     setMoverRequestList: (state, action: PayloadAction<any[]>) => {
       state.moverRequestData = action.payload;
     },
+    setTotalUnreadNotificationCount: (state, action: PayloadAction<number>) => {
+      state.unread_count = action.payload;
+    },
+    setTotalUnreadAlertCount: (state, action: PayloadAction<number>) => {
+      state.unread_alert_count = action.payload;
+    },
   },
 });
 
@@ -192,6 +206,8 @@ export const {
   setIsNewPackageDeliverd,
   setMoverInfo,
   setMoverRequestList,
+  setTotalUnreadNotificationCount,
+  setTotalUnreadAlertCount,
 } = settings.actions;
 
 export default settings.reducer;

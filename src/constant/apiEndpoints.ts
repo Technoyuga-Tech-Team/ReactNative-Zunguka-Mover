@@ -37,6 +37,9 @@ export const API = {
   GET_DASHBOARD: "/home",
   // notification
   GET_NOTIFICATION: "/notification-list",
+  READ_UNREAD_NOTIFICATION: "/read_notification",
+  GET_ALERT: "/alert-list",
+  READ_UNREAD_ALERT: "/read_alert",
   // user data
   ME: "/get-user-details",
   // Payment Card

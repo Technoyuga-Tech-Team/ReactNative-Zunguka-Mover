@@ -9,4 +9,6 @@ export interface SettingsStateProps {
   isNewPackageDelivered: number;
   moverInfo: UserData;
   moverRequestData: any[];
+  unread_count: number;
+  unread_alert_count: number;
 }

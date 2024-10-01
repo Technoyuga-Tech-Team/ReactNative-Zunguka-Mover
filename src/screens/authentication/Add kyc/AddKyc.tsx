@@ -166,11 +166,24 @@ const AddKyc: React.FC<AuthNavigationProps<Route.navAddKyc>> = ({
           if (result.payload.status === 1) {
             console.log("userVerifyId result - - -", result.payload);
             // navigation.navigate(Route.navTakeSelfie, { fromflow: true });
+            // navigation.dispatch(
+            //   CommonActions.reset({
+            //     index: 0,
+            //     routes: [
+            //       { name: Route.navTakeSelfie, params: { fromflow: true } },
+            //     ],
+            //   })
+            // );
             navigation.dispatch(
               CommonActions.reset({
                 index: 0,
                 routes: [
-                  { name: Route.navTakeSelfie, params: { fromflow: true } },
+                  {
+                    name: Route.navAuthentication,
+                    state: {
+                      routes: [{ name: Route.navSetupProfile1 }],
+                    },
+                  },
                 ],
               })
             );

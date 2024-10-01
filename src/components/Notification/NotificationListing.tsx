@@ -10,6 +10,7 @@ interface NotificationDataProps {
   notificationData: GetNotificationDataList[];
   notificationLoading: boolean;
   onEndReached: () => void;
+  onPressItem: (item: GetNotificationDataList) => void;
   loadMoreLoading?: boolean;
 }
 
@@ -18,13 +19,16 @@ const NotificationListing: React.FC<NotificationDataProps> = ({
   notificationLoading,
   onEndReached,
   loadMoreLoading,
+  onPressItem,
 }) => {
   const insets = useSafeAreaInsets();
   const style = useStyles({ insets });
   const { theme } = useTheme();
 
   const renderItem = ({ item }: { item: GetNotificationDataList }) => {
-    return <NotificationItem item={item} />;
+    return (
+      <NotificationItem item={item} onPressItem={() => onPressItem(item)} />
+    );
   };
 
   return (

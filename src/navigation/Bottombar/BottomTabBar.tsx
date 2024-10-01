@@ -11,12 +11,16 @@ import PackageIcon from "../../components/ui/svg/PackageIcon";
 import UserIcon from "../../components/ui/svg/UserIcon";
 import { HIT_SLOP, SCREEN_WIDTH } from "../../constant";
 import { Route } from "../../constant/navigationConstants";
-import { getNotificationCount } from "../../store/settings/settings.selectors";
+import {
+  getNotificationCount,
+  getUnreadAlertCount,
+} from "../../store/settings/settings.selectors";
 import { ThemeProps } from "../../types/global.types";
 import Scale from "../../utils/Scale";
 
 const BottomTabBar = ({ state, navigation }: any) => {
   const notificationCount = useSelector(getNotificationCount);
+  const unread_alert_Count = useSelector(getUnreadAlertCount);
 
   const insets = useSafeAreaInsets();
   const Style = useStyle({ insets });
@@ -89,7 +93,13 @@ const BottomTabBar = ({ state, navigation }: any) => {
                         height={22}
                         width={22}
                       />
-                      {notificationCount > 0 && <View style={Style.redDot} />}
+                      {unread_alert_Count > 0 && (
+                        <View style={Style.redDot}>
+                          <Text style={Style.txtNotificationCount}>
+                            {unread_alert_Count}
+                          </Text>
+                        </View>
+                      )}
                     </>
                   ) : (
                     <UserIcon
@@ -216,14 +226,19 @@ const useStyle = makeStyles((theme, props: ThemeProps) => ({
     marginBottom: 25,
   },
   redDot: {
-    height: Scale(12),
-    width: Scale(12),
-    borderRadius: Scale(12 / 2),
+    height: Scale(18),
+    width: Scale(18),
+    borderRadius: Scale(18 / 2),
     backgroundColor: theme.colors?.pinkDark,
-    borderWidth: 1.5,
-    borderColor: theme.colors?.white,
     position: "absolute",
-    right: 25,
-    top: 0,
+    right: 18,
+    top: -8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  txtNotificationCount: {
+    fontSize: theme.fontSize?.fs10,
+    fontFamily: theme.fontFamily?.bold,
+    color: theme.colors?.white,
   },
 }));

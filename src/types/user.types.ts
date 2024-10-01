@@ -74,6 +74,8 @@ export type UserData = {
   is_mover_setup_profile_done: number;
   mover_setup_step: number;
   all_documentation_approved_by_admin: number;
+  unread_notifications: number;
+  unread_alerts: number;
 };
 
 export interface getUserData {
