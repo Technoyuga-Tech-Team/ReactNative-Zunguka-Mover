@@ -360,7 +360,7 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
       ? "Ongoing Job"
       : status;
   };
-
+  console.log("deliveryDetailsData?.price", deliveryDetailsData?.price);
   return (
     <Modal
       visible={visiblePopup}
@@ -475,7 +475,7 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
                 <BorderBottomItem
                   title="Price"
                   value={`${RWF} ${
-                    Number(deliveryDetailsData?.price).toFixed(2) || ""
+                    Number(selectedItem?.price).toFixed(2) || ""
                   }`}
                   from_mover={false}
                 />

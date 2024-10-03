@@ -187,7 +187,6 @@ const AddKyc: React.FC<AuthNavigationProps<Route.navAddKyc>> = ({
                 ],
               })
             );
-            // setNavigation(result.payload?.data, navigationRoute);
             dispatch(setSuccess(result.payload.message));
           }
         } else {
