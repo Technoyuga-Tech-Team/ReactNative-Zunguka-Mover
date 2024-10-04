@@ -176,28 +176,10 @@ const PackageDetails: React.FC<
         async (position) => {
           const currentLatitude = position.coords.latitude;
           const currentLongitude = position.coords.longitude;
-          console.log("currentLatitude", currentLatitude);
-          console.log("currentLongitude", currentLongitude);
-          console.log("pickup_lat_lng.lat", pickup_lat_lng.lat);
-          console.log("pickup_lat_lng.lng", pickup_lat_lng.lng);
           setCurrentLatLng({ lat: currentLatitude, lng: currentLongitude });
-
-          // let startLoc = `${currentLatitude},${currentLongitude}`;
-          // let destinationLoc = `${pickup_lat_lng?.lat},${pickup_lat_lng?.lng}`;
-          // fetch(
-          //   `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=${GOOGLE_MAP_API_KEY}`
-          // )
-          //   .then((response) => response.json())
-          //   .then((data) => {
-          //     if (data.routes && data.routes.length > 0) {
-          //       const route = data.routes[0];
-          //       const eta = route.legs[0].duration.text;
-          //     }
-          //   })
-          //   .catch((error) => console.error("Error:", error));
         },
         (error) => console.log("error", error),
-        { enableHighAccuracy: true, interval: 2000 } // Update at least every 5 seconds
+        { enableHighAccuracy: true, interval: 5000 } // Update at least every 5 seconds
       );
 
       return () => Geolocation.clearWatch(watchId);

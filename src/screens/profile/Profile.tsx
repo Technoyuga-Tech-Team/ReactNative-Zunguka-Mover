@@ -164,7 +164,7 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
           onPress={onPressMyProfile}
         />
         <ProfileItem
-          name="Masseges"
+          name="Messeges"
           icon={<ChatIcon color={theme.colors?.primary} />}
           onPress={onPressMessages}
         />

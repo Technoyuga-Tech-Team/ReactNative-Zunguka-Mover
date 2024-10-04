@@ -9,6 +9,7 @@ import Inbox from "../../screens/Inbox/Inbox";
 import Profile from "../../screens/profile/Profile";
 import Earnings from "../../screens/Earnings";
 import Pacakge from "../../screens/Packages/Pacakge";
+import Notification from "../../screens/Notification/Notification";
 
 const Bottombar = () => {
   const Tab = createBottomTabNavigator<BottomRoutes>();
@@ -28,7 +29,7 @@ const Bottombar = () => {
       <Tab.Screen name={Route.navHome} component={Home} />
       <Tab.Screen name={Route.navEarnings} component={Earnings} />
       <Tab.Screen name={Route.navPackage} component={Pacakge} />
-      <Tab.Screen name={Route.navAlert} component={Inbox} />
+      <Tab.Screen name={Route.navNotification} component={Notification} />
       <Tab.Screen name={Route.navProfile} component={Profile} />
     </Tab.Navigator>
   );

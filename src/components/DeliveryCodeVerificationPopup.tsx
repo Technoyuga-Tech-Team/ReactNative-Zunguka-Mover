@@ -57,6 +57,7 @@ const DeliveryCodeVerificationPopup: React.FC<
     initialValues: { otp: "" },
     onSubmit: async ({ otp }) => {
       console.log("package_details_id", package_details_id);
+      console.log("jobType", jobType);
       if (jobType == "start") {
         try {
           const result = await dispatch(

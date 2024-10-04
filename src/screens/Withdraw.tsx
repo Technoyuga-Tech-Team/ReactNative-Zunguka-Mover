@@ -33,12 +33,30 @@ const Withdraw: React.FC<MainNavigationProps<Route.navWithdraw>> = ({
   const totalEarning = route.params.earning;
 
   const onChangeText = (val: string) => {
-    if (Number(val) < Number(totalEarning)) {
+    const number = parseFloat(val);
+    if (isNaN(number)) {
       setErrors("");
-      setAmount(val);
+      setAmount("");
+      setErrors("Please enter a valid number.");
+      return;
+    }
+
+    if (number <= parseFloat(totalEarning)) {
+      const formattedInput = val.replace(/[^0-9.]/g, ""); // Remove non-numeric characters except '.'
+
+      if (/^\d*(\.\d{0,2})?$/.test(formattedInput)) {
+        setErrors("");
+        setAmount(formattedInput);
+      }
     } else {
       setErrors("Please enter less amount than available balance");
     }
+    // if (Number(val).toFixed(2) <= Number(totalEarning).toFixed(2)) {
+    //   setErrors("");
+    //   setAmount(val);
+    // } else {
+    //   setErrors("Please enter less amount than available balance");
+    // }
   };
 
   const onPressSend = async () => {

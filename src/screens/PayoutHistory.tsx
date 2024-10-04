@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   FlatList,
+  RefreshControl,
   StatusBar,
   Text,
   TouchableOpacity,
@@ -27,6 +28,7 @@ import NoDataFound from "../components/ui/NoDataFound";
 import { ThemeProps } from "../types/global.types";
 import { getData } from "../utils/asyncStorage";
 import { API } from "../constant/apiEndpoints";
+import { CommonActions } from "@react-navigation/native";
 
 const PayoutHistory: React.FC<
   MoverHomeNavigationProps<Route.navPayoutHistory>
@@ -102,6 +104,25 @@ const PayoutHistory: React.FC<
       getPayoutHistoryData(10, page, false);
     }
   };
+  const onRefresh = () => {
+    getPayoutHistoryData(10, 1, true);
+  };
+
+  const onPressBack = () => {
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [
+          {
+            name: Route.navDashboard,
+            state: {
+              routes: [{ name: Route.navEarnings }],
+            },
+          },
+        ],
+      })
+    );
+  };
 
   return (
     <View style={style.container}>
@@ -109,7 +130,11 @@ const PayoutHistory: React.FC<
         backgroundColor={theme.colors?.background}
         barStyle={"dark-content"}
       />
-      <CustomHeader title="Payout History" />
+      <CustomHeader
+        title="Payout History"
+        onPressBackBtn={onPressBack}
+        isOutsideBack={true}
+      />
       <View style={style.innerCont}>
         {payoutHistoryData?.length > 0 ? (
           <View style={{ paddingHorizontal: 20, flex: 1 }}>
@@ -117,9 +142,9 @@ const PayoutHistory: React.FC<
               data={payoutHistoryData}
               keyExtractor={(_item, index) => index.toString()}
               contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
-              //   refreshControl={
-              //     <RefreshControl refreshing={loader} onRefresh={onRefresh} />
-              //   }
+              refreshControl={
+                <RefreshControl refreshing={loader} onRefresh={onRefresh} />
+              }
               onMomentumScrollEnd={onEndReached}
               showsVerticalScrollIndicator={false}
               renderItem={({ item }) => {

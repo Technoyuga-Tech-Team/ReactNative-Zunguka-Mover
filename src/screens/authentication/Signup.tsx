@@ -39,6 +39,7 @@ import { AuthNavigationProps } from "../../types/navigation";
 import { keepSingleSpace } from "../../utils";
 import { getData } from "../../utils/asyncStorage";
 import Scale from "../../utils/Scale";
+import { useGetFCMToken } from "../../hooks/useGetFCMToken";
 
 const Signup: React.FC<AuthNavigationProps<Route.navSignup>> = ({
   navigation,
@@ -89,15 +90,15 @@ const Signup: React.FC<AuthNavigationProps<Route.navSignup>> = ({
     };
   }, []);
 
-  // useEffect(() => {
-  //   const Init = async () => {
-  //     useGetFCMToken().then((token) => {
-  //       console.log(" - - - - - - FCM token - - - - - - ", token);
-  //       token && setFcmToken(token);
-  //     });
-  //   };
-  //   Init();
-  // }, []);
+  useEffect(() => {
+    const Init = async () => {
+      useGetFCMToken().then((token) => {
+        console.log(" - - - - - - FCM token - - - - - - ", token);
+        token && setFcmToken(token);
+      });
+    };
+    Init();
+  }, []);
 
   const onPressSignin = () => {
     navigation.navigate(Route.navLogin);

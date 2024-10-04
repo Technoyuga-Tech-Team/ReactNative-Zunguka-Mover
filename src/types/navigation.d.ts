@@ -94,6 +94,7 @@ export type MoverRoute = {
   PayoutHistory: undefined;
   Chatroom: { receiver_id: string; product_id: string };
   Inbox: undefined;
+  Alert: undefined;
   Notification: undefined;
 };
 
@@ -152,6 +153,7 @@ export type BottomRoutes = {
   Earnings: undefined;
   Package: undefined;
   Alert: undefined;
+  Notification: undefined;
   Profile: undefined;
 };
 

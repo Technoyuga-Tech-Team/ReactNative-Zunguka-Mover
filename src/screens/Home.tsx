@@ -1,3 +1,5 @@
+import notifee, { AuthorizationStatus } from "@notifee/react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Alert,
@@ -16,6 +18,7 @@ import DeliveryCodeVerificationPopup from "../components/DeliveryCodeVerificatio
 import HeaderHome from "../components/HeaderHome";
 import PickupsListing from "../components/PickupsListing";
 import NoDataFound from "../components/ui/NoDataFound";
+import CancelRequestWithReason from "../components/ui/popups/CancelRequestWithReason";
 import PickupAcceptedPopup from "../components/ui/popups/PickupAcceptedPopup";
 import PickupPopup from "../components/ui/popups/PickupPopup";
 import { Route } from "../constant/navigationConstants";
@@ -28,6 +31,7 @@ import {
 } from "../store/MoverBooking/moverBooking.thunk";
 import {
   getNotificationCount,
+  getUnreadAlertCount,
   getUnreadCount,
   selectMoverRequestData,
   selectUserData,
@@ -39,13 +43,7 @@ import {
 } from "../store/settings/settings.slice";
 import { LoadingState, ThemeProps } from "../types/global.types";
 import { MoverHomeNavigationProps } from "../types/navigation";
-import CancelRequestWithReason from "../components/ui/popups/CancelRequestWithReason";
 import { socket, socketEvent } from "../utils/socket";
-import notifee, {
-  AuthorizationStatus,
-  Notification,
-} from "@notifee/react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   navigation,
@@ -60,6 +58,7 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   const loading = useSelector(selectMoverBookingLoading);
   const notificationCount = useSelector(getNotificationCount);
   const unread_notification_Count = useSelector(getUnreadCount);
+  const unread_alert_Count = useSelector(getUnreadAlertCount);
 
   const appState = useRef(AppState.currentState);
 
@@ -72,10 +71,14 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   const [openCancelRequestPopup, setOpenCancelRequestPopup] = useState(false);
   const [unreadNotificationCount, setUnreadNotificationCount] =
     React.useState(0);
+  const [unreadAlertCount, setUnreadAlertCount] = React.useState(0);
 
   useEffect(() => {
     setUnreadNotificationCount(unread_notification_Count);
   }, [unread_notification_Count]);
+  useEffect(() => {
+    setUnreadAlertCount(unread_alert_Count);
+  }, [unread_alert_Count]);
 
   const { data: currentUser, refetch } = useMeQuery({
     staleTime: Infinity,
@@ -219,7 +222,8 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   }, []);
 
   const onPressNotification = () => {
-    navigation.navigate(Route.navNotification);
+    // navigation.navigate(Route.navNotification);
+    navigation.navigate(Route.navAlert);
   };
 
   const onRefresh = () => {
@@ -387,7 +391,7 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
         onPressNotification={onPressNotification}
         avgRate={userData?.avg_rate}
         totalUserRate={userData?.total_user_rate}
-        notificationCount={unreadNotificationCount}
+        notificationCount={unreadAlertCount}
       />
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}

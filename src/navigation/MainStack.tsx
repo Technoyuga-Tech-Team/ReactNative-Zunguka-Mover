@@ -25,6 +25,7 @@ import Chatroom from "../screens/chat/Chatroom";
 import TransactionHistory from "../screens/profile/TransactionHistory";
 import Messaging from "../screens/chat/Messaging";
 import AdminVerification from "../screens/authentication/AdminVerification";
+import Inbox from "../screens/Inbox/Inbox";
 
 const Stack = createNativeStackNavigator<AppRoutes>();
 
@@ -61,6 +62,7 @@ const MainStack = () => {
         />
         <Stack.Screen name={Route.navWithdraw} component={Withdraw} />
         <Stack.Screen name={Route.navNotification} component={Notification} />
+        <Stack.Screen name={Route.navAlert} component={Inbox} />
         <Stack.Screen
           name={Route.navDeliveryDetails1}
           component={DeliveryDetails1}
