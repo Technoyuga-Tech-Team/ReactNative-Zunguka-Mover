@@ -17,7 +17,7 @@ public class MainActivity extends ReactActivity {
     RNBootSplash.init(this, R.style.BootTheme);
     getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
     WindowManager.LayoutParams.FLAG_FULLSCREEN);
-    super.onCreate(savedInstanceState); // or super.onCreate(null); with react-native-screens
+    super.onCreate(null); // or super.onCreate(null); with react-native-screens
   }
 
   /**

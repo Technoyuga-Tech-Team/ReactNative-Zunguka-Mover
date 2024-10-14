@@ -144,13 +144,28 @@ const MainNavigator = () => {
               product_id: product_id,
             });
             break;
-          case "Category":
+          case "new_rating":
+            // @ts-ignore
+            navigationRef.navigate(Route.navReviewAndRating);
+            break;
+          case "approve_request":
+            // @ts-ignore
+            navigationRef.navigate(Route.navPayoutHistory);
             // set default type wise
             break;
-          case "Brand":
+          case "nearby_request":
+            // @ts-ignore
+            navigationRef.navigate(Route.navDashboard);
             // set default type wise
             break;
           default:
+            // @ts-ignore
+            if (notification?.data?.is_notification == "1") {
+              navigationRef.navigate(Route.navNotification);
+            }
+            if (notification?.data?.is_alert == "1") {
+              navigationRef.navigate(Route.navAlert);
+            }
             null;
           // set default notification
         }
@@ -169,15 +184,11 @@ const MainNavigator = () => {
   const onNotifeeMessageReceived = async (message: any) => {
     console.log("message - - - ", message);
     if (message.data.is_notification == "1") {
-      let unread_noti_count = store.getState().settings.unread_count;
-      console.log("unread_noti_count - - - -", unread_noti_count);
       dispatch(
         setTotalUnreadNotificationCount(message.data.unread_notifications)
       );
     }
     if (message.data.is_alert == "1") {
-      let unread_alerts = store.getState().settings.unread_alert_count;
-      console.log("unread_alerts - - - -", unread_alerts);
       dispatch(setTotalUnreadAlertCount(message.data.unread_alerts));
     }
 

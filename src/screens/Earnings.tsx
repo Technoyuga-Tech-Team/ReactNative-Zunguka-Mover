@@ -204,7 +204,7 @@ const Earnings: React.FC<MoverHomeNavigationProps<Route.navEarnings>> = ({
 
   const onEndReached = () => {
     if (page <= totalPage && loading !== LoadingState.CREATE) {
-      getMyEarningData(10, page);
+      getMyEarningData(20, page);
     }
   };
 

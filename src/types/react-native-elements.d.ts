@@ -39,6 +39,8 @@ declare module "react-native-elements/dist/config/colors" {
     green: string;
     textInBgColor: string;
     backgroundLight1: string;
+    blue: string;
+    whiteOverlay: string;
   }
 }
 

@@ -80,20 +80,20 @@ const BarChartList: React.FC<BarChartListProps> = ({
     return (
       <DropShadow style={style.shadow}>
         <View style={style.container}>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={onPressDate}
-            hitSlop={HIT_SLOP}
-          >
-            <Text
-              style={style.txtDuration}
-            >{`${start_date} - ${end_date}`}</Text>
-          </TouchableOpacity>
           <View style={style.priceCont}>
             <TouchableOpacity onPress={onPressPrev} hitSlop={HIT_SLOP}>
               <LeftIcon color={theme.colors?.primary} />
             </TouchableOpacity>
             <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={onPressDate}
+              hitSlop={HIT_SLOP}
+            >
+              <Text
+                style={style.txtDuration}
+              >{`${start_date} - ${end_date}`}</Text>
+            </TouchableOpacity>
+            {/* <TouchableOpacity
               activeOpacity={0.8}
               onPress={onPressBalance}
               hitSlop={HIT_SLOP}
@@ -101,7 +101,7 @@ const BarChartList: React.FC<BarChartListProps> = ({
               <Text style={style.txtPrice}>
                 {RWF} {balance}
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity
               disabled={isTodayOrAfter()}
               onPress={onPressNext}
@@ -137,10 +137,9 @@ const BarChartList: React.FC<BarChartListProps> = ({
               },
             }}
             withInnerLines={false}
-            yAxisSuffix="k"
+            yAxisSuffix={` ${RWF}`}
             showBarTops={false}
             fromZero={true}
-            // yAxisLabel="$"
           />
         </View>
       </DropShadow>

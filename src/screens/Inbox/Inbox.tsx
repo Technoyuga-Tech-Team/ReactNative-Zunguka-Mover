@@ -138,7 +138,7 @@ const Inbox: React.FC<MainNavigationProps<Route.navAlert>> = ({
 
   return (
     <View style={style.container}>
-      <CustomHeader title="Inbox" isBackVisible={false} />
+      <CustomHeader title="Inbox" isBackVisible={true} />
       <NotificationListing
         notificationData={notifications}
         notificationLoading={loading}

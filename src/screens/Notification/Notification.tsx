@@ -8,15 +8,12 @@ import { BASE_URL, secureStoreKeys } from "../../constant";
 import { API } from "../../constant/apiEndpoints";
 import { Route } from "../../constant/navigationConstants";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
-import {
-  setSaveNotificationCount,
-  setTotalUnreadNotificationCount,
-} from "../../store/settings/settings.slice";
+import { readUnreadNotification } from "../../store/Notification/notification.thunk";
+import { setTotalUnreadNotificationCount } from "../../store/settings/settings.slice";
 import { ThemeProps } from "../../types/global.types";
 import { HomeNavigationProps } from "../../types/navigation";
 import { GetNotificationDataList } from "../../types/notification.types";
 import { getData } from "../../utils/asyncStorage";
-import { readUnreadNotification } from "../../store/Notification/notification.thunk";
 
 const Notification: React.FC<HomeNavigationProps<Route.navNotification>> = ({
   navigation,
@@ -43,13 +40,12 @@ const Notification: React.FC<HomeNavigationProps<Route.navNotification>> = ({
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
-      dispatch(setSaveNotificationCount(0));
       getNotifications(10, 1);
     });
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [navigation]);
 
   const getNotifications = async (limit: number, page: number) => {
     const token = await getData(secureStoreKeys.JWT_TOKEN);
@@ -71,6 +67,11 @@ const Notification: React.FC<HomeNavigationProps<Route.navNotification>> = ({
       if (data && data?.data?.data?.length > 0) {
         setLoading(false);
         setNotifications([...notifications, ...data?.data?.data]);
+        console.log(
+          "data?.data?.unread_notifications===",
+          typeof data?.data?.unread_notifications
+        );
+        setUnreadNotificationCount(data?.data?.unread_notifications);
         setTotalPage(data?.data?.totalPages);
         setPage(page + 1);
         setLoadMoreLoading(false);
@@ -93,6 +94,7 @@ const Notification: React.FC<HomeNavigationProps<Route.navNotification>> = ({
   };
 
   const onPressItem = async (item: GetNotificationDataList) => {
+    console.log("item - - -", item);
     if (item.is_read == 0) {
       let data = [...notifications];
       data.map((ele) => {
@@ -120,12 +122,18 @@ const Notification: React.FC<HomeNavigationProps<Route.navNotification>> = ({
         product_id: null,
         receiver_id: item?.reference_id,
       });
+    } else if (item.type == "new_rating") {
+      navigation.navigate(Route.navReviewAndRating, {
+        rating_id: item.rating_id,
+      });
+    } else if (item.type == "approve_request") {
+      navigation.navigate(Route.navPayoutHistory);
     }
   };
 
   return (
     <View style={style.container}>
-      <CustomHeader title="Notification" />
+      <CustomHeader title="Notification" isBackVisible={false} />
       <NotificationListing
         notificationData={notifications}
         notificationLoading={loading}

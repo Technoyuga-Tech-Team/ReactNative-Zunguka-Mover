@@ -45,7 +45,7 @@ export type AppRoutes = {
   JobHistory: undefined;
   TakeSelfie: { fromflow?: boolean };
   PayoutHistory: undefined;
-  ReviewAndRating: undefined;
+  ReviewAndRating: { rating_id?: number };
   Alert: undefined;
   AdminVerification: undefined;
   Withdraw: { earning: string };
@@ -183,7 +183,7 @@ export type HomeRoutes = {
   MoverDashboard: undefined;
   HomeMover: undefined;
   Earnings: undefined;
-  ReviewAndRating: undefined;
+  ReviewAndRating: { rating_id?: number };
   PackageDetails: {
     package_details_id: string;
     pickupLatLng: { lat: number; lng: number };

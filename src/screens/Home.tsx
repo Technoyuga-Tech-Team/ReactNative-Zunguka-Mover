@@ -44,6 +44,8 @@ import {
 import { LoadingState, ThemeProps } from "../types/global.types";
 import { MoverHomeNavigationProps } from "../types/navigation";
 import { socket, socketEvent } from "../utils/socket";
+import { setErrors } from "../store/global/global.slice";
+import { notifyMessage } from "../utils/notifyMessage";
 
 const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   navigation,
@@ -56,7 +58,6 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   const moverRequestData = useSelector(selectMoverRequestData);
   const userData = useSelector(selectUserData);
   const loading = useSelector(selectMoverBookingLoading);
-  const notificationCount = useSelector(getNotificationCount);
   const unread_notification_Count = useSelector(getUnreadCount);
   const unread_alert_Count = useSelector(getUnreadAlertCount);
 
@@ -127,10 +128,6 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   useEffect(() => {
     if (currentUser?.user) {
       dispatch(setUserData(currentUser?.user));
-      console.log(
-        "currentUser?.user?.unread_notifications",
-        currentUser?.user?.unread_notifications
-      );
       dispatch(
         setTotalUnreadNotificationCount(currentUser?.user?.unread_notifications)
       );
@@ -167,6 +164,7 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
         nextAppState === "active"
       ) {
         refetch().then();
+        getMoverRequestedData();
         console.log("App has come to the foreground!");
         socket.connect();
         const user_id = userData?.id;
@@ -251,6 +249,7 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   };
 
   const onPressItem = (item: any) => {
+    console.log("item.status", item.status);
     if (
       item.status === "confirmed" ||
       item.status === "startjob" ||
@@ -288,6 +287,7 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   };
 
   const togglePopup = () => {
+    getMoverRequestedData();
     setVisible(!visible);
   };
 
@@ -331,16 +331,42 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
         setVisibleAcceptedPopup(true);
         // setRequestData(result.payload.data);
       }
+      if (result.payload.status == 2) {
+        togglePopup();
+        getMoverRequestedData();
+        notifyMessage("Package is no longer available");
+      }
     } else {
       console.log("errror approveRejectMoverRequeste --->", result.payload);
     }
   };
 
   const onPressRejectRequest = async () => {
-    togglePopup();
-    setTimeout(() => {
-      setOpenCancelRequestPopup(true);
-    }, 500);
+    const result = await dispatch(
+      approveRejectMoverRequeste({
+        package_details_id: selectedItem?.id,
+        status: "reject",
+      })
+    );
+    if (approveRejectMoverRequeste.fulfilled.match(result)) {
+      console.log("data Reject Requeste --->", result.payload);
+      if (result.payload.status == 1) {
+        getMoverRequestedData();
+        togglePopup();
+        // setRequestData(result.payload.data);
+      }
+      if (result.payload.status == 2) {
+        getMoverRequestedData();
+        togglePopup();
+        notifyMessage("Package is no longer available");
+      }
+    } else {
+      console.log("errror Reject Requeste --->", result.payload);
+    }
+    // togglePopup();
+    // setTimeout(() => {
+    //   setOpenCancelRequestPopup(true);
+    // }, 500);
   };
 
   const toggleDevliveryCodePopup = () => {
@@ -378,6 +404,8 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
       console.log("errror approveRejectMoverRequeste --->", result.payload);
     }
   };
+
+  console.log("requestData = = =  =", JSON.stringify(requestData));
 
   return (
     <View style={style.container}>

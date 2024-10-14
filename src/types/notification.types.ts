@@ -35,6 +35,7 @@ export interface GetNotificationDataList {
   updated_at: string;
   user: UserData;
   buyer_seller: UserData;
+  rating_id: number;
   // "mover":null,
   // "item":{
   //    "id":1,

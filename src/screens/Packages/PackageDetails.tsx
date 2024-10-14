@@ -1,7 +1,8 @@
 import { decode } from "@mapbox/polyline";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
+  Image,
   PermissionsAndroid,
   Platform,
   StatusBar,
@@ -15,30 +16,26 @@ import Geolocation from "react-native-geolocation-service";
 import MapView, { Marker, Polyline } from "react-native-maps";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
-import {
-  MainNavigationProps,
-  MoverHomeNavigationProps,
-} from "../../types/navigation";
-import { Route } from "../../constant/navigationConstants";
-import { selectMoverBookingLoading } from "../../store/MoverBooking/moverBooking.selectors";
-import { useAppDispatch } from "../../hooks/useAppDispatch";
+import DeliveryCodeVerificationPopup from "../../components/DeliveryCodeVerificationPopup";
+import CustomHeader from "../../components/ui/CustomHeader";
+import Loading from "../../components/ui/Loading";
+import ChatFillIcon from "../../components/ui/svg/ChatFillIcon";
+import ProductLocation from "../../components/ui/svg/ProductLocation";
 import {
   GOOGLE_MAP_API_KEY,
   HIT_SLOP,
   HIT_SLOP2,
   secureStoreKeys,
 } from "../../constant";
-import { approveRejectMoverRequeste } from "../../store/MoverBooking/moverBooking.thunk";
-import CustomHeader from "../../components/ui/CustomHeader";
-import ChatFillIcon from "../../components/ui/svg/ChatFillIcon";
-import ProductLocation from "../../components/ui/svg/ProductLocation";
-import Loading from "../../components/ui/Loading";
+import { Route } from "../../constant/navigationConstants";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { selectMoverBookingLoading } from "../../store/MoverBooking/moverBooking.selectors";
 import { LoadingState, ThemeProps } from "../../types/global.types";
-import DeliveryCodeVerificationPopup from "../../components/DeliveryCodeVerificationPopup";
+import { MainNavigationProps } from "../../types/navigation";
+import { getData } from "../../utils/asyncStorage";
 import Scale from "../../utils/Scale";
 import { socket, socketEvent } from "../../utils/socket";
-import { getData } from "../../utils/asyncStorage";
-import { calculateDistanceWithTime } from "../../utils";
+import { Images } from "../../assets/images";
 
 const PackageDetails: React.FC<
   MainNavigationProps<Route.navPackageDetails>
@@ -46,6 +43,7 @@ const PackageDetails: React.FC<
   const insets = useSafeAreaInsets();
   const style = useStyles({ insets });
   const { theme } = useTheme();
+  const mapRef = useRef<MapView>(null);
 
   const package_details_id = route?.params?.package_details_id;
   const destination_lat_lng = route?.params?.destinationLatLng;
@@ -91,7 +89,6 @@ const PackageDetails: React.FC<
         `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=${KEY}`
       );
       let respJson = await resp.json();
-      console.log("respJson", JSON.stringify(respJson));
       let points = decode(respJson?.routes[0]?.overview_polyline?.points);
       let coords = points.map((point: any[], index: any) => {
         return {
@@ -176,6 +173,12 @@ const PackageDetails: React.FC<
         async (position) => {
           const currentLatitude = position.coords.latitude;
           const currentLongitude = position.coords.longitude;
+          mapRef.current?.animateToRegion({
+            latitude: currentLatitude,
+            longitude: currentLongitude,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.007,
+          });
           setCurrentLatLng({ lat: currentLatitude, lng: currentLongitude });
         },
         (error) => console.log("error", error),
@@ -265,6 +268,12 @@ const PackageDetails: React.FC<
     // }
   };
   const onStartJob = () => {
+    mapRef.current?.animateToRegion({
+      latitude: currentLatLng.lat,
+      longitude: currentLatLng.lng,
+      latitudeDelta: 0.007,
+      longitudeDelta: 0.007,
+    });
     setShowStartBtn(false);
     setCanEndJob(true);
     setIsJobStarted(true);
@@ -303,6 +312,7 @@ const PackageDetails: React.FC<
       <View style={style.mapCont}>
         {currentLatLng.lat !== 0 ? (
           <MapView
+            ref={mapRef}
             style={{
               flex: 1,
               position: "absolute",
@@ -321,12 +331,34 @@ const PackageDetails: React.FC<
             <Marker
               title="Yor are here"
               description=""
+              tracksViewChanges={false}
               coordinate={{
                 latitude: currentLatLng.lat,
                 longitude: currentLatLng.lng,
               }}
             >
               {/* <BikeIcon /> */}
+
+              <View
+                style={{
+                  height: Scale(30),
+                  width: Scale(30),
+                  borderRadius: Scale(30 / 2),
+                  backgroundColor: "rgba(40, 40, 40, 0.3)",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  zIndex: 1111,
+                }}
+              >
+                <View
+                  style={{
+                    height: Scale(15),
+                    width: Scale(15),
+                    borderRadius: Scale(15 / 2),
+                    backgroundColor: theme.colors?.blue,
+                  }}
+                />
+              </View>
             </Marker>
             {/* finally, render the Polyline component with the coords data */}
             {stopFetchingLocation && (
@@ -341,6 +373,7 @@ const PackageDetails: React.FC<
                     <Marker
                       tracksViewChanges={false}
                       coordinate={coords[coords.length - 1]}
+                      style={{ zIndex: 11 }}
                     >
                       <ProductLocation color="#67C2C9" />
                     </Marker>

@@ -61,7 +61,7 @@ const MainStack = () => {
           component={RatingAndReviews}
         />
         <Stack.Screen name={Route.navWithdraw} component={Withdraw} />
-        <Stack.Screen name={Route.navNotification} component={Notification} />
+        {/* <Stack.Screen name={Route.navNotification} component={Notification} /> */}
         <Stack.Screen name={Route.navAlert} component={Inbox} />
         <Stack.Screen
           name={Route.navDeliveryDetails1}

@@ -11,16 +11,12 @@ import PackageIcon from "../../components/ui/svg/PackageIcon";
 import UserIcon from "../../components/ui/svg/UserIcon";
 import { HIT_SLOP, SCREEN_WIDTH } from "../../constant";
 import { Route } from "../../constant/navigationConstants";
-import {
-  getNotificationCount,
-  getUnreadAlertCount,
-} from "../../store/settings/settings.selectors";
+import { getUnreadCount } from "../../store/settings/settings.selectors";
 import { ThemeProps } from "../../types/global.types";
 import Scale from "../../utils/Scale";
 
 const BottomTabBar = ({ state, navigation }: any) => {
-  const notificationCount = useSelector(getNotificationCount);
-
+  const unread_notification_Count = useSelector(getUnreadCount);
   const insets = useSafeAreaInsets();
   const Style = useStyle({ insets });
 
@@ -92,10 +88,10 @@ const BottomTabBar = ({ state, navigation }: any) => {
                         height={22}
                         width={22}
                       />
-                      {notificationCount > 0 && (
+                      {unread_notification_Count > 0 && (
                         <View style={Style.redDot}>
                           <Text style={Style.txtNotificationCount}>
-                            {notificationCount}
+                            {unread_notification_Count}
                           </Text>
                         </View>
                       )}
@@ -225,15 +221,15 @@ const useStyle = makeStyles((theme, props: ThemeProps) => ({
     marginBottom: 25,
   },
   redDot: {
-    height: Scale(18),
-    width: Scale(18),
-    borderRadius: Scale(18 / 2),
     backgroundColor: theme.colors?.pinkDark,
     position: "absolute",
-    right: 18,
+    right: 10,
     top: -8,
     alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 20,
   },
   txtNotificationCount: {
     fontSize: theme.fontSize?.fs10,

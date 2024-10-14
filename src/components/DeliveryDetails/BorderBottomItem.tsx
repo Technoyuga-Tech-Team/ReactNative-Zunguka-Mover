@@ -61,7 +61,15 @@ const BorderBottomItem: React.FC<BorderBottomItemProps> = ({
               { alignItems: "flex-end", justifyContent: "center" },
             ]}
           >
-            <Text numberOfLines={numberOfLines} style={[style.txt]}>
+            <Text
+              numberOfLines={numberOfLines}
+              style={[
+                style.txt,
+                {
+                  color: txtColor ? txtColor : theme.colors?.textSecondary,
+                },
+              ]}
+            >
               {value}
             </Text>
           </View>

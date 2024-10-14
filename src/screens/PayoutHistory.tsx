@@ -148,6 +148,7 @@ const PayoutHistory: React.FC<
               onMomentumScrollEnd={onEndReached}
               showsVerticalScrollIndicator={false}
               renderItem={({ item }) => {
+                console.log("item", item);
                 return (
                   <View style={style.itemCont}>
                     <Text style={style.txtDate}>
@@ -251,6 +252,7 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
     fontSize: theme.fontSize?.fs13,
     fontFamily: theme.fontFamily?.regular,
     color: theme.colors?.black,
+    width: "60%",
   },
   txtStatus: {
     fontSize: theme.fontSize?.fs13,

@@ -59,8 +59,8 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
     width: "80%",
   },
   addrCont: {
-    borderBottomColor: theme.colors?.borderButtonColor,
-    borderBottomWidth: 1,
+    // borderBottomColor: theme.colors?.borderButtonColor,
+    // borderBottomWidth: 1,
     paddingVertical: 15,
   },
   iconCont: {

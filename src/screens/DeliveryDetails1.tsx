@@ -23,6 +23,7 @@ import MoverItem from "../components/Mover/MoverItem";
 import BorderBottomItem from "../components/DeliveryDetails/BorderBottomItem";
 import RatingPopup from "../components/ui/popups/RatingPopup";
 import { RWF } from "../constant";
+import moment from "moment";
 
 const DeliveryDetails1: React.FC<
   MainNavigationProps<Route.navDeliveryDetails1>
@@ -167,15 +168,14 @@ const DeliveryDetails1: React.FC<
   };
 
   const getColorFromStatus = (status: string, theme: Partial<FullTheme>) => {
-    return status === "pending"
-      ? theme.colors?.yellowStar
+    console.log("status", status);
+    return status === "confirmed"
+      ? theme.colors?.primary
       : status === "startjob"
-      ? theme.colors?.primary
+      ? theme.colors?.pinkDark
       : status === "completed"
-      ? theme.colors?.primary
-      : status === "confirmed"
-      ? theme.colors?.yellowStar
-      : theme.colors?.primaryText;
+      ? theme.colors?.green
+      : theme.colors?.golden;
   };
 
   const getStatusStrings = (status: string) => {
@@ -194,6 +194,14 @@ const DeliveryDetails1: React.FC<
     isPackageDeliverd == 1 ? "Package Delivered" : "Delivery Details";
 
   console.log("deliveryDetailsData", deliveryDetailsData);
+
+  const date_Time = moment(deliveryDetailsData?.createdAt).format("DD/MM/YYYY");
+
+  console.log("deliveryDetailsData", deliveryDetailsData);
+  console.log(
+    "getColorFromStatus(deliveryDetailsData?.status, theme)",
+    getColorFromStatus(deliveryDetailsData?.status, theme)
+  );
 
   return (
     <View style={style.container}>
@@ -253,6 +261,15 @@ const DeliveryDetails1: React.FC<
             numberOfLines={3}
             showblur={from_mover && !from_mover_home ? true : false}
           />
+          {date_Time && (
+            <BorderBottomItem
+              title="Date"
+              value={date_Time}
+              from_mover={false}
+              numberOfLines={3}
+              showblur={from_mover && !from_mover_home ? true : false}
+            />
+          )}
           {distance !== "" && (
             <BorderBottomItem
               title="Distance"

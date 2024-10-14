@@ -1,7 +1,7 @@
 import moment from "moment";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { makeStyles, useTheme } from "react-native-elements";
+import { FullTheme, makeStyles, useTheme } from "react-native-elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeProps } from "../types/global.types";
 import Scale from "../utils/Scale";
@@ -28,6 +28,16 @@ const getStatusStrings = (status: string) => {
     : "";
 };
 
+const getColors = (status: string, theme: Partial<FullTheme>) => {
+  return status === "confirmed"
+    ? theme.colors?.primary
+    : status === "startjob"
+    ? theme.colors?.green
+    : status === "completed"
+    ? theme.colors?.secondaryText
+    : theme.colors?.pinkDark;
+};
+
 const PickupItem: React.FC<PickupItemProps> = ({
   item,
   onPress,
@@ -44,9 +54,17 @@ const PickupItem: React.FC<PickupItemProps> = ({
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.8}
-      style={style.container}
+      style={[
+        style.container,
+        { borderColor: getColors(item.status, theme), borderWidth: 1 },
+      ]}
     >
-      <View style={style.topCont}>
+      <View
+        style={[
+          style.topCont,
+          { backgroundColor: getColors(item.status, theme) },
+        ]}
+      >
         <Text style={style.txtDate}>{time}</Text>
         <Text style={style.txtDate}>
           {RWF} {Number(item?.price).toFixed(2)}
@@ -86,12 +104,7 @@ const PickupItem: React.FC<PickupItemProps> = ({
             style={[
               style.txtProductType,
               {
-                color:
-                  item.status === "confirmed" || item.status === "completed"
-                    ? theme.colors?.primary
-                    : item.status === "startjob"
-                    ? theme.colors?.golden
-                    : theme.colors?.golden,
+                color: getColors(item.status, theme),
               },
             ]}
           >
@@ -140,6 +153,8 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    borderTopColor: theme.colors?.borderButtonColor,
+    borderTopWidth: 1,
   },
   shadow: {
     shadowColor: theme.colors?.black,

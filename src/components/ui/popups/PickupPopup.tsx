@@ -32,6 +32,8 @@ import ProductLocation from "../svg/ProductLocation";
 import CustomButton from "../CustomButton";
 import ChatIcon from "../svg/ChatIcon";
 import Geolocation from "react-native-geolocation-service";
+import { setErrors } from "../../../store/global/global.slice";
+import { notifyMessage } from "../../../utils/notifyMessage";
 
 interface PickupPopupProps {
   visiblePopup: boolean;
@@ -213,6 +215,8 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
         if (result.payload?.status == 0) {
           setDeliveryDetailsData({});
           setLoader(false);
+          togglePopup();
+          notifyMessage("Package is no longer available");
         }
         console.log("errror orderDetails --->", result.payload);
       }
@@ -338,15 +342,13 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
   const lngDelta = latDelta * ASPECT_RATIO;
 
   const getColorFromStatus = (status: string, theme: Partial<FullTheme>) => {
-    return status === "pending"
-      ? theme.colors?.yellowStar
+    return status === "confirmed"
+      ? theme.colors?.primary
       : status === "startjob"
-      ? theme.colors?.primary
+      ? theme.colors?.green
       : status === "completed"
-      ? theme.colors?.primary
-      : status === "confirmed"
-      ? theme.colors?.yellowStar
-      : theme.colors?.primaryText;
+      ? theme.colors?.secondaryText
+      : theme.colors?.pinkDark;
   };
 
   const getStatusStrings = (status: string) => {
@@ -355,10 +357,10 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
       : status === "startjob"
       ? "Ongoing Job"
       : status === "completed"
-      ? "Start Job"
+      ? "Reached at delivery location"
       : status === "confirmed"
-      ? "Ongoing Job"
-      : status;
+      ? "Start job"
+      : "";
   };
   console.log("deliveryDetailsData?.price", deliveryDetailsData?.price);
   return (
@@ -517,10 +519,13 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
                       strokeColor="#67C2C9"
                     />
                   )}
-                  <Marker coordinate={coords[0]}>
+                  <Marker tracksViewChanges={false} coordinate={coords[0]}>
                     <ProductLocation color="#FFBE15" />
                   </Marker>
-                  <Marker coordinate={coords[coords.length - 1]}>
+                  <Marker
+                    tracksViewChanges={false}
+                    coordinate={coords[coords.length - 1]}
+                  >
                     <ProductLocation color="#67C2C9" />
                   </Marker>
                 </MapView>

@@ -69,6 +69,8 @@ const CompletedPackages: React.FC<
     }
   };
 
+  console.log("compeltedData - - ", JSON.stringify(compeltedData));
+
   return (
     <View style={style.scrollCont}>
       <PackageList

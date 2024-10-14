@@ -20,6 +20,7 @@ const LightThemeColor = {
   lightGrey: "rgba(187, 190, 197, 1)",
   pinkDark: "#EA5F5F",
   overlay: "rgba(40, 40, 40, 0.5)",
+  whiteOverlay: "rgba(255, 255, 255, 0.8)",
   purple: "#414B70",
   border: "#B2B5C433",
   aqua: "#67C2C9",
@@ -34,6 +35,7 @@ const LightThemeColor = {
   green: "#32BF89",
   textInBgColor: "#FFFFFF1A",
   backgroundLight1: "#F5F5F5",
+  blue: "#0000FF",
 };
 const DarkThemeColor = {
   primary: "#F3B241",
@@ -53,6 +55,7 @@ const DarkThemeColor = {
   lightGrey: "rgba(187, 190, 197, 1)",
   pinkDark: "#EA5F5F",
   overlay: "rgba(40, 40, 40, 0.5)",
+  whiteOverlay: "rgba(255, 255, 255, 0.8)",
   purple: "#414B70",
   border: "#B2B5C433",
   aqua: "#67C2C9",
@@ -68,6 +71,7 @@ const DarkThemeColor = {
   green: "#32BF89",
   textInBgColor: "#FFFFFF1A",
   backgroundLight1: "#F5F5F5",
+  blue: "#0000FF",
 };
 
 export const getTheme = (mode: "light" | "dark" = "dark") => {

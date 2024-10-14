@@ -75,6 +75,10 @@ const DeliveryCodeVerificationPopup: React.FC<
               togglePopup();
               setFieldValue("otp", "");
             }
+            if (result.payload.status == 3) {
+              togglePopup();
+              notifyMessage(result.payload.message);
+            }
           } else {
             console.log("errror Start job --->", result.payload);
           }
@@ -137,8 +141,9 @@ const DeliveryCodeVerificationPopup: React.FC<
                   : "Delivery Code Verification"}
               </Text>
               <Text style={style.txtDesc}>
-                Please ask the customer for the 6-digit delivery code and enter
-                it below to verify the delivery.
+                {jobType == "start"
+                  ? "Please ask the customer for the 6-digit pickup code and enter it below to verify the pickup."
+                  : "Please ask the customer for the 6-digit delivery code and enter it below to verify the delivery."}
               </Text>
               <View
                 style={{

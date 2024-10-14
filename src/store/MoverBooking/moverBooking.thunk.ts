@@ -122,7 +122,7 @@ export const approveRejectMoverRequeste = createAsyncThunk<
   any,
   {
     package_details_id: number;
-    status: "confirmed" | "cancelled" | "startjob" | "endjob";
+    status: "confirmed" | "cancelled" | "startjob" | "endjob" | "reject";
     reason?: string;
     pickup_otp?: string;
   },
