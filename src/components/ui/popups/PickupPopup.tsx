@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
+  Linking,
   Modal,
   PermissionsAndroid,
   Platform,
@@ -34,6 +35,7 @@ import ChatIcon from "../svg/ChatIcon";
 import Geolocation from "react-native-geolocation-service";
 import { setErrors } from "../../../store/global/global.slice";
 import { notifyMessage } from "../../../utils/notifyMessage";
+import NavigationIcon from "../svg/NavigationIcon";
 
 interface PickupPopupProps {
   visiblePopup: boolean;
@@ -64,6 +66,8 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
   const dispatch = useAppDispatch();
 
   const [distance, setDistance] = useState<string>("");
+  const [currentToPickupDistance, setCurrentToPickupDistance] =
+    useState<string>("");
   const [coords, setCoords] = useState<LatLng[]>([]);
   const [loader, setLoader] = useState<boolean>(false);
   const [distanceLoader, setDistanceLoader] = useState<boolean>(false);
@@ -160,7 +164,13 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
           const currentLongitude = position.coords.longitude;
           let startLoc = `${currentLatitude},${currentLongitude}`;
           let destinationLoc = `${pickup_point_lat},${pickup_point_lng}`;
-
+          let distance = calculateDistance(
+            currentLatitude,
+            currentLongitude,
+            pickup_point_lat,
+            pickup_point_lng
+          );
+          setCurrentToPickupDistance(`${distance.toFixed(2)}`);
           if (
             currentLatitude !== 0 &&
             currentLongitude !== 0 &&
@@ -362,7 +372,26 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
       ? "Start job"
       : "";
   };
-  console.log("deliveryDetailsData?.price", deliveryDetailsData?.price);
+
+  const googleMapOpenUrl = ({
+    latitude,
+    longitude,
+  }: {
+    latitude: any;
+    longitude: any;
+  }) => {
+    const latLng = `${latitude},${longitude}`;
+    return `google.navigation:q=${latLng}`;
+  };
+
+  const onPressOpenMap = () => {
+    Linking.openURL(
+      googleMapOpenUrl({
+        latitude: deliveryDetailsData?.pickup_point_lat,
+        longitude: deliveryDetailsData?.pickup_point_lng,
+      })
+    );
+  };
   return (
     <Modal
       visible={visiblePopup}
@@ -491,6 +520,53 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
                     theme
                   )}
                 />
+                <TouchableOpacity
+                  onPress={onPressOpenMap}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    paddingVertical: 10,
+                    borderColor: "#F5F7FA",
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    backgroundColor: theme?.colors?.white,
+                    paddingHorizontal: 5,
+                    marginVertical: 10,
+                  }}
+                >
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <NavigationIcon
+                      color={theme.colors?.black}
+                      height={18}
+                      width={18}
+                    />
+                    <Text
+                      style={{
+                        width: "80%",
+                        marginLeft: 10,
+                        fontSize: theme.fontSize?.fs14,
+                        fontFamily: theme.fontFamily?.medium,
+                        color: theme.colors?.black,
+                      }}
+                    >
+                      Current location to Pickup location distance
+                    </Text>
+                  </View>
+                  <Text
+                    style={{
+                      fontSize: theme.fontSize?.fs14,
+                      fontFamily: theme.fontFamily?.medium,
+                      color: theme.colors?.secondaryText,
+                    }}
+                  >{`${currentToPickupDistance} KM`}</Text>
+                </TouchableOpacity>
               </View>
             )}
             {/* <View style={style.editCont}>

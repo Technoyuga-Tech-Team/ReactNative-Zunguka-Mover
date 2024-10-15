@@ -1,6 +1,14 @@
 import { CommonActions } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { RefreshControl, View } from "react-native";
+import {
+  Linking,
+  PermissionsAndroid,
+  Platform,
+  RefreshControl,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { FullTheme, makeStyles, useTheme } from "react-native-elements";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -24,6 +32,8 @@ import BorderBottomItem from "../components/DeliveryDetails/BorderBottomItem";
 import RatingPopup from "../components/ui/popups/RatingPopup";
 import { RWF } from "../constant";
 import moment from "moment";
+import NavigationIcon from "../components/ui/svg/NavigationIcon";
+import Geolocation from "react-native-geolocation-service";
 
 const DeliveryDetails1: React.FC<
   MainNavigationProps<Route.navDeliveryDetails1>
@@ -40,10 +50,70 @@ const DeliveryDetails1: React.FC<
   const loading = useSelector(selectMoverBookingLoading);
   const isPackageDeliverd = useSelector(getIsPackageDelivered);
 
+  const [locationEnabled, setLocationEnabled] = useState(false);
+
   const [distance, setDistance] = useState<string>("");
+  const [currentToPickupDistance, setCurrentToPickupDistance] =
+    useState<string>("");
   const [visibleRatePopup, setVisibleRatePopup] = useState<boolean>(false);
   const [deliveryDetailsData, setDeliveryDetailsData] =
     useState<DeliveryDetailsData>({});
+
+  useEffect(() => {
+    const requestLocationPermission = async () => {
+      if (Platform.OS === "ios") {
+        await Geolocation.requestAuthorization("whenInUse");
+        setLocationEnabled(true);
+      } else {
+        try {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            {
+              title: "Location Access Required",
+              message: "This App needs to Access your location",
+              buttonPositive: "ok",
+            }
+          );
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            //To Check, If Permission is granted
+            setLocationEnabled(true);
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    };
+    requestLocationPermission();
+    return () => {
+      // Geolocation.clearWatch();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (locationEnabled) {
+      Geolocation.getCurrentPosition(
+        (position) => {
+          const currentLatitude = position.coords.latitude;
+          const currentLongitude = position.coords.longitude;
+          let distance = calculateDistance(
+            currentLatitude,
+            currentLongitude,
+            Number(deliveryDetailsData.pickup_point_lat),
+            Number(deliveryDetailsData.pickup_point_lng)
+          );
+          setCurrentToPickupDistance(`${distance.toFixed(2)}`);
+        },
+        (error) => {
+          console.log("error", error);
+        }
+        // Update at least every 2 seconds
+      );
+    }
+  }, [
+    locationEnabled,
+    deliveryDetailsData.pickup_point_lat,
+    deliveryDetailsData.pickup_point_lng,
+  ]);
 
   useEffect(() => {
     let unsubscribe = navigation.addListener("focus", async () => {
@@ -193,15 +263,29 @@ const DeliveryDetails1: React.FC<
   const title =
     isPackageDeliverd == 1 ? "Package Delivered" : "Delivery Details";
 
-  console.log("deliveryDetailsData", deliveryDetailsData);
-
   const date_Time = moment(deliveryDetailsData?.createdAt).format("DD/MM/YYYY");
 
   console.log("deliveryDetailsData", deliveryDetailsData);
-  console.log(
-    "getColorFromStatus(deliveryDetailsData?.status, theme)",
-    getColorFromStatus(deliveryDetailsData?.status, theme)
-  );
+
+  const googleMapOpenUrl = ({
+    latitude,
+    longitude,
+  }: {
+    latitude: any;
+    longitude: any;
+  }) => {
+    const latLng = `${latitude},${longitude}`;
+    return `google.navigation:q=${latLng}`;
+  };
+
+  const onPressOpenMap = () => {
+    Linking.openURL(
+      googleMapOpenUrl({
+        latitude: deliveryDetailsData?.pickup_point_lat,
+        longitude: deliveryDetailsData?.pickup_point_lng,
+      })
+    );
+  };
 
   return (
     <View style={style.container}>
@@ -322,6 +406,50 @@ const DeliveryDetails1: React.FC<
               txtColor={getColorFromStatus(deliveryDetailsData?.status, theme)}
             />
           )}
+
+          <TouchableOpacity
+            onPress={onPressOpenMap}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              paddingVertical: 10,
+              borderColor: "#F5F7FA",
+              borderWidth: 2,
+              borderRadius: 8,
+              backgroundColor: theme?.colors?.white,
+              paddingHorizontal: 5,
+              marginTop: 5,
+            }}
+          >
+            <View
+              style={{ flex: 1, flexDirection: "row", alignItems: "center" }}
+            >
+              <NavigationIcon
+                color={theme.colors?.black}
+                height={18}
+                width={18}
+              />
+              <Text
+                style={{
+                  width: "80%",
+                  marginLeft: 10,
+                  fontSize: theme.fontSize?.fs14,
+                  fontFamily: theme.fontFamily?.medium,
+                  color: theme.colors?.black,
+                }}
+              >
+                Current location to Pickup location distance
+              </Text>
+            </View>
+            <Text
+              style={{
+                fontSize: theme.fontSize?.fs14,
+                fontFamily: theme.fontFamily?.medium,
+                color: theme.colors?.secondaryText,
+              }}
+            >{`${currentToPickupDistance} KM`}</Text>
+          </TouchableOpacity>
         </View>
         {/* <View style={{ marginVertical: 10 }}>
           <CustomButton
@@ -353,4 +481,13 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
     backgroundColor: theme.colors?.background,
   },
   scrollcont: { paddingHorizontal: 20, flexGrow: 1 },
+  shadow: {
+    shadowColor: theme.colors?.blackTrans,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: Platform.OS === "ios" ? 0.8 : 0.1,
+    shadowRadius: 50,
+  },
 }));

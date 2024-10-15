@@ -324,8 +324,8 @@ const PackageDetails: React.FC<
             initialRegion={{
               latitude: currentLatLng.lat,
               longitude: currentLatLng.lng,
-              latitudeDelta: 0.04,
-              longitudeDelta: 0.04,
+              latitudeDelta: 0.02,
+              longitudeDelta: 0.02,
             }}
           >
             <Marker
