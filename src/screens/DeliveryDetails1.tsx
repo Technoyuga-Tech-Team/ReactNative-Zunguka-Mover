@@ -242,10 +242,10 @@ const DeliveryDetails1: React.FC<
     return status === "confirmed"
       ? theme.colors?.primary
       : status === "startjob"
-      ? theme.colors?.pinkDark
-      : status === "completed"
       ? theme.colors?.green
-      : theme.colors?.golden;
+      : status === "completed"
+      ? theme.colors?.secondaryText
+      : theme.colors?.pinkDark;
   };
 
   const getStatusStrings = (status: string) => {

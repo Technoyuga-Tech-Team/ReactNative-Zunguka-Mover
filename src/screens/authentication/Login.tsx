@@ -233,6 +233,7 @@ const Login: React.FC<AuthNavigationProps<Route.navLogin>> = ({
         <Text style={style.title1}>FIll up your details below</Text>
         <View style={style.txtInCont}>
           <PhoneNumberInput
+            ref={phoneRef}
             textInputTitle="Phone Number"
             onPressFlag={onPressFlag}
             onChangePhoneNumber={(value, iso2) =>

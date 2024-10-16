@@ -155,7 +155,7 @@ const MainNavigator = () => {
             break;
           case "nearby_request":
             // @ts-ignore
-            navigationRef.navigate(Route.navDashboard);
+            // navigationRef.navigate(Route.navDashboard);
             // set default type wise
             break;
           default:

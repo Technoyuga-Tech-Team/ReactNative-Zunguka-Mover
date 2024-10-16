@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Image,
+  Linking,
   PermissionsAndroid,
   Platform,
   StatusBar,
@@ -36,6 +37,7 @@ import { getData } from "../../utils/asyncStorage";
 import Scale from "../../utils/Scale";
 import { socket, socketEvent } from "../../utils/socket";
 import { Images } from "../../assets/images";
+import NavigationIcon from "../../components/ui/svg/NavigationIcon";
 
 const PackageDetails: React.FC<
   MainNavigationProps<Route.navPackageDetails>
@@ -68,6 +70,9 @@ const PackageDetails: React.FC<
   const [canJobStartJob, setCanStartJob] = useState(route?.params?.canStartJob);
   const [canJobEndJob, setCanEndJob] = useState(route?.params?.canEndJob);
   const [isJobStared, setIsJobStarted] = useState(route?.params?.isJobStarted);
+
+  const [currentToPickupDistance, setCurrentToPickupDistance] =
+    useState<string>("");
 
   console.log("route?.params?.canEndJob", route?.params?.canEndJob);
   console.log("canJobStartJob", canJobStartJob);
@@ -173,6 +178,13 @@ const PackageDetails: React.FC<
         async (position) => {
           const currentLatitude = position.coords.latitude;
           const currentLongitude = position.coords.longitude;
+          let distance = calculateDistance(
+            currentLatitude,
+            currentLongitude,
+            pickup_lat_lng?.lat,
+            pickup_lat_lng?.lng
+          );
+          setCurrentToPickupDistance(`${distance.toFixed(2)}`);
           mapRef.current?.animateToRegion({
             latitude: currentLatitude,
             longitude: currentLongitude,
@@ -286,6 +298,26 @@ const PackageDetails: React.FC<
     });
   };
 
+  const googleMapOpenUrl = ({
+    latitude,
+    longitude,
+  }: {
+    latitude: any;
+    longitude: any;
+  }) => {
+    const latLng = `${latitude},${longitude}`;
+    return `google.navigation:q=${latLng}`;
+  };
+
+  const onPressOpenMap = () => {
+    Linking.openURL(
+      googleMapOpenUrl({
+        latitude: pickup_lat_lng.lat,
+        longitude: pickup_lat_lng.lng,
+      })
+    );
+  };
+
   return (
     <View style={style.scrollCont}>
       <StatusBar
@@ -396,6 +428,55 @@ const PackageDetails: React.FC<
         ) : (
           <Loading />
         )}
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={onPressOpenMap}
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            paddingVertical: 10,
+            borderColor: "#F5F7FA",
+            borderWidth: 2,
+            borderRadius: 8,
+            backgroundColor: theme?.colors?.white,
+            paddingHorizontal: 5,
+            marginVertical: 10,
+            marginHorizontal: 20,
+          }}
+        >
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <NavigationIcon
+              color={theme.colors?.black}
+              height={18}
+              width={18}
+            />
+            <Text
+              style={{
+                width: "80%",
+                marginLeft: 10,
+                fontSize: theme.fontSize?.fs14,
+                fontFamily: theme.fontFamily?.medium,
+                color: theme.colors?.black,
+              }}
+            >
+              Current location to Pickup location distance
+            </Text>
+          </View>
+          <Text
+            style={{
+              fontSize: theme.fontSize?.fs14,
+              fontFamily: theme.fontFamily?.medium,
+              color: theme.colors?.secondaryText,
+            }}
+          >{`${currentToPickupDistance} KM`}</Text>
+        </TouchableOpacity>
       </View>
       <View style={style.box}>
         <DropShadow style={style.shadow}>
