@@ -32,6 +32,7 @@ import { LoadingState, ThemeProps } from "../../types/global.types";
 import { MainNavigationProps } from "../../types/navigation";
 import Scale from "../../utils/Scale";
 import { getData } from "../../utils/asyncStorage";
+import { Images } from "../../assets/images";
 
 const ResetPassword: React.FC<MainNavigationProps<Route.navResetPassword>> = ({
   navigation,
@@ -118,7 +119,7 @@ const ResetPassword: React.FC<MainNavigationProps<Route.navResetPassword>> = ({
       </TouchableOpacity>
       <View style={style.iconCont}>
         <AppImage
-          source={require("../../assets/images/roundedLogo.png")}
+          source={Images.ROUND_LOGO_APP}
           resizeMode="contain"
           style={style.appIcon}
         />

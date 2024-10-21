@@ -28,6 +28,7 @@ import { LoadingState, ThemeProps } from "../../../types/global.types";
 import { AuthNavigationProps } from "../../../types/navigation";
 import Scale from "../../../utils/Scale";
 import { ForgotPasswordFormProps } from "../../../types/authentication.types";
+import { Images } from "../../../assets/images";
 
 const ForgotPassword: React.FC<
   AuthNavigationProps<Route.navForgotPassword>
@@ -130,13 +131,13 @@ const ForgotPassword: React.FC<
       </TouchableOpacity>
       <View style={style.iconCont}>
         <AppImage
-          source={require("../../../assets/images/roundedLogo.png")}
+          source={Images.ROUND_LOGO_APP}
           resizeMode="contain"
           style={style.appIcon}
         />
       </View>
       <Text style={style.txtVerificationCode}>Forgot password?</Text>
-      <Text style={style.txtVerificationCode1}>Let’s help you reset it!</Text>
+      <Text style={style.txtVerificationCode1}>Let's help you reset it!</Text>
       <Text style={style.txtVerificationSentCode}>
         Please enter your mobile number that is linked to your account.
       </Text>

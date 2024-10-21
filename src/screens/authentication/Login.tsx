@@ -43,6 +43,7 @@ import Scale from "../../utils/Scale";
 import { getData } from "../../utils/asyncStorage";
 import { setNavigation } from "../../utils/setNavigation";
 import { useGetFCMToken } from "../../hooks/useGetFCMToken";
+import { Images } from "../../assets/images";
 
 const Login: React.FC<AuthNavigationProps<Route.navLogin>> = ({
   navigation,
@@ -223,7 +224,7 @@ const Login: React.FC<AuthNavigationProps<Route.navLogin>> = ({
       {loading === LoadingState.CREATE && <Loading />}
       <View style={style.iconCont}>
         <AppImage
-          source={require("../../assets/images/roundedLogo.png")}
+          source={Images.ROUND_LOGO_APP}
           resizeMode="contain"
           style={style.appIcon}
         />

@@ -5,6 +5,7 @@ export enum Images {
   LOADER = require("../images/loading.png"),
   OOPS = require("../images/oops.png"),
   CHEARS = require("../images/confetti.png"),
+  ROUND_LOGO_APP = require("../images/roundedLogo.png"),
 
   HEADER_HOME_IMAGE = require("../images/home_header.png"),
   ARROW_RIGHT = require("../images/arrow-right.png"),
