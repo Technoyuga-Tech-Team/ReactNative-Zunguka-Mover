@@ -1,6 +1,6 @@
 import notifee from "@notifee/react-native";
 import React, { useEffect, useState } from "react";
-import { Platform, View } from "react-native";
+import { Platform, Text, TouchableOpacity, View } from "react-native";
 import { makeStyles, useTheme } from "react-native-elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
@@ -19,7 +19,11 @@ import { ThemeProps } from "../../types/global.types";
 import { MainNavigationProps } from "../../types/navigation";
 import { GetNotificationDataList } from "../../types/notification.types";
 import { getData } from "../../utils/asyncStorage";
-import { readUnreadAlert } from "../../store/Notification/notification.thunk";
+import {
+  markAllAsRead,
+  readUnreadAlert,
+} from "../../store/Notification/notification.thunk";
+import Scale from "../../utils/Scale";
 
 const Inbox: React.FC<MainNavigationProps<Route.navAlert>> = ({
   navigation,
@@ -136,16 +140,57 @@ const Inbox: React.FC<MainNavigationProps<Route.navAlert>> = ({
     }
   };
 
+  const onPressMarkAllAsRead = async () => {
+    try {
+      const result = await dispatch(markAllAsRead({ is_alert: 1 }));
+      if (markAllAsRead.fulfilled.match(result)) {
+        console.log("markAllAsRead result.payload", result.payload);
+        if (result.payload.status == 1) {
+          let data = [...notifications];
+          data.map((ele) => {
+            return (ele.is_read = 1);
+          });
+          setNotifications(data);
+          getNotifications(10, 1);
+          setUnreadAlertCount(0);
+        }
+      } else {
+        console.log("errror markAllAsRead --->", result.payload);
+      }
+    } catch (error) {
+      console.log("catch error markAllAsRead --->", error);
+    }
+  };
+
   return (
     <View style={style.container}>
       <CustomHeader title="Inbox" isBackVisible={true} />
-      <NotificationListing
-        notificationData={notifications}
-        notificationLoading={loading}
-        onEndReached={onEndReached}
-        loadMoreLoading={loadMoreLoading}
-        onPressItem={onPressItem}
-      />
+      <View style={{ flex: 1 }}>
+        {notifications?.length > 0 && (
+          <TouchableOpacity
+            disabled={unreadAlertCount == 0}
+            onPress={onPressMarkAllAsRead}
+            style={[
+              style.btnMarkCont,
+              {
+                backgroundColor:
+                  unreadAlertCount == 0
+                    ? theme?.colors?.unselectedIconColor
+                    : theme?.colors?.blue,
+              },
+            ]}
+          >
+            <Text style={style.txtMark}>Mark all as read</Text>
+          </TouchableOpacity>
+        )}
+        <NotificationListing
+          notificationData={notifications}
+          notificationLoading={loading}
+          onEndReached={onEndReached}
+          loadMoreLoading={loadMoreLoading}
+          onPressItem={onPressItem}
+        />
+      </View>
     </View>
   );
 };
@@ -163,5 +208,22 @@ const useStyles = makeStyles((theme, props: ThemeProps) => ({
         : props.insets.bottom + 60,
     backgroundColor: theme.colors?.background,
     paddingTop: props.insets.top,
+  },
+  btnMarkCont: {
+    height: Scale(30),
+    paddingHorizontal: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: theme?.colors?.blue,
+    // backgroundColor: "red",
+    alignSelf: "flex-end",
+    borderRadius: 4,
+    marginRight: 10,
+    marginVertical: 5,
+  },
+  txtMark: {
+    fontSize: theme.fontSize?.fs14,
+    fontFamily: theme.fontFamily?.regular,
+    color: theme.colors?.white,
   },
 }));

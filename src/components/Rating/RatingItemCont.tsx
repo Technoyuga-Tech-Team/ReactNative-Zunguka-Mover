@@ -16,7 +16,8 @@ const RatingItemCont: React.FC<RatingItemContProps> = ({ item }) => {
   const insets = useSafeAreaInsets();
   const style = useStyles({ insets });
   const { theme } = useTheme();
-  const time = moment(item?.createdAt).fromNow();
+  const time = moment(item?.createdAt).format("hh:mm A");
+  const date = moment(item?.createdAt).format("DD/MM/YYYY");
   return (
     <View style={style.container}>
       <AppImage
@@ -37,7 +38,10 @@ const RatingItemCont: React.FC<RatingItemContProps> = ({ item }) => {
           <Text numberOfLines={1} style={style.txtName}>
             {item?.first_name} {item?.last_name}
           </Text>
-          <Text style={style.txtDate}>{time}</Text>
+          <View style={{ alignItems: "flex-end" }}>
+            <Text style={style.txtDate}>{date}</Text>
+            <Text style={style.txtDate}>{time}</Text>
+          </View>
         </View>
         <RatingBox rating={item?.rate} onlyStar={true} />
         <Text style={style.txtComment}>Item - {item?.item_name}</Text>

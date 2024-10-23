@@ -151,9 +151,18 @@ const PayoutHistory: React.FC<
                 console.log("item", item);
                 return (
                   <View style={style.itemCont}>
-                    <Text style={style.txtDate}>
-                      {moment(item.created_at).format("DD MMM YYYY")}
-                    </Text>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Text style={style.txtDate}>
+                        {moment(item.created_at).format("DD MMM YYYY")}
+                      </Text>
+                      <Text style={style.txtDate}>#{item.request_number}</Text>
+                    </View>
                     <View style={style.itemInnerCont}>
                       <Text style={style.txtAmount}>
                         Requested amount - {RWF} {item.amount}

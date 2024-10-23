@@ -35,6 +35,36 @@ export const readUnreadNotification = createAsyncThunk<
   }
 );
 
+export const markAllAsRead = createAsyncThunk<
+  any,
+  {
+    is_alert: number;
+  },
+  { state: RootReduxState; rejectValue: FetchResponseError }
+>(
+  "notification/readUnreadNotification",
+  async ({ is_alert }, { dispatch, rejectWithValue }) => {
+    const { errors, data } = await dispatch(
+      fetchAction<TokenPayload1>(
+        {
+          url: API.MARK_ALL_AS_READ_NOTIFICATION_ALERT,
+          method: "POST",
+          data: {
+            is_alert,
+          },
+        },
+        true
+      )
+    );
+
+    if (errors) {
+      return rejectWithValue(errors);
+    }
+
+    return data;
+  }
+);
+
 export const readUnreadAlert = createAsyncThunk<
   any,
   {

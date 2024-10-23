@@ -38,6 +38,7 @@ export const API = {
   // notification
   GET_NOTIFICATION: "/notification-list",
   READ_UNREAD_NOTIFICATION: "/read_notification",
+  MARK_ALL_AS_READ_NOTIFICATION_ALERT: "/mark-all-as-read",
   GET_ALERT: "/alert-list",
   READ_UNREAD_ALERT: "/read_alert",
   // user data

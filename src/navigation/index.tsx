@@ -84,6 +84,7 @@ const MainNavigator = () => {
             backgroundColor: theme.colors?.error,
             textColor: theme.colors?.white,
             fontFamily: theme.fontFamily?.medium,
+            numberOfLines: 4,
           });
         }
       }
@@ -108,6 +109,7 @@ const MainNavigator = () => {
         backgroundColor: theme.colors?.primary,
         textColor: theme.colors?.black,
         fontFamily: theme.fontFamily?.medium,
+        numberOfLines: 4,
       });
       dispatch(clearSuccess());
     }

@@ -2,7 +2,11 @@ import { createSlice, isAnyOf } from "@reduxjs/toolkit";
 import { LoadingState } from "../../types/global.types";
 
 import { NotificationStatusState } from "../../types/notification.types";
-import { readUnreadAlert, readUnreadNotification } from "./notification.thunk";
+import {
+  markAllAsRead,
+  readUnreadAlert,
+  readUnreadNotification,
+} from "./notification.thunk";
 
 const initialState: NotificationStatusState = {
   loading: LoadingState.REMOVE,
@@ -15,7 +19,11 @@ const notification = createSlice({
   extraReducers: (builder) => {
     builder
       .addMatcher(
-        isAnyOf(readUnreadNotification.pending, readUnreadAlert.pending),
+        isAnyOf(
+          readUnreadNotification.pending,
+          readUnreadAlert.pending,
+          markAllAsRead.pending
+        ),
         (state) => {
           state.loading = LoadingState.CREATE;
         }
@@ -24,8 +32,10 @@ const notification = createSlice({
         isAnyOf(
           readUnreadNotification.fulfilled,
           readUnreadAlert.fulfilled,
+          markAllAsRead.fulfilled,
           readUnreadNotification.rejected,
-          readUnreadAlert.rejected
+          readUnreadAlert.rejected,
+          markAllAsRead.rejected
         ),
         (state) => {
           state.loading = LoadingState.REMOVE;

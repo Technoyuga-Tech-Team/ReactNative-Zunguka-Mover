@@ -288,7 +288,7 @@ const Earnings: React.FC<MoverHomeNavigationProps<Route.navEarnings>> = ({
           <Text style={style.txtToday}>{`${start_date} - ${end_date}`}</Text>
           <PackageList
             data={myEarningData}
-            isCompleted={true}
+            isCompleted={false}
             isFromMover={true}
             fromEarning={true}
             onPress={() => {}}

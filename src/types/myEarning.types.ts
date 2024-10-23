@@ -25,4 +25,5 @@ export interface PayoutHistoryItem {
   withdraw_date: string;
   created_at: string;
   updated_at: string;
+  request_number: string;
 }

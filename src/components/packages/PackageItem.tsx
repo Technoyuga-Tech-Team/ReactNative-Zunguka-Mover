@@ -6,6 +6,7 @@ import { ThemeProps } from "../../types/global.types";
 import { HIT_SLOP2, RWF } from "../../constant";
 import StarOutlineIcon from "../ui/svg/StarOutlineIcon";
 import moment from "moment";
+import RatingBox from "../RatingBox";
 
 interface PackageItemProps {
   item: any;
@@ -64,7 +65,12 @@ const PackageItem: React.FC<PackageItemProps> = ({
           {RWF} {Number(item?.price).toFixed(2)}
         </Text>
       </View>
-      {isReviewPending && isFromMover && isCompleted && (
+      {isCompleted && (
+        <View style={{ marginTop: 5 }}>
+          <RatingBox rating={item?.rating?.rate} onlyStar={true} />
+        </View>
+      )}
+      {/* {isReviewPending && isFromMover && isCompleted && (
         <TouchableOpacity
           hitSlop={HIT_SLOP2}
           onPress={onPressRating}
@@ -78,7 +84,7 @@ const PackageItem: React.FC<PackageItemProps> = ({
           />
           <Text style={style.txtRating}>Leave your reviews & rating</Text>
         </TouchableOpacity>
-      )}
+      )} */}
     </TouchableOpacity>
   );
 };
