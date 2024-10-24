@@ -30,6 +30,7 @@ import ChatIcon from "../../components/ui/svg/ChatIcon";
 import { deleteAccount } from "../../store/userprofile/userprofile.thunk";
 import { setUserData } from "../../store/settings/settings.slice";
 import { selectUserProfileLoading } from "../../store/userprofile/userprofile.selectors";
+import ContactUsIcon from "../../components/ui/svg/ContactUsIcon";
 
 const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
   navigation,
@@ -135,6 +136,10 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
     navigation.navigate(Route.navReviewAndRating);
   };
 
+  const onPressContactUs = () => {
+    navigation.navigate(Route.navContactUs);
+  };
+
   const Profile = profilePicture;
   return (
     <View style={style.container}>
@@ -196,6 +201,11 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
         <ProfileItem
           name="Terms and Conditions"
           icon={<DocslistIcon color={theme.colors?.primary} />}
+        />
+        <ProfileItem
+          name="Contact Us"
+          icon={<ContactUsIcon color={theme.colors?.primary} />}
+          onPress={onPressContactUs}
         />
       </KeyboardAwareScrollView>
       <View

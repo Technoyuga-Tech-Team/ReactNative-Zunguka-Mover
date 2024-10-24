@@ -77,3 +77,10 @@ export interface AddAddressProps {
   country: string;
   zipcode: string;
 }
+
+// Contact us
+export interface ContactUsFormProps {
+  email: string;
+  subject: string;
+  message: string;
+}

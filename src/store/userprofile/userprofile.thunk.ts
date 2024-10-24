@@ -153,3 +153,31 @@ export const deleteAccount = createAsyncThunk<
 
   return data;
 });
+
+// Contact us
+
+export const userContactUs = createAsyncThunk<
+  any,
+  { formData: FormData },
+  { state: RootReduxState; rejectValue: FetchResponseError }
+>("user/userContactUs", async ({ formData }, { dispatch, rejectWithValue }) => {
+  const { errors, data } = await dispatch(
+    fetchAction<TokenPayload1>(
+      {
+        url: API.CONTACT_US,
+        method: "POST",
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      },
+      true
+    )
+  );
+
+  if (errors) {
+    return rejectWithValue(errors);
+  }
+
+  return data;
+});

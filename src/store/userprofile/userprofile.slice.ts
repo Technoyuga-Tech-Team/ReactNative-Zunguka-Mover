@@ -5,6 +5,7 @@ import { UserProfileState } from "../../types/user.types";
 import {
   deleteAccount,
   updateNotificationProfile,
+  userContactUs,
   userSetupProfile,
   userUpdateProfile,
   userUpdateProfilePicture,
@@ -26,7 +27,8 @@ const userprofile = createSlice({
           userUpdateProfile.pending,
           updateNotificationProfile.pending,
           userSetupProfile.pending,
-          deleteAccount.pending
+          deleteAccount.pending,
+          userContactUs.pending
         ),
         (state) => {
           state.loading = LoadingState.CREATE;
@@ -39,11 +41,13 @@ const userprofile = createSlice({
           updateNotificationProfile.fulfilled,
           userSetupProfile.fulfilled,
           deleteAccount.fulfilled,
+          userContactUs.fulfilled,
           userUpdateProfilePicture.rejected,
           userUpdateProfile.rejected,
           updateNotificationProfile.rejected,
           userSetupProfile.rejected,
-          deleteAccount.rejected
+          deleteAccount.rejected,
+          userContactUs.rejected
         ),
         (state) => {
           state.loading = LoadingState.REMOVE;

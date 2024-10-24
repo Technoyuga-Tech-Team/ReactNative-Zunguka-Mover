@@ -19,6 +19,7 @@ export const API = {
   // profile
   UPDATE_PROFILE: "/profile",
   UPDATE_PROFILE_PICTURE: "/profile",
+  CONTACT_US: "/contact",
   UPDATE_NOTIFICATION: "/profile",
   SETUP_PROFILE: "/setup-profile",
   // product

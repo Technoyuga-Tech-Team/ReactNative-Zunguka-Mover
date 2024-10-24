@@ -48,6 +48,7 @@ export type AppRoutes = {
   ReviewAndRating: { rating_id?: number };
   Alert: undefined;
   AdminVerification: undefined;
+  ContactUs: undefined;
   Withdraw: { earning: string };
   PackageDetails: {
     package_details_id: string;
@@ -64,6 +65,7 @@ export type AppRoutes = {
     package_details_id: string;
     from?: string;
     fromHome?: string;
+    isCompleted?: boolean;
   };
 };
 
@@ -196,7 +198,11 @@ export type HomeRoutes = {
     seller_id: string;
   };
   DeliveryDetails: undefined;
-  DeliveryDetails1: { package_details_id: string; from?: string };
+  DeliveryDetails1: {
+    package_details_id: string;
+    from?: string;
+    isCompleted?: boolean;
+  };
   Withdraw: { earning: string };
   PayoutHistory: undefined;
   Chatroom: { receiver_id: string; product_id: string };
@@ -212,6 +218,7 @@ export type HomeRoutes = {
   TransactionHistory: undefined;
   EditProfile: undefined;
   AdminVerification: undefined;
+  ContactUs: undefined;
 };
 
 export type SellAnItemRoutes = {

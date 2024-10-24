@@ -46,6 +46,7 @@ const DeliveryDetails1: React.FC<
   const package_details_id = route.params?.package_details_id;
   const from_mover = route.params?.from == "mover";
   const from_mover_home = route.params?.fromHome == "home";
+  const is_from_completed = route.params?.isCompleted || false;
 
   const loading = useSelector(selectMoverBookingLoading);
   const isPackageDeliverd = useSelector(getIsPackageDelivered);
@@ -406,50 +407,51 @@ const DeliveryDetails1: React.FC<
               txtColor={getColorFromStatus(deliveryDetailsData?.status, theme)}
             />
           )}
-
-          <TouchableOpacity
-            onPress={onPressOpenMap}
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              paddingVertical: 10,
-              borderColor: "#F5F7FA",
-              borderWidth: 2,
-              borderRadius: 8,
-              backgroundColor: theme?.colors?.white,
-              paddingHorizontal: 5,
-              marginTop: 5,
-            }}
-          >
-            <View
-              style={{ flex: 1, flexDirection: "row", alignItems: "center" }}
+          {!is_from_completed && (
+            <TouchableOpacity
+              onPress={onPressOpenMap}
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                paddingVertical: 10,
+                borderColor: "#F5F7FA",
+                borderWidth: 2,
+                borderRadius: 8,
+                backgroundColor: theme?.colors?.white,
+                paddingHorizontal: 5,
+                marginTop: 5,
+              }}
             >
-              <NavigationIcon
-                color={theme.colors?.black}
-                height={18}
-                width={18}
-              />
+              <View
+                style={{ flex: 1, flexDirection: "row", alignItems: "center" }}
+              >
+                <NavigationIcon
+                  color={theme.colors?.black}
+                  height={18}
+                  width={18}
+                />
+                <Text
+                  style={{
+                    width: "80%",
+                    marginLeft: 10,
+                    fontSize: theme.fontSize?.fs14,
+                    fontFamily: theme.fontFamily?.medium,
+                    color: theme.colors?.black,
+                  }}
+                >
+                  Current location to Pickup location distance
+                </Text>
+              </View>
               <Text
                 style={{
-                  width: "80%",
-                  marginLeft: 10,
                   fontSize: theme.fontSize?.fs14,
                   fontFamily: theme.fontFamily?.medium,
-                  color: theme.colors?.black,
+                  color: theme.colors?.secondaryText,
                 }}
-              >
-                Current location to Pickup location distance
-              </Text>
-            </View>
-            <Text
-              style={{
-                fontSize: theme.fontSize?.fs14,
-                fontFamily: theme.fontFamily?.medium,
-                color: theme.colors?.secondaryText,
-              }}
-            >{`${currentToPickupDistance} KM`}</Text>
-          </TouchableOpacity>
+              >{`${currentToPickupDistance} KM`}</Text>
+            </TouchableOpacity>
+          )}
         </View>
         {/* <View style={{ marginVertical: 10 }}>
           <CustomButton

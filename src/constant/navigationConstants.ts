@@ -22,6 +22,7 @@ export enum Route {
   navSetupProfile6 = "SetupProfile6",
   navSetupProfile7 = "SetupProfile7",
   navAuthentication = "Authentication",
+  navContactUs = "ContactUs",
   navMoverAuthentication = "MoverAuthentication",
   navDashboard = "Dashboard",
   navMoverDashboard = "MoverDashboard",

@@ -60,6 +60,7 @@ const CompletedPackages: React.FC<
     navigation.navigate(Route.navDeliveryDetails1, {
       package_details_id: item.id,
       from: "mover",
+      isCompleted: true,
     });
   };
 
