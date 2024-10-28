@@ -9,7 +9,9 @@ import CustomButton from "../../components/ui/CustomButton";
 import ProfileAndName from "../../components/ui/Profile/ProfileAndName";
 import ProfileItem from "../../components/ui/Profile/ProfileItem";
 import LogoutPopup from "../../components/ui/popups/LogoutPopup";
-import CreditcardIcon from "../../components/ui/svg/CreditcardIcon";
+import CallIcon from "../../components/ui/svg/CallIcon";
+import ChatIcon from "../../components/ui/svg/ChatIcon";
+import DeleteIcon from "../../components/ui/svg/DeleteIcon";
 import DocslistIcon from "../../components/ui/svg/DocslistIcon";
 import InfocircleIcon from "../../components/ui/svg/InfocircleIcon";
 import LogoutIcon from "../../components/ui/svg/LogoutIcon";
@@ -19,18 +21,15 @@ import StarOutlineIcon from "../../components/ui/svg/StarOutlineIcon";
 import { SCREEN_WIDTH, USER_DATA, secureStoreKeys } from "../../constant";
 import { Route } from "../../constant/navigationConstants";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { logout } from "../../store/authentication/authentication.thunks";
 import { selectUserData } from "../../store/settings/settings.selectors";
+import { setUserData } from "../../store/settings/settings.slice";
+import { selectUserProfileLoading } from "../../store/userprofile/userprofile.selectors";
+import { deleteAccount } from "../../store/userprofile/userprofile.thunk";
 import { LoadingState, ThemeProps } from "../../types/global.types";
 import { HomeNavigationProps } from "../../types/navigation";
 import Scale from "../../utils/Scale";
 import { setData } from "../../utils/asyncStorage";
-import { logout } from "../../store/authentication/authentication.thunks";
-import DeleteIcon from "../../components/ui/svg/DeleteIcon";
-import ChatIcon from "../../components/ui/svg/ChatIcon";
-import { deleteAccount } from "../../store/userprofile/userprofile.thunk";
-import { setUserData } from "../../store/settings/settings.slice";
-import { selectUserProfileLoading } from "../../store/userprofile/userprofile.selectors";
-import ContactUsIcon from "../../components/ui/svg/ContactUsIcon";
 
 const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
   navigation,
@@ -204,7 +203,9 @@ const Profile: React.FC<HomeNavigationProps<Route.navProfile>> = ({
         />
         <ProfileItem
           name="Contact Us"
-          icon={<ContactUsIcon color={theme.colors?.primary} />}
+          icon={
+            <CallIcon color={theme.colors?.primary} height={24} width={24} />
+          }
           onPress={onPressContactUs}
         />
       </KeyboardAwareScrollView>

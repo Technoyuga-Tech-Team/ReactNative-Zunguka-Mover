@@ -55,6 +55,7 @@ export type AppRoutes = {
     pickupLatLng: { lat: number; lng: number };
     destinationLatLng: { lat: number; lng: number };
     product_id?: string;
+    buyer_phone_number?: string;
     canStartJob: boolean;
     isJobStarted: boolean;
     canEndJob: boolean;
@@ -81,6 +82,7 @@ export type MoverRoute = {
     destinationLatLng: { lat: number; lng: number };
     canStartJob: boolean;
     product_id?: string;
+    buyer_phone_number?: string;
     isJobStarted: boolean;
     canEndJob: boolean;
     buyerSellerId: string;

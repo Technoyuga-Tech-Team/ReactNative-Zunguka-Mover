@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   Linking,
   Modal,
   PermissionsAndroid,
@@ -24,7 +25,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { orderDetails } from "../../../store/MoverBooking/moverBooking.thunk";
 import { DeliveryDetailsData } from "../../../types/delivery.types";
-import { ASPECT_RATIO, GOOGLE_MAP_API_KEY, RWF } from "../../../constant";
+import {
+  ASPECT_RATIO,
+  GOOGLE_MAP_API_KEY,
+  RWF,
+  SCREEN_WIDTH,
+} from "../../../constant";
 import { Route } from "../../../constant/navigationConstants";
 import { Images } from "../../../assets/images";
 import CustomHeader from "../CustomHeader";
@@ -36,6 +42,7 @@ import Geolocation from "react-native-geolocation-service";
 import { setErrors } from "../../../store/global/global.slice";
 import { notifyMessage } from "../../../utils/notifyMessage";
 import NavigationIcon from "../svg/NavigationIcon";
+import CallIcon from "../svg/CallIcon";
 
 interface PickupPopupProps {
   visiblePopup: boolean;
@@ -339,6 +346,11 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
     );
   };
 
+  const onPressCall = () => {
+    let phoneNumber = selectedItem?.buyer_phone_number;
+    Linking.openURL(`tel:${phoneNumber}`);
+  };
+
   const profile = selectedItem?.profile_image || Images.PLACEHOLDER_IMAGE;
 
   const isReachedDestination = selectedItem?.status === "completed";
@@ -614,9 +626,10 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
             <View
               style={{
                 alignItems: "center",
-                justifyContent: "center",
-                paddingHorizontal: 50,
+                justifyContent: "space-around",
+                paddingHorizontal: 20,
                 marginTop: 10,
+                flexDirection: "row",
               }}
             >
               <CustomButton
@@ -628,6 +641,42 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
                 variant="secondary"
                 icon={
                   <ChatIcon
+                    height={18}
+                    width={18}
+                    color={
+                      isPending
+                        ? theme.colors?.textSecondary
+                        : theme.colors?.primary
+                    }
+                    style={{ marginRight: 5 }}
+                  />
+                }
+                containerStyle={[
+                  style.btnMessage,
+                  {
+                    borderColor: isPending
+                      ? theme.colors?.textSecondary
+                      : theme.colors?.primary,
+                  },
+                ]}
+                titleStyle={[
+                  style.txtTitleStyle,
+                  {
+                    color: isPending
+                      ? theme.colors?.textSecondary
+                      : theme.colors?.primary,
+                  },
+                ]}
+              />
+              <CustomButton
+                disabled={isPending}
+                onPress={onPressCall}
+                title={"Call with client"}
+                buttonWidth="half"
+                type="clear"
+                variant="secondary"
+                icon={
+                  <CallIcon
                     height={18}
                     width={18}
                     color={
@@ -850,7 +899,7 @@ const useStyle = makeStyles((theme, props: ThemeProps) => ({
   },
   btnMessage: {
     backgroundColor: theme.colors?.white,
-    width: "100%",
+    width: (SCREEN_WIDTH - 100) / 2,
     height: Scale(40),
     borderRadius: 8,
     borderColor: theme.colors?.primary,

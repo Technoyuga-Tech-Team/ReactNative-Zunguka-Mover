@@ -30,7 +30,6 @@ import {
   moverRequestedDetails,
 } from "../store/MoverBooking/moverBooking.thunk";
 import {
-  getNotificationCount,
   getUnreadAlertCount,
   getUnreadCount,
   selectMoverRequestData,
@@ -43,9 +42,8 @@ import {
 } from "../store/settings/settings.slice";
 import { LoadingState, ThemeProps } from "../types/global.types";
 import { MoverHomeNavigationProps } from "../types/navigation";
-import { socket, socketEvent } from "../utils/socket";
-import { setErrors } from "../store/global/global.slice";
 import { notifyMessage } from "../utils/notifyMessage";
+import { socket, socketEvent } from "../utils/socket";
 
 const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   navigation,
@@ -249,7 +247,6 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   };
 
   const onPressItem = (item: any) => {
-    console.log("item.status", item.status);
     if (
       item.status === "confirmed" ||
       item.status === "startjob" ||
@@ -265,6 +262,7 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
           lat: item.delivery_point_lat,
           lng: item.delivery_point_lng,
         },
+        buyer_phone_number: item?.buyer_phone_number,
         product_id: item.product_id,
         isJobStarted: item.status === "startjob",
         canStartJob: item.status === "confirmed",

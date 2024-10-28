@@ -2,6 +2,7 @@ import { decode } from "@mapbox/polyline";
 import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   Image,
   Linking,
   PermissionsAndroid,
@@ -38,6 +39,7 @@ import Scale from "../../utils/Scale";
 import { socket, socketEvent } from "../../utils/socket";
 import { Images } from "../../assets/images";
 import NavigationIcon from "../../components/ui/svg/NavigationIcon";
+import CallIcon from "../../components/ui/svg/CallIcon";
 
 const PackageDetails: React.FC<
   MainNavigationProps<Route.navPackageDetails>
@@ -53,6 +55,7 @@ const PackageDetails: React.FC<
   const buyerSellerId = route?.params?.buyerSellerId;
   const sellerId = route?.params?.seller_id;
   const product_id = route?.params?.product_id;
+  const phone = route?.params?.buyer_phone_number;
 
   const loading = useSelector(selectMoverBookingLoading);
   const dispatch = useAppDispatch();
@@ -298,6 +301,10 @@ const PackageDetails: React.FC<
     });
   };
 
+  const onPressCall = () => {
+    Linking.openURL(`tel:${phone}`);
+  };
+
   const googleMapOpenUrl = ({
     latitude,
     longitude,
@@ -331,13 +338,32 @@ const PackageDetails: React.FC<
         textColor={theme?.colors?.white}
         backgroundColor={theme?.colors?.primary}
         rightView={
-          <TouchableOpacity
-            onPress={onPressMessage}
-            activeOpacity={0.8}
-            hitSlop={HIT_SLOP2}
+          <View
+            style={{
+              flexDirection: "row",
+              marginRight: 10,
+            }}
           >
-            <ChatFillIcon color={theme.colors?.white} height={28} width={28} />
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={onPressMessage}
+              activeOpacity={0.8}
+              hitSlop={HIT_SLOP2}
+              style={{ marginRight: 5 }}
+            >
+              <ChatFillIcon
+                color={theme.colors?.white}
+                height={28}
+                width={28}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={onPressCall}
+              activeOpacity={0.8}
+              hitSlop={HIT_SLOP2}
+            >
+              <CallIcon color={theme.colors?.white} height={28} width={28} />
+            </TouchableOpacity>
+          </View>
         }
       />
 
