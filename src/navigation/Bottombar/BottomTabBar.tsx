@@ -43,7 +43,7 @@ const BottomTabBar = ({ state, navigation }: any) => {
                 <TouchableOpacity
                   key={route.key}
                   onPress={onPress}
-                  activeOpacity={0.8}
+                  activeOpacity={1}
                   hitSlop={HIT_SLOP}
                   style={Style.iconCont}
                 >

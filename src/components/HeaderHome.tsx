@@ -52,14 +52,14 @@ const HeaderHome: React.FC<HeaderHomeProps> = ({
           </View>
           <TouchableOpacity
             hitSlop={HIT_SLOP2}
-            activeOpacity={0.8}
+            activeOpacity={1}
             style={style.notificationCont}
             onPress={onPressNotification}
           >
             <RightRoundIcon
               color={theme?.colors?.white}
-              height={60}
-              width={60}
+              height={Scale(60)}
+              width={Scale(60)}
             />
             {notificationCount > 0 && (
               <View style={style.redDot}>
