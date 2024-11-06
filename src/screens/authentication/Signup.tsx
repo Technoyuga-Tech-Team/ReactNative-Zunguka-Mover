@@ -227,7 +227,6 @@ const Signup: React.FC<AuthNavigationProps<Route.navSignup>> = ({
             keyboardType={"default"}
             maxLength={MAX_CHAR_LENGTH}
             onChangeText={handleChange("lastName")}
-            // onBlur={handleBlur("lastName")}
             value={values.lastName}
             error={errors.lastName}
             touched={touched.lastName}
