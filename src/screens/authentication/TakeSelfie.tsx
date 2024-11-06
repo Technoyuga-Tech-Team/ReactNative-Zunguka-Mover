@@ -278,7 +278,6 @@ const TakeSelfie: React.FC<MainNavigationProps<Route.navTakeSelfie>> = ({
               height: SCREEN_HEIGHT,
               width: SCREEN_WIDTH,
               position: "absolute",
-              // bottom: 0,
             }}
             source={Images.SELFIE_BG_IMAGE}
           />

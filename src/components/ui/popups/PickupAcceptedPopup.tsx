@@ -39,14 +39,14 @@ const PickupAcceptedPopup: React.FC<PickupAcceptedPopupProps> = ({
             <AcceptedIcon color={theme.colors?.primary} />
             <Text style={style.txtLoginToAnypost}>Pick up accepted!</Text>
             <Text style={style.txtDesc}>
-              Go ahead and arrange with your customer to pick up the goods
+              Go pick up and get the OTP to pick up the items.
             </Text>
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={onPressOk}
               style={style.btnOk}
             >
-              <Text style={style.txtOk}>OK</Text>
+              <Text style={style.txtOk}>Start Job</Text>
             </TouchableOpacity>
           </View>
         </View>
