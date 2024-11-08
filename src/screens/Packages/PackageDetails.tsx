@@ -40,6 +40,8 @@ import { socket, socketEvent } from "../../utils/socket";
 import { Images } from "../../assets/images";
 import NavigationIcon from "../../components/ui/svg/NavigationIcon";
 import CallIcon from "../../components/ui/svg/CallIcon";
+import InputFieldInfo from "../../components/ui/InputFieldInfo";
+import Snackbar from "react-native-snackbar";
 
 const PackageDetails: React.FC<
   MainNavigationProps<Route.navPackageDetails>
@@ -78,7 +80,6 @@ const PackageDetails: React.FC<
     useState<string>("");
 
   console.log("route?.params?.canEndJob", route?.params?.canEndJob);
-  console.log("canJobStartJob", canJobStartJob);
   console.log("canJobEndJob", canJobEndJob);
 
   useEffect(() => {
@@ -150,6 +151,22 @@ const PackageDetails: React.FC<
       // Geolocation.clearWatch();
     };
   }, []);
+
+  // useEffect(() => {
+  //   if (!canJobEndJob) {
+  //     Snackbar.show({
+  //       text: "You will get OTP from seller once you reach the pickup point",
+  //       duration: Snackbar.LENGTH_INDEFINITE,
+  //       backgroundColor: theme?.colors?.primary,
+  //       textColor: theme?.colors?.textPrimary,
+  //       action: {
+  //         text: "OK",
+  //         textColor: "white",
+  //         onPress: () => console.log("OK"),
+  //       },
+  //     });
+  //   }
+  // }, [canJobEndJob]);
 
   const calculateDistance = (
     currentLatitude: number,
@@ -507,23 +524,33 @@ const PackageDetails: React.FC<
       <View style={style.box}>
         <DropShadow style={style.shadow}>
           {showStartBtn && !canJobEndJob && (
-            <TouchableOpacity
-              onPress={onPressStartJob}
-              activeOpacity={0.8}
-              style={[
-                style.btnPickup,
-                {
-                  alignItems: "center",
-                  justifyContent: "center",
-                },
-              ]}
-            >
-              {loading === LoadingState.CREATE ? (
-                <ActivityIndicator color={theme.colors?.white} />
-              ) : (
-                <Text style={style.txtBtn}>Start Job</Text>
-              )}
-            </TouchableOpacity>
+            <>
+              <TouchableOpacity
+                onPress={onPressStartJob}
+                activeOpacity={0.8}
+                style={[
+                  style.btnPickup,
+                  {
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginBottom: 5,
+                  },
+                ]}
+              >
+                {loading === LoadingState.CREATE ? (
+                  <ActivityIndicator color={theme.colors?.white} />
+                ) : (
+                  <Text style={style.txtBtn}>Start Job</Text>
+                )}
+              </TouchableOpacity>
+              <View style={{ paddingHorizontal: 20 }}>
+                <InputFieldInfo
+                  text={
+                    "Press on start button to fill the OTP from the seller."
+                  }
+                />
+              </View>
+            </>
           )}
           {showEndBtn && canJobEndJob && (
             <TouchableOpacity

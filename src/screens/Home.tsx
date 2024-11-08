@@ -380,6 +380,27 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
   };
 
   const onPressOk = () => {
+    let item = selectedItem;
+
+    navigation.navigate(Route.navPackageDetails, {
+      package_details_id: item?.id,
+      pickupLatLng: {
+        lat: item.pickup_point_lat,
+        lng: item.pickup_point_lng,
+      },
+      destinationLatLng: {
+        lat: item.delivery_point_lat,
+        lng: item.delivery_point_lng,
+      },
+      buyer_phone_number: item?.buyer_phone_number,
+      product_id: item.product_id,
+      isJobStarted: true,
+      canStartJob: item.status === "confirmed",
+      canEndJob: true || item.status === "completed",
+      buyerSellerId: item.userid,
+      seller_id: item.seller_id,
+    });
+
     setVisibleAcceptedPopup(false);
   };
 
@@ -478,9 +499,6 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
         package_details_id={selectedItem?.id}
         isLoading={loading === LoadingState.CREATE}
         jobType={""}
-        onStartJob={function (): void {
-          throw new Error("Function not implemented.");
-        }}
       />
       <PickupAcceptedPopup
         visiblePopup={visibleAcceptedPopup}
