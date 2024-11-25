@@ -381,7 +381,7 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
       : status === "completed"
       ? "At Delivery Location"
       : status === "confirmed"
-      ? "Start job"
+      ? "Go Pick Up Package"
       : "";
   };
 
@@ -454,11 +454,11 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
               <ActivityIndicator color={theme.colors?.primary} />
             ) : (
               <View style={{ flex: 1, marginTop: 10, paddingHorizontal: 20 }}>
-                <BorderBottomItem
+                {/* <BorderBottomItem
                   title="Receiver"
                   value={deliveryDetailsData?.receiver_name}
                   from_mover={false}
-                />
+                /> */}
                 {/* <BorderBottomItem
                   title="Item name"
                   value={deliveryDetailsData?.item_name}
@@ -516,7 +516,7 @@ const PickupPopup: React.FC<PickupPopupProps> = ({
                   )
                 )}
                 <BorderBottomItem
-                  title="Price"
+                  title="Your Earnings"
                   value={`${RWF} ${
                     Number(selectedItem?.price).toFixed(2) || ""
                   }`}

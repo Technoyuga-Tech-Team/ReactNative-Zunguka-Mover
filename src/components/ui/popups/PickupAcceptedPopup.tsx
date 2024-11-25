@@ -46,7 +46,7 @@ const PickupAcceptedPopup: React.FC<PickupAcceptedPopupProps> = ({
               onPress={onPressOk}
               style={style.btnOk}
             >
-              <Text style={style.txtOk}>Start Job</Text>
+              <Text style={style.txtOk}>Go Pick Up Package</Text>
             </TouchableOpacity>
           </View>
         </View>

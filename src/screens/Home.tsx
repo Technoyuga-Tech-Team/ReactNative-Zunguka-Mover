@@ -396,7 +396,7 @@ const Home: React.FC<MoverHomeNavigationProps<Route.navHome>> = ({
       product_id: item.product_id,
       isJobStarted: true,
       canStartJob: item.status === "confirmed",
-      canEndJob: true || item.status === "completed",
+      canEndJob: item.status === "startjob" || item.status === "completed",
       buyerSellerId: item.userid,
       seller_id: item.seller_id,
     });

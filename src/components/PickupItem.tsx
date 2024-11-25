@@ -24,7 +24,7 @@ const getStatusStrings = (status: string) => {
     : status === "completed"
     ? "At Delivery Location"
     : status === "confirmed"
-    ? "Start job"
+    ? "Go Pick Up Package"
     : "";
 };
 

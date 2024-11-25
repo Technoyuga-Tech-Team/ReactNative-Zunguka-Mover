@@ -160,7 +160,7 @@ const Notification: React.FC<HomeNavigationProps<Route.navNotification>> = ({
 
   return (
     <View style={style.container}>
-      <CustomHeader title="Notification" isBackVisible={false} />
+      <CustomHeader title="Steps and Statuses" isBackVisible={false} />
       <View style={{ flex: 1 }}>
         {notifications?.length > 0 && (
           <TouchableOpacity

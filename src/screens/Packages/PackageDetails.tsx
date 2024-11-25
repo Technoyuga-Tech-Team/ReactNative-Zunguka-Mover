@@ -540,13 +540,13 @@ const PackageDetails: React.FC<
                 {loading === LoadingState.CREATE ? (
                   <ActivityIndicator color={theme.colors?.white} />
                 ) : (
-                  <Text style={style.txtBtn}>Start Job</Text>
+                  <Text style={style.txtBtn}>Pick Up Package</Text>
                 )}
               </TouchableOpacity>
               <View style={{ paddingHorizontal: 20 }}>
                 <InputFieldInfo
                   text={
-                    "Press on start button to fill the OTP from the seller."
+                    "Press on Pick Up Package button to fill the OTP from the seller."
                   }
                 />
               </View>

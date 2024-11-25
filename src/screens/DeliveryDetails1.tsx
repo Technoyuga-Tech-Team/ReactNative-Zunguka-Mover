@@ -257,7 +257,7 @@ const DeliveryDetails1: React.FC<
       : status === "completed"
       ? "At Delivery Location"
       : status === "confirmed"
-      ? "Start job"
+      ? "Go Pick Up Package"
       : status;
   };
 
