@@ -392,7 +392,7 @@ const DeliveryDetails1: React.FC<
           )}
           {from_mover && (
             <BorderBottomItem
-              title="Price"
+              title="Your Earning"
               value={`${RWF} ${
                 Number(deliveryDetailsData?.price).toFixed(2) || ""
               }`}
