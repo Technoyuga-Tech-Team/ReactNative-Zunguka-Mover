@@ -326,12 +326,12 @@ const DeliveryDetails1: React.FC<
           />
         )}
         <View style={{ flex: 1, marginTop: 10 }}>
-          <BorderBottomItem
+          {/* <BorderBottomItem
             title="Receiver"
             value={deliveryDetailsData?.receiver_name}
             from_mover={false}
             showblur={from_mover && !from_mover_home ? true : false}
-          />
+          /> */}
           <BorderBottomItem
             title="Pickup point"
             value={deliveryDetailsData?.pickup_point_address}
