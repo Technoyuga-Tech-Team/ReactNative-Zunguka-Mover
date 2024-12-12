@@ -235,6 +235,12 @@ const Signup: React.FC<AuthNavigationProps<Route.navSignup>> = ({
             onSubmitEditing={() => usernameRef.current?.focus()}
           />
           <InputFieldInfo text={"Name view only for admin."} />
+          <InputFieldInfo
+            text={
+              "First name and last name cannot be changed after admin accepts the name as per the ID."
+            }
+          />
+
           <CustomTxtInput
             textInputTitle="Username"
             ref={usernameRef}

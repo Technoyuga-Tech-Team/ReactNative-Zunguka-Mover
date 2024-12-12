@@ -31,5 +31,6 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: theme.fontFamily?.regular,
     color: theme.colors?.secondaryText,
     marginLeft: 5,
+    width: "90%",
   },
 }));

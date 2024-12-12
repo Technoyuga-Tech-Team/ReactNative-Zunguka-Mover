@@ -50,6 +50,7 @@ import {
 } from "../../utils/ImagePickerCameraGallary";
 import Scale from "../../utils/Scale";
 import { setData } from "../../utils/asyncStorage";
+import InputFieldInfo from "../../components/ui/InputFieldInfo";
 
 const EditProfile: React.FC<MainNavigationProps<Route.navEditProfile>> = ({
   navigation,
@@ -308,6 +309,7 @@ const EditProfile: React.FC<MainNavigationProps<Route.navEditProfile>> = ({
               onChangeText={handleChange("firstName")}
               onBlur={handleBlur("firstName")}
               value={values.firstName}
+              editable={userData?.acc_verified ? false : true}
               error={errors.firstName}
               touched={touched.firstName}
               onSubmitEditing={() => lastnameRef.current?.focus()}
@@ -324,9 +326,16 @@ const EditProfile: React.FC<MainNavigationProps<Route.navEditProfile>> = ({
               onBlur={handleBlur("lastName")}
               value={values.lastName}
               error={errors.lastName}
+              editable={userData?.acc_verified ? false : true}
               touched={touched.lastName}
               onSubmitEditing={() => usernameRef.current?.focus()}
             />
+            <InputFieldInfo
+              text={
+                "First name and last name cannot be changed after admin accepts the name as per the ID."
+              }
+            />
+
             <CustomTxtInput
               textInputTitle="Username"
               ref={usernameRef}
