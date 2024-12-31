@@ -479,10 +479,8 @@ const PackageDetails: React.FC<
             alignItems: "center",
             justifyContent: "space-between",
             paddingVertical: 10,
-            borderColor: "#F5F7FA",
-            borderWidth: 2,
             borderRadius: 8,
-            backgroundColor: theme?.colors?.white,
+            backgroundColor: theme?.colors?.primary,
             paddingHorizontal: 5,
             marginVertical: 10,
             marginHorizontal: 20,
@@ -516,7 +514,7 @@ const PackageDetails: React.FC<
             style={{
               fontSize: theme.fontSize?.fs14,
               fontFamily: theme.fontFamily?.medium,
-              color: theme.colors?.secondaryText,
+              color: theme.colors?.black,
             }}
           >{`${currentToPickupDistance} KM`}</Text>
         </TouchableOpacity>
